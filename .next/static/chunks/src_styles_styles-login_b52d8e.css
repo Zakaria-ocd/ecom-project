@@ -1,0 +1,18 @@
+/* [project]/src/styles/styles-login.css [app-client] (css) */
+@keyframes slideIn {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.form-container {
+  animation: 1.5s forwards slideIn;
+}
+
+/*# sourceMappingURL=src_styles_styles-login_b52d8e.css.map*/
