@@ -58,7 +58,7 @@ __turbopack_esm__({
 });
 var __TURBOPACK__imported__module__$5b$externals$5d2f$__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__ = __turbopack_import__("[externals]/ [external] (mongoose, cjs)");
 ;
-const MONGODB_URI = 'mongodb://localhost:27017/ecom';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ecom';
 let cached = global.mongo;
 if (!cached) {
     cached = global.mongo = {
@@ -76,6 +76,9 @@ async function dbConnect() {
         };
         cached.promise = __TURBOPACK__imported__module__$5b$externals$5d2f$__$5b$external$5d$__$28$mongoose$2c$__cjs$29$__["default"].connect(MONGODB_URI, opts).then((mongoose)=>{
             return mongoose;
+        }).catch((error)=>{
+            console.error('Failed to connect to MongoDB', error);
+            throw new Error('MongoDB connection error');
         });
     }
     cached.conn = await cached.promise;

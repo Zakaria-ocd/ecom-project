@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 55, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/PC%20G.M.T/OneDrive/Documentos/ecom-OLO/ecom-project/pages/_app.js"],"sourcesContent":["import { wrapper } from '../src/wrapper';\r\n\r\nfunction MyApp({ Component, pageProps }) {\r\n  return (\r\n    <wrapper>\r\n      <Component {...pageProps} />\r\n    </wrapper>\r\n  );\r\n}\r\n\r\nexport default MyApp;\r\n"],"names":[],"mappings":";;;;AAAA;;;AAEA,SAAS,MAAM,EAAE,SAAS,EAAE,SAAS,EAAE;IACrC,qBACE,uIAAC;kBACC,cAAA,uIAAC;YAAW,GAAG,SAAS;;;;;;;;;;;AAG9B;uCAEe"}},
+    {"offset": {"line": 78, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}

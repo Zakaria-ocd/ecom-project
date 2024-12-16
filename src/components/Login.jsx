@@ -5,12 +5,14 @@ import Notification from './Notification';
 import '../styles/styles-login.css';
 import logo from '../../public/assets/logo.png';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [notification, setNotification] = useState({ message: '', type: '', visible: false });
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,6 +33,7 @@ export default function LoginForm() {
                 throw new Error(data.message || 'Something went wrong');
             }
             setNotification({ message: data.message, type: 'success', visible: true });
+            router.push('/admin/dashboard'); 
         } catch (err) {
             setNotification({ message: err.message, type: 'error', visible: true });
         } finally {

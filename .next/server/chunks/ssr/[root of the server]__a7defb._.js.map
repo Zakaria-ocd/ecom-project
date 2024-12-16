@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 75, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/PC%20G.M.T/OneDrive/Documentos/ecom-OLO/ecom-project/src/wrapper.js"],"sourcesContent":["import { Provider } from 'react-redux';\r\nimport { configureStore } from '@reduxjs/toolkit';\r\nimport dashboardReducer from './reducers/dashboardReducer';\r\n\r\nexport const wrapper = ({ children }) => {\r\n  const store = configureStore({\r\n    dashboard: dashboardReducer,\r\n  });\r\n\r\n  return <Provider store={store}>{children}</Provider>;\r\n};\r\n"],"names":[],"mappings":";;;;AAAA;AACA;AACA;;;;;;;;;;AAEO,MAAM,UAAU,CAAC,EAAE,QAAQ,EAAE;IAClC,MAAM,QAAQ,CAAA,GAAA,oHAAA,CAAA,iBAAc,AAAD,EAAE;QAC3B,WAAW,4HAAA,CAAA,UAAgB;IAC7B;IAEA,qBAAO,uIAAC,8GAAA,CAAA,WAAQ;QAAC,OAAO;kBAAQ;;;;;;AAClC"}},
+    {"offset": {"line": 104, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}},
+    {"offset": {"line": 111, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/PC%20G.M.T/OneDrive/Documentos/ecom-OLO/ecom-project/pages/_app.js"],"sourcesContent":["import { wrapper } from '../src/wrapper';\r\n\r\nfunction MyApp({ Component, pageProps }) {\r\n  return (\r\n    <wrapper>\r\n      <Component {...pageProps} />\r\n    </wrapper>\r\n  );\r\n}\r\n\r\nexport default MyApp;\r\n"],"names":[],"mappings":";;;;AAAA;;;;;;;AAEA,SAAS,MAAM,EAAE,SAAS,EAAE,SAAS,EAAE;IACrC,qBACE,uIAAC;kBACC,cAAA,uIAAC;YAAW,GAAG,SAAS;;;;;;;;;;;AAG9B;uCAEe"}},
+    {"offset": {"line": 138, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}

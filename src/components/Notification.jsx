@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect } from 'react';
 import { FaTimesCircle, FaCheckCircle } from 'react-icons/fa';
 

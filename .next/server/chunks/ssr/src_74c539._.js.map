@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/PC%20G.M.T/OneDrive/Documentos/ecom-OLO/ecom-project/src/components/TotalOrders.jsx"],"sourcesContent":["'use client';\r\nimport { useSelector } from 'react-redux';\r\nimport { FontAwesomeIcon } from '@fortawesome/react-fontawesome';\r\nimport { faShoppingCart } from '@fortawesome/free-solid-svg-icons';\r\n\r\nconst TotalOrders = () => {\r\n  const totalOrders = useSelector((state) => state.dashboard.totalOrders);\r\n\r\n  return (\r\n    <div className=\"bg-blue-50 p-4 rounded-lg shadow-md flex items-center justify-between\">\r\n      <div className=\"flex flex-col items-start\">\r\n        <p className=\"text-3xl font-bold\">{totalOrders}</p>\r\n        <p className=\"text-sm text-gray-500\">Total Orders</p>\r\n      </div>\r\n      <FontAwesomeIcon icon={faShoppingCart} className=\"text-blue-500 text-3xl\" />\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default TotalOrders;\r\n"],"names":[],"mappings":";;;;AAEA;AADA;AAEA;AAHA;;;;;AAKA,MAAM,cAAc;IAClB,MAAM,cAAc,CAAA,GAAA,yJAAA,CAAA,cAAW,AAAD,EAAE,CAAC,QAAU,MAAM,SAAS,CAAC,WAAW;IAEtE,qBACE,8OAAC;QAAI,WAAU;;0BACb,8OAAC;gBAAI,WAAU;;kCACb,8OAAC;wBAAE,WAAU;kCAAsB;;;;;;kCACnC,8OAAC;wBAAE,WAAU;kCAAwB;;;;;;;;;;;;0BAEvC,8OAAC,oKAAA,CAAA,kBAAe;gBAAC,MAAM,wKAAA,CAAA,iBAAc;gBAAE,WAAU;;;;;;;;;;;;AAGvD;uCAEe"}},
+    {"offset": {"line": 65, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
+}
