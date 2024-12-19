@@ -1,3 +1,5 @@
+// Code to connect to MongoDB database using mongoose
+// Path: ecom-project/src/db.js
 import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ecom';
@@ -21,8 +23,8 @@ async function dbConnect() {
         cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
             return mongoose;
         }).catch((error) => {
-            console.error('Failed to connect to MongoDB', error);
-            throw new Error('MongoDB connection error');
+            console.error('Failed to connect to MongoDB', error.message);
+            throw error;
         });
     }
     cached.conn = await cached.promise;

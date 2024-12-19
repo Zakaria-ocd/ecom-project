@@ -1,5 +1,5 @@
-import TotalProducts from "@/components/TotalProducts";
-import Sidebar from "@/components/SideBar";
+import TotalProducts from "@/components/admin/TotalProducts";
+import Sidebar from "@/components/admin/SideBar";
 
 const ProductsPage = () => {
   return (

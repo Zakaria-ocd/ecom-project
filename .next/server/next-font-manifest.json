@@ -11,14 +11,6 @@
     "[project]/src/app/admin/dashboard/page": [
       "static/media/GeistVF-s.p.7fe29570.woff",
       "static/media/GeistMonoVF-s.p.a9159d35.woff"
-    ],
-    "[project]/src/app/admin/orders/page": [
-      "static/media/GeistVF-s.p.7fe29570.woff",
-      "static/media/GeistMonoVF-s.p.a9159d35.woff"
-    ],
-    "[project]/src/app/_not-found/page": [
-      "static/media/GeistVF-s.p.7fe29570.woff",
-      "static/media/GeistMonoVF-s.p.a9159d35.woff"
     ]
   },
   "appUsingSizeAdjust": true,
