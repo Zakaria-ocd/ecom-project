@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import dbConnect from ;
+import dbConnect from '@/db';
 import DashboardData from '@/models/dahboardData';
 
 export async function GET() {
