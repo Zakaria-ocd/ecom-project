@@ -1,18 +1,17 @@
-// Objective: create a dashboard for the admin.
-'use client';
-import Sidebar from './SideBar';
-import Profile from './Profile';
-import Search from './Search';
-import TotalSales from './TotalSales';
-import TotalProducts from './TotalProducts';
-import TotalSellers from './TotalSellers';
-import TotalOrders from './TotalOrders';
-import RecentSellerMessages from './RecentSellerMessages';
-import '../../styles/styles-dashboard.css';
+"use client";
+import Sidebar from "./SideBar";
+import Profile from "./Profile";
+import Search from "./Search";
+import TotalSales from "./TotalSales";
+import TotalProducts from "./TotalProducts";
+import TotalSellers from "./TotalSellers";
+import TotalOrders from "./TotalOrders";
+import RecentSellerMessages from "./RecentSellerMessages";
+import "../../styles/styles-dashboard.css";
 
 const Dashboard = () => {
   return (
-    <div className="flex  h-screen ">
+    <div className="flex h-screen">
       {/* Sidebar */}
       <Sidebar />
 

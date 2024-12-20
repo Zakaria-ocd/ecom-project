@@ -1,8 +1,6 @@
 // Objective: create a component that shows the total sales of the store.
-'use client';
-import { useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWallet  } from '@fortawesome/free-solid-svg-icons';
+"use client";
+import { useSelector } from "react-redux";
 
 const TotalSales = () => {
   const totalSales = useSelector((state) => state.dashboard.totalSales);
@@ -13,7 +11,7 @@ const TotalSales = () => {
         <p className="text-3xl font-bold">{totalSales}</p>
         <p className="text-sm text-gray-500">Total Sales</p>
       </div>
-      <FontAwesomeIcon icon={faWallet } className="text-orange-500 text-3xl" />
+      <i className="fa-regular fa-wallet text-orange-500 text-3xl"></i>
     </div>
   );
 };

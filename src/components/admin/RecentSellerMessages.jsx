@@ -1,7 +1,7 @@
 // Objective: create a component that displays the last three messages from sellers.
-'use client';
-import { useSelector } from 'react-redux';
-import Link from 'next/link';
+"use client";
+import { useSelector } from "react-redux";
+import Link from "next/link";
 
 const RecentSellerMessages = () => {
   const recentSellerMessages = useSelector(
@@ -18,7 +18,9 @@ const RecentSellerMessages = () => {
           <li key={index} className="mb-4">
             <p className="text-gray-700 font-medium">Message:</p>
             <p className="text-gray-700">{message.message}</p>
-            <p className="text-sm text-gray-500">From Seller {message.sellerId} at {message.timestamp}</p>
+            <p className="text-sm text-gray-500">
+              From Seller {message.sellerId} at {message.timestamp}
+            </p>
           </li>
         ))}
       </ul>

@@ -1,5 +1,5 @@
 // Objective: create a component to display the admin profile.
-'use client';
+"use client";
 import { useSelector } from "react-redux";
 
 const Profile = () => {

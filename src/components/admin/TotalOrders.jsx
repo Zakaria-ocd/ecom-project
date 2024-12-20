@@ -1,8 +1,6 @@
 // Objective: create a component that shows the total orders in the dashboard.
-'use client';
-import { useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+"use client";
+import { useSelector } from "react-redux";
 
 const TotalOrders = () => {
   const totalOrders = useSelector((state) => state.dashboard.totalOrders);
@@ -13,7 +11,7 @@ const TotalOrders = () => {
         <p className="text-3xl font-bold">{totalOrders}</p>
         <p className="text-sm text-gray-500">Total Orders</p>
       </div>
-      <FontAwesomeIcon icon={faShoppingCart} className="text-blue-500 text-3xl" />
+      <i className="fa-regular fa-shopping-cart text-blue-500 text-3xl"></i>
     </div>
   );
 };
