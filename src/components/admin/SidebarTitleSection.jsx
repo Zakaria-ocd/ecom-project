@@ -5,7 +5,7 @@ import Link from "next/link";
 const TitleSection = ({ open, username, plan }) => {
   return (
     <div className="flex items-center justify-between rounded-md transition-colors">
-      <div className="h-fit flex items-center gap-2">
+      <div className="h-[42px] flex items-center gap-2">
         <Link
           href={"/"}
           className="grid size-[42px] shrink-0 place-content-center rounded-md hover:bg-slate-100"
