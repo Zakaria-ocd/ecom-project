@@ -1,8 +1,6 @@
 // Objective: create a component that shows the total number of products in the database.
-'use client';
-import { useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBox } from '@fortawesome/free-solid-svg-icons';
+"use client";
+import { useSelector } from "react-redux";
 
 const TotalProducts = () => {
   const totalProducts = useSelector((state) => state.dashboard.totalProducts);
@@ -13,7 +11,7 @@ const TotalProducts = () => {
         <p className="text-3xl font-bold">{totalProducts}</p>
         <p className="text-sm text-gray-500">Total Products</p>
       </div>
-      <FontAwesomeIcon icon={faBox} className="text-violet-500 text-3xl" />
+      <i className="fa-regular fa-box text-violet-500 text-3xl"></i>
     </div>
   );
 };

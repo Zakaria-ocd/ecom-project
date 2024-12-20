@@ -1,8 +1,6 @@
 // Objective: create a component that shows the total number of sellers in the system.
-'use client';
-import { useSelector } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+"use client";
+import { useSelector } from "react-redux";
 
 const TotalSellers = () => {
   const totalSellers = useSelector((state) => state.dashboard.totalSellers);
@@ -13,7 +11,7 @@ const TotalSellers = () => {
         <p className="text-3xl font-bold">{totalSellers}</p>
         <p className="text-sm text-gray-500">Total Sellers</p>
       </div>
-      <FontAwesomeIcon icon={faUser} className="text-green-500 text-3xl" />
+      <i className="fa-regular fa-user text-green-500 text-3xl"></i>
     </div>
   );
 };

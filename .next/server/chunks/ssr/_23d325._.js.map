@@ -2,7 +2,7 @@
   "version": 3,
   "sources": [],
   "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/PC%20G.M.T/OneDrive/Documentos/ecom-OLO/ecom-project/src/app/page.js"],"sourcesContent":["import Image from \"next/image\";\r\n\r\nexport default function Home() {\r\n  return (\r\n    // USER PAGE\r\n    <>\r\n    </>\r\n  );\r\n}\r\n"],"names":[],"mappings":";;;;AAAA;;;AAEe,SAAS;IACtB,OACE,YAAY;kBACZ;AAGJ"}},
+    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/3aB0z/OneDrive/Documents/GitHub/next.js/next.js-projects/ecom-project/src/app/page.js"],"sourcesContent":["import Image from \"next/image\";\r\n\r\nexport default function Home() {\r\n  return (\r\n    // USER PAGE\r\n    <>\r\n    </>\r\n  );\r\n}\r\n"],"names":[],"mappings":";;;;AAAA;;;AAEe,SAAS;IACtB,OACE,YAAY;kBACZ;AAGJ"}},
     {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}},
     {"offset": {"line": 30, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":""}},
     {"offset": {"line": 31, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]

@@ -1,6 +1,4 @@
 {
   "/admin/dashboard/page": "app/admin/dashboard/page.js",
-  "/admin/login/page": "app/admin/login/page.js",
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/api/admin/login/route": "app/api/admin/login/route.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js"
 }

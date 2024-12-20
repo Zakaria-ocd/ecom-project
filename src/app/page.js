@@ -1,9 +1,9 @@
-import Image from "next/image";
+import Navbar from "@/components/user/Navbar";
 
 export default function Home() {
   return (
-    // USER PAGE
-    <>
-    </>
+    <div className="w-screen h-screen">
+      <Navbar />
+    </div>
   );
 }

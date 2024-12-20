@@ -14,7 +14,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/react-icons/fa/index.mjs [app-client] (ecmascript)");
 ;
 var _s = __turbopack_refresh__.signature();
-'use client';
+"use client";
 ;
 ;
 const Notification = ({ message, type, onClose })=>{
@@ -34,28 +34,28 @@ const Notification = ({ message, type, onClose })=>{
         onClose
     ]);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: `fixed bottom-4 left-4 p-2 rounded-lg shadow-lg transition-transform transform ${type === 'success' ? 'bg-green-600' : 'bg-red-600'} text-white flex items-center w-60`,
+        className: `fixed bottom-4 left-4 p-2 rounded-lg shadow-lg transition-transform transform ${type === "success" ? "bg-green-600" : "bg-red-600"} text-white flex items-center w-60`,
         children: [
-            type === 'success' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaCheckCircle"], {
+            type === "success" ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaCheckCircle"], {
                 className: "mr-2"
             }, void 0, false, {
                 fileName: "[project]/src/components/admin/Notification.jsx",
-                lineNumber: 17,
-                columnNumber: 35
+                lineNumber: 22,
+                columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["FaTimesCircle"], {
                 className: "mr-2"
             }, void 0, false, {
                 fileName: "[project]/src/components/admin/Notification.jsx",
-                lineNumber: 17,
-                columnNumber: 72
+                lineNumber: 24,
+                columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                 className: "mr-4",
                 children: message
             }, void 0, false, {
                 fileName: "[project]/src/components/admin/Notification.jsx",
-                lineNumber: 18,
-                columnNumber: 13
+                lineNumber: 26,
+                columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                 onClick: onClose,
@@ -63,14 +63,14 @@ const Notification = ({ message, type, onClose })=>{
                 children: "×"
             }, void 0, false, {
                 fileName: "[project]/src/components/admin/Notification.jsx",
-                lineNumber: 19,
-                columnNumber: 13
+                lineNumber: 27,
+                columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/admin/Notification.jsx",
         lineNumber: 16,
-        columnNumber: 9
+        columnNumber: 5
     }, this);
 };
 _s(Notification, "OD7bBpZva5O2jO+Puf00hKivP7c=");
@@ -86,7 +86,7 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 
 var { r: __turbopack_require__, f: __turbopack_module_context__, i: __turbopack_import__, s: __turbopack_esm__, v: __turbopack_export_value__, n: __turbopack_export_namespace__, c: __turbopack_cache__, M: __turbopack_modules__, l: __turbopack_load__, j: __turbopack_dynamic__, P: __turbopack_resolve_absolute_path__, U: __turbopack_relative_url__, R: __turbopack_resolve_module_id_path__, b: __turbopack_worker_blob_url__, g: global, __dirname, t: require } = __turbopack_context__;
 {
-__turbopack_export_value__("/_next/static/media/logo.76f97c7a.png");}}),
+__turbopack_export_value__("/_next/static/media/logo.e29e1a7e.png");}}),
 "[project]/public/assets/logo.png.mjs { IMAGE => \"[project]/public/assets/logo.png [app-client] (static)\" } [app-client] (structured image object, ecmascript)": ((__turbopack_context__) => {
 "use strict";
 
@@ -99,11 +99,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$public$2f$assets$2f$logo$2e$
 ;
 const __TURBOPACK__default__export__ = {
     src: __TURBOPACK__imported__module__$5b$project$5d2f$public$2f$assets$2f$logo$2e$png__$5b$app$2d$client$5d$__$28$static$29$__["default"],
-    width: 577,
-    height: 433,
-    blurDataURL: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAGCAYAAAD+Bd/7AAAAXUlEQVR42o2OMQqAMBAEc6uCieilCkY4sBQbfYFgZWvjB/Qn9ja+2PSxyMLCFgM7SqUGROiNESm4gyJEgNi8fbfhuebzrmrnIsBqNMvodz+tR2aY/2+AMlSHScluH6lKBlsFJzvEAAAAAElFTkSuQmCC",
-    blurWidth: 8,
-    blurHeight: 6
+    width: 158,
+    height: 170,
+    blurDataURL: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAICAYAAAA1BOUGAAAA80lEQVR42gHoABf/AAQCAQNBGA88XxkcXJsaMJ84Bx42RQYsQQQBAwQAFwwEE8RQH8HEPjPHqCpBuYcNVYu7CH7GFQMQFABzQAtqy2kOxI9KGIt9NFCibxVYhHsbcqEXNFFVALNiDahPLQlFqF4Xp2hQcLApSXN+EiQ5OhdonaUAgEgLdq9gC6V9SRR7P1V9nx5ikZcQbaWlD1J8egAQCQMNJxYFIhAJBQ8OEhsgCRIaGggZJiQDCw8OAHk4GnFtLyVmXSQuWWcoR2tLLk9mOkZsehxLam4AgTwcd28wJ2RnKDNhcCtNc0osS2MtNVFcGUVhYjH/QAPEqWO5AAAAAElFTkSuQmCC",
+    blurWidth: 7,
+    blurHeight: 8
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_refresh__.registerExports(module, globalThis.$RefreshHelpers$);
@@ -126,7 +126,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navi
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/react-icons/fa/index.mjs [app-client] (ecmascript)");
 ;
 var _s = __turbopack_refresh__.signature();
-'use client';
+"use client";
 ;
 ;
 ;
@@ -136,12 +136,12 @@ var _s = __turbopack_refresh__.signature();
 ;
 function LoginForm() {
     _s();
-    const [email, setEmail] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
-    const [password, setPassword] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [email, setEmail] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
+    const [password, setPassword] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [notification, setNotification] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
-        message: '',
-        type: '',
+        message: "",
+        type: "",
         visible: false
     });
     const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"])();
@@ -149,10 +149,10 @@ function LoginForm() {
         e.preventDefault();
         setLoading(true);
         try {
-            const response = await fetch('/api/admin/login', {
-                method: 'POST',
+            const response = await fetch("/api/admin/login", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     email,
@@ -161,18 +161,18 @@ function LoginForm() {
             });
             const data = await response.json();
             if (!response.ok) {
-                throw new Error(data.message || 'Something went wrong');
+                throw new Error(data.message || "Something went wrong");
             }
             setNotification({
                 message: data.message,
-                type: 'success',
+                type: "success",
                 visible: true
             });
-            router.push('/admin/dashboard');
+            router.push("/admin/dashboard");
         } catch (err) {
             setNotification({
                 message: err.message,
-                type: 'error',
+                type: "error",
                 visible: true
             });
         } finally{
@@ -200,22 +200,22 @@ function LoginForm() {
                                 className: "w-72 h-54 mx-auto pointer-events-none"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/admin/Login.jsx",
-                                lineNumber: 52,
-                                columnNumber: 17
+                                lineNumber: 60,
+                                columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "text-gray-500",
                                 children: '"Shop smart, live better."'
                             }, void 0, false, {
                                 fileName: "[project]/src/components/admin/Login.jsx",
-                                lineNumber: 53,
-                                columnNumber: 17
+                                lineNumber: 65,
+                                columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/admin/Login.jsx",
-                        lineNumber: 51,
-                        columnNumber: 13
+                        lineNumber: 59,
+                        columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                         onSubmit: handleSubmit,
@@ -229,8 +229,8 @@ function LoginForm() {
                                         children: "Email"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/admin/Login.jsx",
-                                        lineNumber: 59,
-                                        columnNumber: 25
+                                        lineNumber: 71,
+                                        columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex items-center bg-gray-50 p-2 rounded-lg border border-gray-300 focus-within:border-blue-500 transition",
@@ -239,8 +239,8 @@ function LoginForm() {
                                                 className: "text-gray-500 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/admin/Login.jsx",
-                                                lineNumber: 61,
-                                                columnNumber: 29
+                                                lineNumber: 78,
+                                                columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                                 className: "w-full bg-transparent outline-none text-gray-700",
@@ -252,20 +252,20 @@ function LoginForm() {
                                                 required: true
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/admin/Login.jsx",
-                                                lineNumber: 62,
-                                                columnNumber: 29
+                                                lineNumber: 79,
+                                                columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/admin/Login.jsx",
-                                        lineNumber: 60,
-                                        columnNumber: 25
+                                        lineNumber: 77,
+                                        columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/admin/Login.jsx",
-                                lineNumber: 58,
-                                columnNumber: 21
+                                lineNumber: 70,
+                                columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "mb-6 relative",
@@ -276,8 +276,8 @@ function LoginForm() {
                                         children: "Password"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/admin/Login.jsx",
-                                        lineNumber: 76,
-                                        columnNumber: 25
+                                        lineNumber: 93,
+                                        columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "flex items-center bg-gray-50 p-2 rounded-lg border border-gray-300 focus-within:border-blue-500 transition",
@@ -286,8 +286,8 @@ function LoginForm() {
                                                 className: "text-gray-500 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/admin/Login.jsx",
-                                                lineNumber: 78,
-                                                columnNumber: 29
+                                                lineNumber: 100,
+                                                columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                                 className: "w-full bg-transparent outline-none text-gray-700",
@@ -299,20 +299,20 @@ function LoginForm() {
                                                 required: true
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/admin/Login.jsx",
-                                                lineNumber: 79,
-                                                columnNumber: 29
+                                                lineNumber: 101,
+                                                columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/admin/Login.jsx",
-                                        lineNumber: 77,
-                                        columnNumber: 25
+                                        lineNumber: 99,
+                                        columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/admin/Login.jsx",
-                                lineNumber: 75,
-                                columnNumber: 21
+                                lineNumber: 92,
+                                columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 className: "w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 ```javascript   transition duration-300 focus:outline-none",
@@ -325,62 +325,62 @@ function LoginForm() {
                                             className: "text-white mr-2 animate-spin"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/admin/Login.jsx",
-                                            lineNumber: 100,
-                                            columnNumber: 33
+                                            lineNumber: 122,
+                                            columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Loading..."
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/admin/Login.jsx",
-                                            lineNumber: 101,
-                                            columnNumber: 33
+                                            lineNumber: 123,
+                                            columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/admin/Login.jsx",
-                                    lineNumber: 99,
-                                    columnNumber: 29
+                                    lineNumber: 121,
+                                    columnNumber: 15
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: "Login"
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/admin/Login.jsx",
-                                    lineNumber: 104,
-                                    columnNumber: 29
+                                    lineNumber: 126,
+                                    columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/admin/Login.jsx",
-                                lineNumber: 92,
-                                columnNumber: 21
+                                lineNumber: 114,
+                                columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/admin/Login.jsx",
-                        lineNumber: 56,
-                        columnNumber: 17
+                        lineNumber: 68,
+                        columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/admin/Login.jsx",
-                lineNumber: 50,
-                columnNumber: 13
+                lineNumber: 58,
+                columnNumber: 7
             }, this),
             notification.visible && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$admin$2f$Notification$2e$jsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                 message: notification.message,
-                type: notification.type === 'success' ? 'success' : 'error',
+                type: notification.type === "success" ? "success" : "error",
                 onClose: closeNotification
             }, void 0, false, {
                 fileName: "[project]/src/components/admin/Login.jsx",
-                lineNumber: 112,
-                columnNumber: 17
+                lineNumber: 134,
+                columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/admin/Login.jsx",
-        lineNumber: 49,
-        columnNumber: 9
+        lineNumber: 57,
+        columnNumber: 5
     }, this);
 }
-_s(LoginForm, "0PEsPO95vEd5iRq0q5Z3zDo8qQI=", false, function() {
+_s(LoginForm, "ECYJIf/+rrtlFDOP2vAwHmsai1M=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"]
     ];
