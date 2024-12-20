@@ -1,1 +1,4 @@
 node_modules
+.next 
+##   RUN THIS COMMAND git rm -r --cached .next
+###  ADD .next IN THE GIT IGNORE TO AVOID CONFLICTS WHILE PUSHING !!!
