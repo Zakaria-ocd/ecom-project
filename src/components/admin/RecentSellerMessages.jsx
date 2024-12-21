@@ -11,7 +11,7 @@ const RecentSellerMessages = () => {
   const lastThreeMessages = recentSellerMessages.slice(-3);
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md">
+    <div className="bg-white p-4 border border-slate-200/40 rounded-lg shadow-md">
       <h2 className="text-lg font-semibold mb-2">Recent Seller Messages</h2>
       <ul>
         {lastThreeMessages.map((message, index) => (

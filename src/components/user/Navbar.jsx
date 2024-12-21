@@ -68,11 +68,11 @@ export default function Navbar() {
 
         <div className="min-w-96 h-10 flex items-center ring-1 ring-gray-200 rounded-md transition-all focus-within:ring focus-within:ring-sky-200/50">
           <button
-            className="relative w-auto h-full"
+            className="relative w-auto h-full flex flex-col items-center"
             onBlur={() => setDropdownVisibility(false)}
           >
             <div
-              className="w-full h-full bg-slate-100 rounded-s-md cursor-pointer transition-colors hover:bg-slate-200 flex items-center space-x-1 px-3"
+              className="w-full h-full bg-slate-100 flex items-center space-x-1 px-3 rounded-s-md cursor-pointer transition-colors hover:bg-slate-200"
               onClick={() => setDropdownVisibility((value) => !value)}
             >
               <span className="text-slate-600 text-sm font-medium">
@@ -81,9 +81,9 @@ export default function Navbar() {
               <i className="fa-regular fa-angle-down text-slate-400 text-sm"></i>
             </div>
             <ul
-              className={`absolute top-11 bg-slate-100/20 backdrop-blur-sm text-sm border rounded-md ${
+              className={`absolute top-11 bg-slate-100/85 backdrop-blur-sm text-sm border rounded-md ${
                 dropdownVisibility ? "visible" : "hidden"
-              } shadow-lg shadow-slate-200 transition-all z-20`}
+              } shadow-md shadow-slate-200 transition-all z-20`}
             >
               {filters.categories.map((item) => {
                 const newSelectedCategories = selectedCategories.find(

@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 export default function FiltersBar({
   selectedCategories,
@@ -37,7 +38,10 @@ export default function FiltersBar({
           <div className="flex items-center space-x-3">
             {selectedCategories.map((item) => {
               return (
-                <div
+                <motion.div
+                  layout
+                  initial={{ scale: 0.5, opacity: 0, translateX: -30 }}
+                  animate={{ scale: [0.5, 1], opacity: 1, translateX: 0 }}
                   key={item.id}
                   className="bg-blue-100 text-blue-800 flex items-center space-x-1 px-1.5 py-px rounded-lg"
                 >
@@ -48,7 +52,7 @@ export default function FiltersBar({
                   >
                     <i className="fa-regular fa-xmark text-blue-500"></i>
                   </button>
-                </div>
+                </motion.div>
               );
             })}
           </div>

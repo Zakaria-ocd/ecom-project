@@ -8,10 +8,13 @@ import { FiHome, FiShoppingCart, FiMessageCircle } from "react-icons/fi";
 import { FaGear } from "react-icons/fa6";
 import { TbUserDollar, TbDeviceAnalytics } from "react-icons/tb";
 import { MdAddCard } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
   const [selected, setSelected] = useState("Dashboard");
+
+  const adminUsername = useSelector((state) => state.dashboard.adminUsername);
 
   return (
     <motion.nav
@@ -22,7 +25,10 @@ const Sidebar = () => {
       animate={{ width: open ? "208px" : "59px" }}
       transition={{ duration: 0.3 }}
     >
-      <SidebarTitleSection open={open} username={"3aB0z"} plan={"Admin Plan"} />
+      <SidebarTitleSection
+        open={open}
+        username={adminUsername}
+      />
 
       <span className="w-full h-px bg-slate-300 block my-3"></span>
 

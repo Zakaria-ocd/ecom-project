@@ -11,20 +11,20 @@ import "../../styles/styles-dashboard.css";
 
 const Dashboard = () => {
   return (
-    <div className="flex h-screen">
+    <div className="flex bg-slate-50">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main content */}
-      <div className="flex flex-col flex-1 p-6 bg-indigo-200">
+      <div className="h-[300vh] w-full flex flex-col space-y-4">
         {/* Top bar */}
-        <div className="flex justify-between items-center mb-6 bg-indigo-400">
-          <Search className="mr-4 " />
+        <div className="w-full h-[63px] bg-white flex justify-between items-center border-b px-4 py-2 shadow-sm">
+          <Search />
           <Profile />
         </div>
 
         {/* Dashboard cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 px-4">
           <TotalSales />
           <TotalProducts />
           <TotalSellers />
@@ -32,7 +32,7 @@ const Dashboard = () => {
         </div>
 
         {/* Recent messages */}
-        <div className="flex-1">
+        <div className="flex-1 px-4">
           <RecentSellerMessages />
         </div>
       </div>

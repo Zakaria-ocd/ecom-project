@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 12, "column": 0}, "map": {"version":3,"sources":["file://C%3A/Users/3aB0z/OneDrive/Documents/GitHub/next.js/next.js-projects/ecom-project/public/assets/logo.png.mjs%20%28structured%20image%20object%29"],"sourcesContent":["import src from \"IMAGE\";\nexport default { src, width: 150, height: 160, blurDataURL: \"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAABE0lEQVR42gEIAff+AP/9/AT7ybtT+KqldfFlebj0kaOB+6/cU/qo2lv++/0FAP717hT6ilLG9WtR2ehygrbqkqiJ7ky2uew9ssn77fcVAPvAg4X7n0XD+qphqd6msYTXnbmI22rCotKDzZOoze1rAPuhQ8X96NIw+7JnoMmgnqmrp8ubpcftdeHs+CdVr+nBAPu3bpn7sWGl/LNmoMPBzXmGqNawar3xp2e/9aRwwfOeAP748Q/+6NIw/vTqF/T3+xDa5/Uy5vP8HdPt/C/w+f0QAPrFrGb60MhN+cvQUPjL3EzvxN5Y3M/nVMHN6Wav1fBlAPecca72s6d+97S4dvOpxX7kpMyLyrHYhbPC5HyNxuuNZ/Syr2NyjGwAAAAASUVORK5CYII=\", blurWidth: 8, blurHeight: 8 }\n"],"names":[],"mappings":";;;AAAA;;uCACe;IAAE,KAAA,wHAAA,CAAA,UAAG;IAAE,OAAO;IAAK,QAAQ;IAAK,aAAa;IAAsd,WAAW;IAAG,YAAY;AAAE"}},
-    {"offset": {"line": 28, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
-}
