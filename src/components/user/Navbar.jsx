@@ -8,7 +8,7 @@ export default function Navbar() {
   const [selectedFilter, setSelectedFilter] = useState({
     sorts: 1,
     categories: [],
-    prices: 1,
+    prices: [],
     colors: [],
     sizes: [],
   });

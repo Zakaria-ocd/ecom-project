@@ -5,7 +5,7 @@ export default function HeroSection() {
         <h1 className="mb-4 text-slate-900 text-4xl font-semibold sm:mb-10 sm:text-5xl md:mb-8 lg:text-6xl">
           Buy, and sell products securely with ease.
         </h1>
-        <p className="max-w-2xl mb-2 font-light text-gray-500 sm:mb-4 sm:text-xl lg:mb-4">
+        <p className="max-w-2xl mb-2 font-light text-gray-600 sm:mb-4 sm:text-xl lg:mb-4">
           Explore the latest products in our store and easily sell your own with
           total peace of mind!
         </p>

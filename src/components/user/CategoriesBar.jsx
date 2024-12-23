@@ -97,11 +97,9 @@ export default function CategoriesBar({
                 <span className="text-slate-600 font-medium capitalize transition-colors group-hover:text-slate-700">
                   {key}
                 </span>
-                {key !== "prices" && (
-                  <span className="size-5 bg-slate-200 text-slate-600 rounded-md">
-                    {selectedFilter[key].length}
-                  </span>
-                )}
+                <span className="size-5 bg-slate-200 text-slate-600 rounded-md">
+                  {selectedFilter[key].length}
+                </span>
                 <i className="fa-regular fa-angle-down text-slate-400 transition-colors group-hover:text-slate-500"></i>
               </button>
               <DropdownMenu
@@ -111,7 +109,6 @@ export default function CategoriesBar({
                 }
                 filterVisibility={dropdownsVisibility[key]}
                 filter={filters[key]}
-                isSingleSelect={key === "prices"}
                 filterName={key}
               />
             </div>
