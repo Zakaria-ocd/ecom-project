@@ -7,6 +7,7 @@
   --foreground: #171717;
 }
 
+<<<<<<< HEAD
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -18,4 +19,10 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+=======
+@font-face {
+  font-family: "Inter";
+  src: url("./fonts/Inter.ttf") format("truetype");
+  font-weight: 100 900;
+>>>>>>> 34f26d8b328b489bc0295d8abf0dd50d6b95ff24
 }
