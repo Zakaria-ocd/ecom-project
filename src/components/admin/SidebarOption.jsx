@@ -22,7 +22,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs }) => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.125 }}
-            className="text-xs font-bold"
+            className="text-xs font-semibold"
           >
             {title}
           </motion.span>

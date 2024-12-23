@@ -12,7 +12,7 @@ module.exports = {
         foreground: "var(--foreground)",
       },
       fontFamily: {
-        nunito: ['"Nunito"', "serif"],
+        sans: ['Inter', 'sans-serif'],
       },
     },
   },

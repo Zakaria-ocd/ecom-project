@@ -1,116 +1,73 @@
 "use client";
 import Link from "next/link";
 import Logo from "@/components/Logo";
-import { useState } from "react";
-import FiltersBar from "./FiltersBar";
+import { useEffect, useState } from "react";
+import CategoriesBar from "./CategoriesBar";
 
 export default function Navbar() {
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [dropdownVisibility, setDropdownVisibility] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState({
+    sorts: 1,
+    categories: [],
+    prices: 1,
+    colors: [],
+    sizes: [],
+  });
   const isLogged = true; // for testing
 
-  const [selectedSort, setSelectedSort] = useState("Most Popular");
-  const filters = {
-    categories: [
-      { id: 1, categorie: "Accessories" },
-      { id: 2, categorie: "Shirts" },
-      { id: 3, categorie: "Shoes" },
-      { id: 4, categorie: "Jackets" },
-      { id: 5, categorie: "Men" },
-      { id: 6, categorie: "Women" },
-    ],
-    prices: [
-      { id: 1, min: 0, max: 25, moreThan: 0 },
-      { id: 2, min: 25, max: 50, moreThan: 0 },
-      { id: 3, min: 50, max: 75, moreThan: 0 },
-      { id: 4, min: 0, max: 0, moreThan: 75 },
-    ],
-    colors: [
-      { id: 1, color: "White" },
-      { id: 2, color: "Black" },
-      { id: 3, color: "Blue" },
-      { id: 4, color: "Brown" },
-      { id: 5, color: "Green" },
-      { id: 6, color: "Purple" },
-      { id: 7, color: "Yellow" },
-      { id: 8, color: "Orange" },
-    ],
-    sizes: [
-      { id: 1, color: "XS" },
-      { id: 2, color: "S" },
-      { id: 3, color: "M" },
-      { id: 4, color: "L" },
-      { id: 5, color: "XL" },
-      { id: 6, color: "2XL" },
-      { id: 7, color: "3XL" },
-    ],
-  };
+  const [filters, setFilters] = useState({
+    sorts: [],
+    categories: [],
+    prices: [],
+    colors: [],
+    sizes: [],
+  });
 
-  function handleCategorieChange(selectedCategorie) {
-    const isCategorieSelected = selectedCategories.find(
-      (item) => item.id === selectedCategorie.id
-    );
-    let filteredCategories;
-    if (isCategorieSelected) {
-      filteredCategories = selectedCategories.filter(
-        (item) => item.id !== selectedCategorie.id
-      );
-    } else {
-      filteredCategories = [...selectedCategories, { ...selectedCategorie }];
-    }
-    setSelectedCategories(filteredCategories);
-  }
+  useEffect(() => {
+    setFilters({
+      sorts: [
+        { id: 1, name: "Most Popular" },
+        { id: 2, name: "Newest Arrivals" },
+        { id: 3, name: "Best Rating" },
+      ],
+      categories: [
+        { id: 1, name: "T-shirts" },
+        { id: 2, name: "Jackets" },
+        { id: 3, name: "Boots" },
+        { id: 4, name: "Man" },
+        { id: 5, name: "Woman" },
+      ],
+      prices: [
+        { id: 1, name: "All prices" },
+        { id: 2, name: "Less than $50" },
+        { id: 3, name: "$50 - $100" },
+        { id: 4, name: "$100 - $200" },
+        { id: 5, name: "$200 - $300" },
+        { id: 6, name: "More than $300" },
+      ],
+      colors: [
+        { id: 1, name: "Red" },
+        { id: 2, name: "Blue" },
+        { id: 3, name: "Green" },
+        { id: 4, name: "Black" },
+        { id: 5, name: "White" },
+      ],
+      sizes: [
+        { id: 1, name: "Small" },
+        { id: 2, name: "Medium" },
+        { id: 3, name: "Large" },
+        { id: 4, name: "Extra Large" },
+      ],
+    });
+  }, []);
 
   return (
-    <>
-      <nav className="w-full h-16 flex flex-row justify-between items-center px-3 py-1 border-b z-10">
+    <nav>
+      <div className="w-full h-16 flex flex-row justify-between items-center px-3 py-1 border-b z-10">
         <Logo className="w-10" />
 
         <div className="min-w-96 h-10 flex items-center ring-1 ring-gray-200 rounded-md transition-all focus-within:ring focus-within:ring-sky-200/50">
-          <button
-            className="relative w-auto h-full flex flex-col items-center"
-            onBlur={() => setDropdownVisibility(false)}
-          >
-            <div
-              className="w-full h-full bg-slate-100 flex items-center space-x-1 px-3 rounded-s-md cursor-pointer transition-colors hover:bg-slate-200"
-              onClick={() => setDropdownVisibility((value) => !value)}
-            >
-              <span className="text-slate-600 text-sm font-medium">
-                Categories
-              </span>
-              <i className="fa-regular fa-angle-down text-slate-400 text-sm"></i>
-            </div>
-            <ul
-              className={`absolute top-11 bg-slate-100/85 backdrop-blur-sm text-sm border rounded-md ${
-                dropdownVisibility ? "visible" : "hidden"
-              } shadow-md shadow-slate-200 transition-all z-20`}
-            >
-              {filters.categories.map((item) => {
-                const newSelectedCategories = selectedCategories.find(
-                  (nsc) => nsc.id === item.id
-                );
-                return (
-                  <li
-                    key={item.id}
-                    className={`${
-                      newSelectedCategories
-                        ? "text-emerald-500"
-                        : "text-slate-700"
-                    } w-full flex justify-between items-center space-x-2 py-1 px-3 hover:bg-slate-200/60 transition-colors cursor-pointer first:hover:rounded-t last:hover:rounded-b`}
-                    value={item.id}
-                    onClick={() => handleCategorieChange(item)}
-                  >
-                    <span className="pr-4">{item.categorie}</span>
-                    {newSelectedCategories && (
-                      <i className="fa-regular fa-check text-emerald-400 absolute right-2"></i>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </button>
           <input
-            className="min-w-40 w-full h-full px-2 outline-none"
+            className="min-w-40 w-full h-full px-2 rounded-md outline-none"
             type="text"
             placeholder="Search"
           />
@@ -159,13 +116,12 @@ export default function Navbar() {
             </div>
           </div>
         )}
-      </nav>
-      <FiltersBar
-        selectedCategories={selectedCategories}
-        setSelectedCategories={(value) => setSelectedCategories(value)}
-        selectedSort={selectedSort}
-        setSelectedSort={(value) => setSelectedSort(value)}
+      </div>
+      <CategoriesBar
+        selectedFilter={selectedFilter}
+        setSelectedFilter={(value) => setSelectedFilter(value)}
+        filters={filters}
       />
-    </>
+    </nav>
   );
 }
