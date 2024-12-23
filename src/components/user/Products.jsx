@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import product from "../../public/assets/products/24913.jpg";
+import product from "@/../public/assets/products/24913.jpg";
 import Link from "next/link";
 import { motion } from "framer-motion";
 export default function Products() {
