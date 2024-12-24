@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
   --background: #ffffff;
   --foreground: #171717;
 }
@@ -12,3 +12,4 @@
   src: url("./fonts/Inter.ttf") format("truetype");
   font-weight: 100 900;
 }
+*/
