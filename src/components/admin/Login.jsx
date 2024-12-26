@@ -56,14 +56,7 @@ export default function LoginForm() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className={`bg-white p-8 rounded-lg shadow-xl w-96 form-container`}>
-        <div className="text-center">
-          <Image
-            src={logo}
-            alt="Logo"
-            className="w-72 h-54 mx-auto pointer-events-none"
-          />
-          <p className="text-gray-500">"Shop smart, live better."</p>
-        </div>
+        <Image src={logo} alt="Logo" className="mx-auto pointer-events-none mb-6" />
 
         <form onSubmit={handleSubmit}>
           {/* Email Input */}

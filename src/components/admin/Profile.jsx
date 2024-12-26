@@ -13,7 +13,7 @@ export default function Profile() {
   const profileRef = useRef(false);
 
   useEffect(() => {
-  // Toggle profile visibility
+    // Toggle profile visibility
     const handleClickOutside = (event) => {
       if (profileRef.current && !profileRef.current.contains(event.target)) {
         setProfileVisibility(false);
