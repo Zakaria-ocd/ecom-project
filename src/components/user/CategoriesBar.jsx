@@ -24,8 +24,6 @@ export default function CategoriesBar({
     sizes: null,
   });
 
-  const dropdownsName = ["categories", "prices", "colors", "sizes"];
-
   const handleDropdownToggle = (key) => {
     setDropdownsVisibility((prev) => ({
       ...Object.keys(prev).reduce((acc, k) => {
@@ -82,44 +80,52 @@ export default function CategoriesBar({
           />
         </div>
         <div className="flex">
-          {dropdownsName.map((key, index) => (
-            <div
-              key={key}
-              className={`relative flex flex-col items-center space-y-7
-                ${dropdownsName.length - 1 === index ? "pl-4" : "px-4"}
-                ${index !== 0 && "border-l border-slate-300/70"}`}
-              ref={(el) => (dropdownsRef.current[key] = el)}
-            >
-              <button
-                className="flex items-center space-x-1 rounded-md group transition-colors"
-                onClick={() => handleDropdownToggle(key)}
-              >
-                <span className="text-slate-600 font-medium capitalize transition-colors group-hover:text-slate-700">
-                  {key}
-                </span>
-                <span className="size-5 bg-slate-200 text-slate-600 rounded-md">
-                  {selectedFilter[key].length}
-                </span>
-                <i className="fa-regular fa-angle-down text-slate-400 transition-colors group-hover:text-slate-500"></i>
-              </button>
-              <DropdownMenu
-                selectedFilter={selectedFilter[key]}
-                setSelectedFilter={(value) =>
-                  setSelectedFilter({ ...selectedFilter, [key]: value })
+          {Object.keys(selectedFilter).map((key, index) => {
+            return (
+              key !== "sorts" && (
+                <div
+                  key={key}
+                  className={`relative flex flex-col items-center space-y-6
+                ${
+                  Object.keys(selectedFilter).length - 1 === index
+                    ? "pl-4"
+                    : "px-4"
                 }
-                filterVisibility={dropdownsVisibility[key]}
-                filter={filters[key]}
-                filterName={key}
-              />
-            </div>
-          ))}
+                ${index !== 1 && "border-l border-slate-300/70"}`}
+                  ref={(el) => (dropdownsRef.current[key] = el)}
+                >
+                  <button
+                    className="flex items-center space-x-1 rounded-md group transition-colors"
+                    onClick={() => handleDropdownToggle(key)}
+                  >
+                    <span className="text-slate-600 font-medium capitalize transition-colors group-hover:text-slate-700">
+                      {key}
+                    </span>
+                    {selectedFilter[key].length !== 0 && (
+                      <span className="size-5 bg-slate-200 text-slate-600 rounded-md">
+                        {selectedFilter[key].length}
+                      </span>
+                    )}
+                    <i className="fa-regular fa-angle-down text-slate-400 transition-colors group-hover:text-slate-500"></i>
+                  </button>
+                  <DropdownMenu
+                    selectedFilter={selectedFilter[key]}
+                    setSelectedFilter={(value) =>
+                      setSelectedFilter({ ...selectedFilter, [key]: value })
+                    }
+                    filterVisibility={dropdownsVisibility[key]}
+                    filter={filters[key]}
+                    filterName={key}
+                  />
+                </div>
+              )
+            );
+          })}
         </div>
       </div>
       <FiltersBar
-        selectedCategories={selectedFilter.categories}
-        setSelectedCategories={(value) =>
-          setSelectedFilter({ ...selectedFilter, categories: value })
-        }
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
       />
     </>
   );

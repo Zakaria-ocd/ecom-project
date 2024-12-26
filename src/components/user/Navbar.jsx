@@ -61,7 +61,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav>
+    <nav className="w-full">
       <div className="w-full h-16 flex flex-row justify-between items-center px-3 py-1 border-b z-10">
         <Logo className="w-10" />
 
@@ -119,7 +119,7 @@ export default function Navbar() {
       </div>
       <CategoriesBar
         selectedFilter={selectedFilter}
-        setSelectedFilter={(value) => setSelectedFilter(value)}
+        setSelectedFilter={setSelectedFilter}
         filters={filters}
       />
     </nav>

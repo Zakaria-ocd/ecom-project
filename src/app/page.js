@@ -4,10 +4,10 @@ import Products from "@/components/user/Products";
 
 export default function Home() {
   return (
-    <div className="w-screen h-screen">
+    <div className="w-full">
       <Navbar />
       <HeroSection />
-      <Products></Products>
+      <Products />
     </div>
   );
 }
