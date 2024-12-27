@@ -5,6 +5,9 @@ import blackShoes from "@/../public/assets/products/men-black-shoes.jpg";
 import brownShoes from "@/../public/assets/products/men-brown-shoes.jpg";
 import tShirts from "@/../public/assets/products/t-shirts.jpg";
 import beigePants from "@/../public/assets/products/women-beige-pants.jpg";
+import reafonbgatesPants from "@/../public/assets/products/reafonbgates-pants.jpg";
+import goumbikBrownShoes from "@/../public/assets/products/goumbik-brown-shoes.jpg";
+import introspectiveDesignHat from "@/../public/assets/products/introspective-design-hat.jpg";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -19,30 +22,56 @@ export default function Products() {
         name: "Men Apple Watch",
         price: 120.0,
         image: appleWatch,
+        rating: 4.3,
       },
       {
         productId: 2,
         name: "Men Black Shoes",
-        price: 120.0,
+        price: 155.0,
         image: blackShoes,
+        rating: 4.7,
       },
       {
         productId: 3,
         name: "Men Brown Shoes",
-        price: 120.0,
+        price: 80.0,
         image: brownShoes,
+        rating: 3.4,
       },
       {
         productId: 4,
         name: "Men T-Shirts",
-        price: 120.0,
+        price: 140.0,
         image: tShirts,
+        rating: 5,
       },
       {
         productId: 5,
         name: "Women Beige Pants",
-        price: 120.0,
+        price: 185.0,
         image: beigePants,
+        rating: 3.1,
+      },
+      {
+        productId: 6,
+        name: "Reafonbgates Pants",
+        price: 75.0,
+        image: reafonbgatesPants,
+        rating: 4.7,
+      },
+      {
+        productId: 7,
+        name: "Goumbik Brown Shoes",
+        price: 135.0,
+        image: goumbikBrownShoes,
+        rating: 3.9,
+      },
+      {
+        productId: 8,
+        name: "introspectivedsgn-hat.jpg",
+        price: 65.0,
+        image: introspectiveDesignHat,
+        rating: 3.4,
       },
     ]);
   }, []);
@@ -56,10 +85,13 @@ export default function Products() {
       </div>
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-10 gap-10">
         {products.map((item) => {
+          const fullStars = Math.floor(item.rating);
+          const hasHalfStar = fullStars + 0.5 <= item.rating;
+
           return (
             <div
               key={item.productId}
-              className="w-64 sm:w-52 flex flex-col gap-3 place-self-center"
+              className="w-64 sm:w-52 flex flex-col gap-4 place-self-center"
             >
               <div className="w-full relative h-[350px] sm:h-72 flex flex-col justify-center items-center">
                 <Image
@@ -97,21 +129,48 @@ export default function Products() {
                         Quick shop
                       </div>
                       <div className="w-full h-1/2 flex justify-center items-center text-white">
-                        <i className="fa-light fa-cart-shopping"></i>
+                        <i className="fa-light fa-cart-plus"></i>
                       </div>
                     </div>
                   </Link>
                 </div>
               </div>
 
-              <div className="flex flex-col px-1">
+              <div className="relative w-full flex flex-col px-1">
                 <Link
                   className="text-slate-900 font-semibold"
                   href={`/products/${item.productId.toString()}`}
                 >
                   {item.name}
                 </Link>
-                <p className="text-gray-500">${item.price}</p>
+                <div className="w-full flex justify-between items-center">
+                  <p className="text-gray-500">${item.price}</p>
+                  <div className="flex items-center gap-1">
+                    <p className="text-sm text-slate-700 mt-px">
+                      {item.rating}
+                    </p>
+                    <div className="relative flex items-center">
+                      <div className="absolute text-sm flex justify-start items-center w-20">
+                        <i className="fa-regular fa-star text-amber-500"></i>
+                        <i className="fa-regular fa-star text-amber-500"></i>
+                        <i className="fa-regular fa-star text-amber-500"></i>
+                        <i className="fa-regular fa-star text-amber-500"></i>
+                        <i className="fa-regular fa-star text-amber-500"></i>
+                      </div>
+                      <div className="text-sm flex justify-start items-center w-20">
+                        {[...Array(fullStars)].map((_, index) => (
+                          <i
+                            key={index}
+                            className="fa-solid fa-star text-amber-500"
+                          ></i>
+                        ))}
+                        {hasHalfStar && (
+                          <i className="fa-solid fa-star-half text-amber-500"></i>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           );
