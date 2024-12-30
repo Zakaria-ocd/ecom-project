@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { FaEnvelope, FaLock, FaSpinner } from "react-icons/fa";
 import Notification from "./Notification";
-import logo from "../../../public/assets/logo.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -55,7 +54,7 @@ export default function LoginForm() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className={`bg-white p-8 rounded-lg shadow-xl w-96 form-container`}>
-        <Image src={logo} alt="Logo" className="mx-auto pointer-events-none mb-6" />
+        <Image src={"assets/logo.png"} alt="Logo" className="mx-auto pointer-events-none mb-6" />
 
         <form onSubmit={handleSubmit}>
           {/* Email Input */}
