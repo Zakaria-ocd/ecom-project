@@ -7,7 +7,6 @@ import TotalProducts from "./TotalProducts";
 import TotalSellers from "./TotalSellers";
 import TotalOrders from "./TotalOrders";
 import RecentSellerMessages from "./RecentSellerMessages";
-import "../../styles/styles-dashboard.css";
 
 const Dashboard = () => {
   return (
