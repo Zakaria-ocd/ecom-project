@@ -51,6 +51,8 @@ export default function LoginForm() {
     setNotification({ ...notification, visible: false });
   };
 
+
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className={`bg-white p-8 rounded-lg shadow-xl w-96 form-container`}>
