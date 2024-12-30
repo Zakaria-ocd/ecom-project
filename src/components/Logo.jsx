@@ -1,8 +1,7 @@
-import Image from "next/image";
 
 export default function Logo({ className = "" }) {
   //test 
 
   
-  return <Image src={"/assets/logo.png"} width={500}  height={300} alt="logo" className={className} />;
+  return <img src={"/assets/logo.png"}  alt="logo" className={className} />;
 }
