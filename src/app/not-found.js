@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import notFound from '../../public/assets/not-found.png';
 
 export default function NotFound() {
   const containerVariants = {
@@ -99,7 +98,7 @@ export default function NotFound() {
           className="relative"
         >
           <Image
-            src={notFound}
+            src={"/assets/not-found.png"}
             alt="404 group illustration"
             width={500}
             height={500}

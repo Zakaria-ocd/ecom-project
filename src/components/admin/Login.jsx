@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { FaEnvelope, FaLock, FaSpinner } from "react-icons/fa";
 import Notification from "./Notification";
-import "../../styles/styles-login.css";
 import logo from "../../../public/assets/logo.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
