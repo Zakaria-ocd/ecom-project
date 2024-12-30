@@ -90,6 +90,7 @@ export default function Products() {
                 <Image
                 width={500}
                 height={300}
+                
                   className=" w-full h-full peer shadow-lg rounded-sm"
                   src={item.image}
                   alt={item.name}
