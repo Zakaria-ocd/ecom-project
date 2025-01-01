@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import DropdownMenu from "./DropdownMenu";
-import FiltersBar from "./FiltersBar";
+import { motion } from "framer-motion";
 
 export default function CategoriesBar({
   selectedFilter,
@@ -53,80 +53,79 @@ export default function CategoriesBar({
   }, []);
 
   return (
-    <>
-      <div className="w-full h-10 bg-slate-50 flex justify-between items-center text-sm font-semibold text-slate-700 px-6 border-b z-10">
-        <div
-          className="relative flex flex-col items-center space-y-6"
-          ref={(el) => (dropdownsRef.current.sorts = el)}
+    <div className="sticky top-[55px] z-50 w-full h-10 bg-white/95 flex justify-between items-center text-sm font-semibold text-slate-700 px-6 border-y backdrop-blur-sm transition-colors dark:bg-slate-800/95 dark:border-y-slate-700">
+      <div
+        className="relative flex flex-col items-center space-y-6"
+        ref={(el) => (dropdownsRef.current.sorts = el)}
+      >
+        <button
+          className="flex items-center space-x-1 rounded-md transition-colors group"
+          onClick={() => handleDropdownToggle("sorts")}
         >
-          <button
-            className="flex items-center space-x-1 rounded-md transition-colors group"
-            onClick={() => handleDropdownToggle("sorts")}
-          >
-            <span className="text-slate-600 font-medium transition-colors group-hover:text-slate-700">
-              Sort by
-            </span>
-            <i className="fa-regular fa-angle-down text-slate-400 transition-colors group-hover:text-slate-500"></i>
-          </button>
-          <DropdownMenu
-            selectedFilter={selectedFilter.sorts}
-            setSelectedFilter={(value) =>
-              setSelectedFilter({ ...selectedFilter, sorts: value })
-            }
-            filterVisibility={dropdownsVisibility.sorts}
-            filter={filters.sorts}
-            isSingleSelect={true}
-            filterName={"sorts"}
-          />
-        </div>
-        <div className="flex">
-          {Object.keys(selectedFilter).map((key, index) => {
-            return (
-              key !== "sorts" && (
-                <div
-                  key={key}
-                  className={`relative flex flex-col items-center space-y-6
+          <span className="text-slate-600 font-medium transition-colors group-hover:text-slate-700 dark:text-slate-200 dark:group-hover:text-slate-300">
+            Sort by
+          </span>
+          <i className="fa-regular fa-angle-down text-slate-400 transition-colors group-hover:text-slate-500 dark:text-slate-300 dark:group-hover:text-slate-400"></i>
+        </button>
+        <DropdownMenu
+          selectedFilter={selectedFilter.sorts}
+          setSelectedFilter={(value) =>
+            setSelectedFilter({ ...selectedFilter, sorts: value })
+          }
+          filterVisibility={dropdownsVisibility.sorts}
+          filter={filters.sorts}
+          isSingleSelect={true}
+          filterName={"sorts"}
+        />
+      </div>
+      <div className="flex">
+        {Object.keys(selectedFilter).map((key, index) => {
+          return (
+            key !== "sorts" && (
+              <div
+                key={key}
+                className={`relative flex flex-col items-center space-y-6
                 ${
                   Object.keys(selectedFilter).length - 1 === index
                     ? "pl-4"
                     : "px-4"
                 }
                 ${index !== 1 && "border-l border-slate-300/70"}`}
-                  ref={(el) => (dropdownsRef.current[key] = el)}
+                ref={(el) => (dropdownsRef.current[key] = el)}
+              >
+                <button
+                  className="flex items-center space-x-1 rounded-md group transition-colors"
+                  onClick={() => handleDropdownToggle(key)}
                 >
-                  <button
-                    className="flex items-center space-x-1 rounded-md group transition-colors"
-                    onClick={() => handleDropdownToggle(key)}
-                  >
-                    <span className="text-slate-600 font-medium capitalize transition-colors group-hover:text-slate-700">
-                      {key}
-                    </span>
-                    {selectedFilter[key].length !== 0 && (
-                      <span className="size-5 bg-slate-200 text-slate-600 rounded-md">
-                        {selectedFilter[key].length}
-                      </span>
-                    )}
-                    <i className="fa-regular fa-angle-down text-slate-400 transition-colors group-hover:text-slate-500"></i>
-                  </button>
-                  <DropdownMenu
-                    selectedFilter={selectedFilter[key]}
-                    setSelectedFilter={(value) =>
-                      setSelectedFilter({ ...selectedFilter, [key]: value })
-                    }
-                    filterVisibility={dropdownsVisibility[key]}
-                    filter={filters[key]}
-                    filterName={key}
-                  />
-                </div>
-              )
-            );
-          })}
-        </div>
+                  <span className="text-slate-600 font-medium capitalize transition-colors group-hover:text-slate-700 dark:text-slate-200 dark:group-hover:text-slate-300">
+                    {key}
+                  </span>
+                  {selectedFilter[key].length !== 0 && (
+                    <motion.span
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.2 }}
+                      className="size-5 bg-slate-200 text-slate-600 rounded-md dark:bg-slate-600 dark:text-slate-200 dark:group-hover:text-slate-300 transition-colors"
+                    >
+                      {selectedFilter[key].length}
+                    </motion.span>
+                  )}
+                  <i className="fa-regular fa-angle-down text-slate-400 transition-colors group-hover:text-slate-500 dark:text-slate-200 dark:group-hover:text-slate-400"></i>
+                </button>
+                <DropdownMenu
+                  selectedFilter={selectedFilter[key]}
+                  setSelectedFilter={(value) =>
+                    setSelectedFilter({ ...selectedFilter, [key]: value })
+                  }
+                  filterVisibility={dropdownsVisibility[key]}
+                  filter={filters[key]}
+                  filterName={key}
+                />
+              </div>
+            )
+          );
+        })}
       </div>
-      <FiltersBar
-        selectedFilter={selectedFilter}
-        setSelectedFilter={setSelectedFilter}
-      />
-    </>
+    </div>
   );
 }
