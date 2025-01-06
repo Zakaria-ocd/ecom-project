@@ -1,5 +1,4 @@
 import Image from "next/image";
-import heroImage from "@/../public/assets/heroImage.png";
 import Link from "next/link";
 
 export default function HeroSection() {
@@ -27,7 +26,13 @@ export default function HeroSection() {
           <i className="fa-solid fa-arrow-right text-slate-800 ml-2 transition-all ease-out duration-300 group-hover:text-blue-600 group-hover:translate-x-2 dark:text-blue-500 dark:group-hover:text-blue-600"></i>
         </Link>
       </div>
-      <Image src={heroImage} alt="mockup" className="w-5/12 hidden md:block" />
+      <Image
+        src={"/assets/heroImage.png"}
+        width={500}
+        height={300}
+        alt="mockup"
+        className="w-5/12 hidden md:block"
+      />
     </section>
   );
 }
