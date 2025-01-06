@@ -1,13 +1,6 @@
 "use client";
 import Image from "next/image";
-import appleWatch from "@/../public/assets/products/men-apple-watch.jpg";
-import blackShoes from "@/../public/assets/products/men-black-shoes.jpg";
-import brownShoes from "@/../public/assets/products/men-brown-shoes.jpg";
-import tShirts from "@/../public/assets/products/t-shirts.jpg";
-import beigePants from "@/../public/assets/products/women-beige-pants.jpg";
-import reafonbgatesPants from "@/../public/assets/products/reafonbgates-pants.jpg";
-import goumbikBrownShoes from "@/../public/assets/products/goumbik-brown-shoes.jpg";
-import introspectiveDesignHat from "@/../public/assets/products/introspective-design-hat.jpg";
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -16,61 +9,61 @@ export default function Products() {
   const [favouriteTransform, setFavouriteTransform] = useState(false);
 
   useEffect(() => {
-    setProducts([
+     setProducts([
       {
         productId: 1,
         name: "Men Apple Watch",
         price: 120.0,
-        image: appleWatch,
+        image: "/assets/products/men-apple-watch.jpg",
         rating: 4.3,
       },
       {
         productId: 2,
         name: "Men Black Shoes",
         price: 155.0,
-        image: blackShoes,
+        image: "/assets/products/men-apple-watch.jpg",
         rating: 4.7,
       },
       {
         productId: 3,
         name: "Men Brown Shoes",
         price: 80.0,
-        image: brownShoes,
+        image: "/assets/products/men-apple-watch.jpg",
         rating: 3.4,
       },
       {
         productId: 4,
         name: "Men T-Shirts",
         price: 140.0,
-        image: tShirts,
+        image: "/assets/products/men-apple-watch.jpg",
         rating: 5,
       },
       {
         productId: 5,
         name: "Women Beige Pants",
         price: 185.0,
-        image: beigePants,
+        image: "/assets/products/men-apple-watch.jpg",
         rating: 3.1,
       },
       {
         productId: 6,
         name: "Reafonbgates Pants",
         price: 75.0,
-        image: reafonbgatesPants,
+        image: "/assets/products/men-apple-watch.jpg",
         rating: 4.7,
       },
       {
         productId: 7,
         name: "Goumbik Brown Shoes",
         price: 135.0,
-        image: goumbikBrownShoes,
+        image: "/assets/products/men-apple-watch.jpg",
         rating: 3.9,
       },
       {
         productId: 8,
         name: "introspectivedsgn-hat.jpg",
         price: 65.0,
-        image: introspectiveDesignHat,
+        image: "/assets/products/men-apple-watch.jpg",
         rating: 3.4,
       },
     ]);
@@ -97,6 +90,7 @@ export default function Products() {
                 <Image
                   className=" w-full h-full peer shadow-lg rounded-sm"
                   src={item.image}
+                   width={500} height={300}
                   alt={item.name}
                 />
                 <i
