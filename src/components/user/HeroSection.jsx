@@ -7,7 +7,7 @@ export default function HeroSection() {
     <section className="flex justify-between items-center gap-0 px-12 pb-14 pt-28 border-b transition-colors bg-white dark:bg-slate-800 dark:border-b-slate-700">
       <div className="w-full md:w-7/12">
         <h1 className="min-w-[474px] mb-4 text-slate-800 text-4xl text-start font-semibold sm:text-5xl sm:mb-10 md:mb-8 lg:min-w-[592px] lg:text-6xl transition-colors dark:text-slate-100">
-          Buy, and sell products securely with ease.
+          Buy, and sell products securely with ease
         </h1>
         <p className="mb-2 font-light text-gray-600 sm:mb-4 sm:text-lg md:text-xl lg:mb-4 transition-colors dark:text-slate-300">
           Explore the latest products in our store and easily sell your own with

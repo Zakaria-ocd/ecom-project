@@ -8,7 +8,7 @@ export default function Navbar() {
 
   return (
     <nav className="w-full">
-      <div className="fixed top-0 z-50 w-full h-14 bg-slate-50 backdrop-blur-sm flex flex-row justify-between items-center px-3 py-1 border-b border-b-slate-400/30 transition-colors dark:bg-slate-900 dark:border-b-slate-400/30">
+      <div className="fixed top-0 z-50 w-full h-14 bg-white backdrop-blur-sm flex flex-row justify-between items-center px-3 py-1 border-b border-b-slate-400/30 transition-colors dark:bg-slate-900 dark:border-b-slate-400/30">
         <Link href={"/"}>
           <Logo className="w-9" />
         </Link>
@@ -30,13 +30,13 @@ export default function Navbar() {
           {isLogged ? (
             <div className="flex flex-row items-center gap-4">
               <Link className="p-1" href="/user/wishlist" title="Wish list">
-                <i className="fa-regular fa-heart text-xl text-rose-500"></i>
+                <i className="fa-light fa-heart text-xl text-rose-400"></i>
               </Link>
               <Link className="p-1" href="/user/cart" title="Shopping cart">
-                <i className="fa-regular fa-cart-shopping text-xl text-amber-400"></i>
+                <i className="fa-light fa-cart-shopping text-xl text-amber-400"></i>
               </Link>
               <button className="p-1" title="Profile">
-                <i className="fa-regular fa-circle-user text-slate-400 text-2xl"></i>
+                <i className="fa-light fa-circle-user text-slate-400 text-2xl"></i>
               </button>
             </div>
           ) : (

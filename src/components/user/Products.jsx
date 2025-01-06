@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import CategoriesBar from "./CategoriesBar";
 import FiltersBar from "./FiltersBar";
+import Rating from "../Rating";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -175,7 +176,7 @@ export default function Products() {
                 <div className="absolute hover:translate-y-0 -translate-y-6 opacity-0 peer-hover:opacity-100 ease-in-out duration-500 peer-hover:translate-y-0 hover:opacity-100 flex flex-col h-24 justify-center gap-4">
                   <Link
                     className="w-32 hover:bg-[#222] duration-500 overflow-hidden h-9 rounded-xl bg-white dark:bg-gray-800 dark:hover:bg-zinc-900"
-                    href={`/products/${item.productId.toString()}`}
+                    href={`/products/${item.productId}`}
                   >
                     <div className="h-16 w-full flex flex-col translate-y-px duration-300 ease-in-out hover:-translate-y-[30px]">
                       <div className="w-full h-1/2 flex justify-center items-center text-gray-900 dark:text-gray-200">
@@ -188,7 +189,7 @@ export default function Products() {
                   </Link>
                   <Link
                     className="w-32 hover:bg-[#222] duration-500 overflow-hidden h-9 rounded-xl bg-white dark:bg-gray-800 dark:hover:bg-zinc-900"
-                    href={`/products/${item.productId.toString()}`}
+                    href={`/products/${item.productId}`}
                   >
                     <div className="h-16 w-full flex flex-col translate-y-px duration-300 ease-in-out hover:-translate-y-[30px]">
                       <div className="w-full h-1/2 flex justify-center items-center text-gray-900 dark:text-gray-200">
@@ -205,7 +206,7 @@ export default function Products() {
               <div className="relative w-full flex flex-col px-1">
                 <Link
                   className="text-gray-900 transition-colors font-semibold dark:text-gray-200"
-                  href={`/products/${item.productId.toString()}`}
+                  href={`/products/${item.productId}`}
                 >
                   {item.name}
                 </Link>
@@ -217,26 +218,7 @@ export default function Products() {
                     <p className="text-sm text-gray-700 transition-colors mt-px dark:text-gray-300">
                       {item.rating}
                     </p>
-                    <div className="relative flex items-center">
-                      <div className="absolute text-sm flex justify-start items-center w-20">
-                        <i className="fa-regular fa-star text-amber-500"></i>
-                        <i className="fa-regular fa-star text-amber-500"></i>
-                        <i className="fa-regular fa-star text-amber-500"></i>
-                        <i className="fa-regular fa-star text-amber-500"></i>
-                        <i className="fa-regular fa-star text-amber-500"></i>
-                      </div>
-                      <div className="text-sm flex justify-start items-center w-20">
-                        {[...Array(fullStars)].map((_, index) => (
-                          <i
-                            key={index}
-                            className="fa-solid fa-star text-amber-500"
-                          ></i>
-                        ))}
-                        {hasHalfStar && (
-                          <i className="fa-solid fa-star-half text-amber-500"></i>
-                        )}
-                      </div>
-                    </div>
+                    <Rating rating={item.rating} starClass="text-sm" />
                   </div>
                 </div>
               </div>
