@@ -155,7 +155,9 @@ export default function Products() {
             >
               <div className="w-full relative h-[350px] sm:h-72 flex flex-col justify-center items-center overflow-hidden">
                 <Image
-                  className="w-full h-full peer shadow-lg rounded-sm"
+                  width={500}
+                  height={300}
+                  className=" w-full h-full peer shadow-lg rounded-sm"
                   src={item.image}
                    width={500} height={300}
                   alt={item.name}
