@@ -1,7 +1,5 @@
-export default function ProductPage({ params }) {
-  return (
-    <div>
-      <h1>Product {params.productId}</h1>
-    </div>
-  );
+import Product from "@/components/user/Product";
+
+export default function ProductPage({ productId }) {
+  return <Product productId={productId} />;
 }

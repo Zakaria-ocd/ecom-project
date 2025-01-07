@@ -1,7 +1,7 @@
-'use client';
-import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
+"use client";
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 export default function NotFound() {
   const containerVariants = {
@@ -9,9 +9,9 @@ export default function NotFound() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.3
-      }
-    }
+        staggerChildren: 0.3,
+      },
+    },
   };
 
   const itemVariants = {
@@ -20,9 +20,9 @@ export default function NotFound() {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.5
-      }
-    }
+        duration: 0.5,
+      },
+    },
   };
 
   const numberVariants = {
@@ -33,9 +33,9 @@ export default function NotFound() {
       transition: {
         type: "spring",
         stiffness: 100,
-        duration: 0.8
-      }
-    }
+        duration: 0.8,
+      },
+    },
   };
 
   return (
@@ -53,7 +53,7 @@ export default function NotFound() {
                 className="my-2 text-gray-800 font-bold text-2xl"
                 variants={itemVariants}
               >
-                Looks like you've found the doorway to the great nothing
+                {"Looks like you've found the doorway to the great nothing"}
               </motion.h1>
               <motion.p className="my-2 text-gray-800" variants={itemVariants}>
                 Sorry about that! Please visit our homepage to get where you
@@ -86,7 +86,7 @@ export default function NotFound() {
         </div>
         <motion.div variants={itemVariants} className="relative">
           <Image
-            src={"assets/not-found.png"}
+            src={"/assets/not-found.png"}
             alt="404 group illustration"
             width={500}
             height={500}
