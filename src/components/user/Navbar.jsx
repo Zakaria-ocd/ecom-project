@@ -2,6 +2,14 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import DarkModeToggle from "./DarkModeToggle";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export default function Navbar() {
   const isLogged = true; // for testing
@@ -32,9 +40,20 @@ export default function Navbar() {
               <Link className="p-1" href="/user/wishlist" title="Wish list">
                 <i className="fa-light fa-heart text-xl text-rose-400"></i>
               </Link>
-              <Link className="p-1" href="/user/cart" title="Shopping cart">
-                <i className="fa-light fa-cart-shopping text-xl text-amber-400"></i>
-              </Link>
+
+              <Sheet>
+                <SheetTrigger>
+                  <div className="p-1"  title="Shopping cart">
+                    <i className="fa-light fa-cart-shopping text-xl text-amber-400"></i>
+                  </div>
+                </SheetTrigger>
+                <SheetContent>
+                  <div className="h-full w-full bg-slate-500">
+
+                  </div>
+                </SheetContent>
+              </Sheet>
+
               <button className="p-1" title="Profile">
                 <i className="fa-light fa-circle-user text-slate-400 text-2xl"></i>
               </button>

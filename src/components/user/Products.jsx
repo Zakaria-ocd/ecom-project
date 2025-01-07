@@ -6,6 +6,14 @@ import { useEffect, useState } from "react";
 import CategoriesBar from "./CategoriesBar";
 import FiltersBar from "./FiltersBar";
 import Rating from "../Rating";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -166,7 +174,9 @@ export default function Products() {
                   onMouseOut={() => setFavouriteTransform(false)}
                 ></i>
                 <div className="absolute hover:translate-y-0 -translate-y-6 opacity-0 peer-hover:opacity-100 ease-in-out duration-500 peer-hover:translate-y-0 hover:opacity-100 flex flex-col h-24 justify-center gap-4">
-                  <Link
+                 
+                  <Dialog>
+                    <DialogTrigger> <div
                     className="w-32 hover:bg-[#222] duration-500 overflow-hidden h-9 rounded-xl bg-white dark:bg-gray-800 dark:hover:bg-zinc-900"
                     href={`/products/${item.productId}`}
                   >
@@ -178,7 +188,19 @@ export default function Products() {
                         <i className="fa-light fa-eye"></i>
                       </div>
                     </div>
-                  </Link>
+                  </div></DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Are you absolutely sure?</DialogTitle>
+                        <DialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete your account and remove your data from our
+                          servers.
+                        </DialogDescription>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+
                   <Link
                     className="w-32 hover:bg-[#222] duration-500 overflow-hidden h-9 rounded-xl bg-white dark:bg-gray-800 dark:hover:bg-zinc-900"
                     href={`/products/${item.productId}`}
