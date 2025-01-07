@@ -48,7 +48,7 @@ export default function DropdownMenu({
           }}
           className={`absolute ${filterName === "sorts" && "-left-2"} ${
             filterName === "sizes" && "-right-2"
-          } bg-white flex flex-col border rounded-lg shadow-lg z-20`}
+          } bg-white flex flex-col border rounded-lg shadow-lg z-20 dark:bg-slate-700 dark:border-slate-600`}
         >
           {filter.map((item) => {
             const isSelected = isSingleSelect
@@ -59,8 +59,8 @@ export default function DropdownMenu({
               <li
                 key={item.id}
                 className={`${
-                  isSelected ? "text-emerald-500" : "text-slate-500"
-                } w-full flex items-center text-start px-3 py-1.5 text-nowrap font-medium cursor-pointer first:rounded-t-lg last:rounded-b-lg hover:bg-slate-200/60 transition-all`}
+                  isSelected ? "text-emerald-500 dark:text-slate-200" : "text-slate-500 dark:text-slate-400"
+                } w-full flex items-center text-start px-3 py-1.5 text-nowrap font-medium cursor-pointer first:rounded-t-lg last:rounded-b-lg hover:bg-slate-200/60 transition-all dark:hover:bg-slate-500/60`}
                 onClick={() => handleFilterChange(item)}
               >
                 {isSelected && (
