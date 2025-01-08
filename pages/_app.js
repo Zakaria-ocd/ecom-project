@@ -1,10 +1,10 @@
-import { Wrapper } from '../src/wrapper';
+import { wrapper } from '../src/wrapper';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Wrapper>
+    <wrapper>
       <Component {...pageProps} />
-    </Wrapper>
+    </wrapper>
   );
 }
 

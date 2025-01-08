@@ -2,7 +2,7 @@ import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import dashboardReducer from "./reducers/dashboardReducer";
 
-export const Wrapper = ({ children }) => {
+export const wrapper = ({ children }) => {
   const store = configureStore({
     dashboard: dashboardReducer,
   });
