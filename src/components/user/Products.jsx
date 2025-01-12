@@ -9,11 +9,11 @@ import Rating from "../Rating";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { easeInOut, motion } from "framer-motion";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
@@ -33,15 +33,20 @@ export default function Products() {
     colors: [],
     sizes: [],
   });
-
+  const [productColors, setProductColors] = useState("");
   useEffect(() => {
-     setProducts([
+    setProducts([
       {
         productId: 1,
         name: "Men Apple Watch",
         price: 120.0,
         image: "/assets/products/men-apple-watch.jpg",
         rating: 4.3,
+        colors: [
+          { name: "Red", colorCode: "#FF0000" },
+          { name: "Green", colorCode: "#00FF00" },
+          { name: "Blue", colorCode: "#0000FF" },
+        ],
       },
       {
         productId: 2,
@@ -49,6 +54,11 @@ export default function Products() {
         price: 155.0,
         image: "/assets/products/t-shirts.jpg",
         rating: 4.7,
+        colors: [
+          { name: "Red", colorCode: "#FF0000" },
+          { name: "Green", colorCode: "#00FF00" },
+          { name: "Blue", colorCode: "#0000FF" },
+        ],
       },
       {
         productId: 3,
@@ -56,6 +66,11 @@ export default function Products() {
         price: 80.0,
         image: "/assets/products/reafonbgates-pants.jpg",
         rating: 3.4,
+        colors: [
+          { name: "Red", colorCode: "#FF0000" },
+          { name: "Green", colorCode: "#00FF00" },
+          { name: "Blue", colorCode: "#0000FF" },
+        ],
       },
       {
         productId: 4,
@@ -63,6 +78,11 @@ export default function Products() {
         price: 140.0,
         image: "/assets/products/men-brown-shoes.jpg",
         rating: 5,
+        colors: [
+          { name: "Red", colorCode: "#FF0000" },
+          { name: "Green", colorCode: "#00FF00" },
+          { name: "Blue", colorCode: "#0000FF" },
+        ],
       },
       {
         productId: 5,
@@ -70,6 +90,11 @@ export default function Products() {
         price: 185.0,
         image: "/assets/products/men-black-shoes.jpg",
         rating: 3.1,
+        colors: [
+          { name: "Red", colorCode: "#FF0000" },
+          { name: "Green", colorCode: "#00FF00" },
+          { name: "Blue", colorCode: "#0000FF" },
+        ],
       },
       {
         productId: 6,
@@ -77,6 +102,11 @@ export default function Products() {
         price: 75.0,
         image: "/assets/products/introspective-design-hat.jpg",
         rating: 4.7,
+        colors: [
+          { name: "Red", colorCode: "#FF0000" },
+          { name: "Green", colorCode: "#00FF00" },
+          { name: "Blue", colorCode: "#0000FF" },
+        ],
       },
       {
         productId: 7,
@@ -84,6 +114,11 @@ export default function Products() {
         price: 135.0,
         image: "/assets/products/goumbik-brown-shoes.jpg",
         rating: 3.9,
+        colors: [
+          { name: "Red", colorCode: "#FF0000" },
+          { name: "Green", colorCode: "#00FF00" },
+          { name: "Blue", colorCode: "#0000FF" },
+        ],
       },
       {
         productId: 8,
@@ -91,6 +126,11 @@ export default function Products() {
         price: 65.0,
         image: "/assets/products/women-beige-pants.jpg",
         rating: 3.4,
+        colors: [
+          { name: "Red", colorCode: "#FF0000" },
+          { name: "Green", colorCode: "#00FF00" },
+          { name: "Blue", colorCode: "#0000FF" },
+        ],
       },
     ]);
 
@@ -174,30 +214,79 @@ export default function Products() {
                   onMouseOut={() => setFavouriteTransform(false)}
                 ></i>
                 <div className="absolute hover:translate-y-0 -translate-y-6 opacity-0 peer-hover:opacity-100 ease-in-out duration-500 peer-hover:translate-y-0 hover:opacity-100 flex flex-col h-24 justify-center gap-4">
-                 
                   <Dialog>
-                    <DialogTrigger> <div
-                    className="w-32 hover:bg-[#222] duration-500 overflow-hidden h-9 rounded-xl bg-white dark:bg-gray-800 dark:hover:bg-zinc-900"
-                    href={`/products/${item.productId}`}
-                  >
-                    <div className="h-16 w-full flex flex-col translate-y-px duration-300 ease-in-out hover:-translate-y-[30px]">
-                      <div className="w-full h-1/2 flex justify-center items-center text-gray-900 dark:text-gray-200">
-                        Quick view
+                    <DialogTrigger>
+                      {" "}
+                      <div
+                        className="w-32 hover:bg-[#222] duration-500 overflow-hidden h-9 rounded-xl bg-white dark:bg-gray-800 dark:hover:bg-zinc-900"
+                        href={`/products/${item.productId}`}
+                      >
+                        <div className="h-16 w-full flex flex-col translate-y-px duration-300 ease-in-out hover:-translate-y-[30px]">
+                          <div className="w-full h-1/2 flex justify-center items-center text-gray-900 dark:text-gray-200">
+                            Quick view
+                          </div>
+                          <div className="w-full h-1/2 flex justify-center items-center text-white">
+                            <i className="fa-light fa-eye"></i>
+                          </div>
+                        </div>
                       </div>
-                      <div className="w-full h-1/2 flex justify-center items-center text-white">
-                        <i className="fa-light fa-eye"></i>
-                      </div>
-                    </div>
-                  </div></DialogTrigger>
+                    </DialogTrigger>
                     <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Are you absolutely sure?</DialogTitle>
-                        <DialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete your account and remove your data from our
-                          servers.
-                        </DialogDescription>
-                      </DialogHeader>
+                      <VisuallyHidden>
+                        <DialogTitle></DialogTitle>
+                      </VisuallyHidden>
+                      <div className="w-full absolute h-full flex">
+                        <Image
+                          className="w-1/2 h-full"
+                          src={item.image}
+                          alt={item.name}
+                          width={500}
+                          height={300}
+                        ></Image>
+                        <div className="p-8 w-1/2 flex flex-col gap-3">
+                          <div className=" w-full justify-between h-[3.25rem] flex flex-col ">
+                            <div className="text-gray-900 transition-colors font-extrabold dark:text-gray-200">
+                              {item.name}
+                            </div>
+                            <div className="w-full flex justify-between items-center">
+                              <p className="text-gray-600 transition-colors dark:text-gray-400">
+                                ${item.price}
+                              </p>
+                              <div className="flex items-center gap-1">
+                                <p className="text-sm text-gray-700 transition-colors mt-px dark:text-gray-300">
+                                  {item.rating}
+                                </p>
+                                <Rating
+                                  rating={item.rating}
+                                  starClass="text-sm"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-[#878787] text-[0.85rem] transition-colors dark:text-gray-500">
+                            adipisicing elit. Ullam placeat molestiae vero iusto
+                            ut, quos ipsam omnis ipsum dicta nobis nemo
+                            quooriosam odio non maxime expedita.
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <div className="font-extrabold flex  text-gray-900 text-xs">
+                              COLOR <div>:{productColors}</div>
+                            </div>
+                            <div>
+                              <motion.div
+                              style={{
+                                border:"3px",
+                                borderColor:"#94a3b8"}}
+                                className="w-7 h-7 cursor-pointer flex justify-center items-center   rounded-full relative "
+                                transition={{ ease: "easeInOut", duration: 3 }}
+                                whileHover={{ borderColor: "black" }}
+                              >
+                                <div className="w-6 h-6 absolute  bg-black rounded-full"></div>
+                              </motion.div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </DialogContent>
                   </Dialog>
 
