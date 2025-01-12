@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import shadcnAnimation from "tailwindcss-animate";
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   darkMode: "class",
@@ -26,5 +27,5 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [shadcnAnimation],
 };
