@@ -21,7 +21,7 @@ export default function FiltersBar({
 
   return (
     <div className="w-full">
-      <div className="w-full flex items-center gap-2 text-slate-700 px-3.5 p-2 border-y transition-colors bg-slate-50 dark:bg-gray-900 dark:border-y-slate-700">
+      <div className="w-full flex items-center gap-2 text-slate-700 px-3 p-2 border-y transition-colors bg-slate-50 dark:bg-gray-900 dark:border-y-slate-700">
         <div className="flex items-center gap-2 text-slate-800 text-sm font-semibold pr-2 py-0.5 border-r border-slate-300 pointer-events-none transition-colors dark:text-slate-300 dark:border-r-slate-600">
           <i className="fa-solid fa-sort"></i>
           Quick Sort
@@ -45,9 +45,9 @@ export default function FiltersBar({
         </div>
       </div>
 
-      <div className="w-full min-h-10 flex justify-between items-center gap-2 text-slate-700 text-sm font-medium px-3 py-2 border-b transition-colors bg-slate-50 dark:bg-gray-900 dark:border-y-slate-700">
+      <div className="w-full min-h-10 flex justify-between items-center gap-2 text-sm font-medium px-3 py-2 border-b transition-colors bg-slate-50 dark:bg-gray-900 dark:border-y-slate-700">
         <div className="flex flex-wrap gap-1.5">
-          <div className="flex items-center gap-2 text-slate-800 text-sm font-semibold mr-0.5 pr-2 py-0.5 border-r border-slate-300 pointer-events-none transition-colors dark:text-slate-300 dark:border-r-slate-600">
+          <div className="flex items-center gap-2 text-slate-600 text-sm font-semibold mr-0.5 pr-2 py-0.5 border-r border-slate-300 pointer-events-none transition-colors dark:text-slate-300 dark:border-r-slate-600">
             <i className="fa-solid fa-filter"></i>
             Filters
           </div>
@@ -55,7 +55,7 @@ export default function FiltersBar({
             return acc + selectedFilters[filterKey].length;
           }, 0) > 1 && (
             <button
-              className="bg-rose-100 flex items-center gap-1 text-rose-500 font-normal px-1.5 py-px rounded-lg transition-colors hover:text-rose-600 hover:bg-rose-200 dark:bg-rose-900 dark:text-rose-300 dark:hover:bg-rose-800 dark:hover:text-rose-200"
+              className="bg-rose-100 flex items-center gap-1 text-rose-600 px-1.5 py-px rounded-lg transition-colors hover:text-rose-700 hover:bg-rose-200 dark:bg-rose-900 dark:text-rose-300 dark:hover:bg-rose-800 dark:hover:text-rose-200"
               onClick={() =>
                 setSelectedFilters((prev) =>
                   Object.keys(prev).reduce((acc, key) => {
@@ -66,7 +66,7 @@ export default function FiltersBar({
               }
             >
               <span>Clear all filters</span>
-              <i className="fa-regular fa-xmark text-rose-500 transition-colors dark:text-rose-400"></i>
+              <i className="fa-regular fa-xmark text-rose-600 transition-colors dark:text-rose-400"></i>
             </button>
           )}
           {Object.keys(selectedFilters).map((filterKey) => {
