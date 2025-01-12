@@ -27,5 +27,5 @@ export default {
   		}
   	}
   },
-  plugins: [shadcnAnimation, require("tailwindcss-animate")],
+  plugins: [shadcnAnimation],
 };
