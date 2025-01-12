@@ -27,7 +27,7 @@ export default function DarkModeToggle() {
       className="relative bg-white flex items-center place-content-center rounded-full border border-slate-300 transition-colors dark:bg-slate-100"
       onClick={toggleDarkMode}
     >
-      <i className="fa-regular fa-sun-bright text-white z-10 size-7 ml-px text-sm transition-colors before:size-full before:flex before:justify-center before:items-center dark:text-slate-800"></i>
+      <i className="fa-regular fa-sun-bright text-white z-10 size-7  text-sm transition-colors before:size-full before:flex before:justify-center before:items-center dark:text-slate-800"></i>
       <i className="fa-solid fa-moon text-slate-700 z-10 size-7 ml-px text-sm transition-colors before:size-full before:flex before:justify-center before:items-center dark:text-white"></i>
       <div
         className={`absolute inset-0 z-0 flex ${
