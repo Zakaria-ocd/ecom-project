@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function HeroSection() {
   return (
-    <section className="flex justify-between items-center gap-0 px-12 pb-14 pt-28 transition-colors bg-white dark:bg-slate-800">
+    <section className="flex justify-between items-center gap-0 px-12 py-14 transition-colors bg-white dark:bg-slate-800">
       <div className="w-full md:w-7/12">
         <h1 className="min-w-[474px] mb-4 text-slate-800 text-4xl text-start font-semibold sm:text-5xl sm:mb-10 md:mb-8 lg:min-w-[592px] lg:text-6xl transition-colors dark:text-slate-100">
           Buy, and sell products securely with ease

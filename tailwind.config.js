@@ -9,23 +9,24 @@ export default {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-  	extend: {
-  		colors: {
-  			background: 'var(--background)',
-  			foreground: 'var(--foreground)'
-  		},
-  		fontFamily: {
-  			sans: [
-  				'Inter',
-  				'sans-serif'
-  			]
-  		},
-  		borderRadius: {
-  			lg: 'var(--radius)',
-  			md: 'calc(var(--radius) - 2px)',
-  			sm: 'calc(var(--radius) - 4px)'
-  		}
-  	}
+    extend: {
+      colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+      },
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+    },
+    backgroundImage: {
+      "colored-gradient-text":
+        'linear-gradient(to bottom right, theme("colors.rose.500"), theme("colors.orange.400"), theme("colors.rose.500"))',
+    },
   },
   plugins: [shadcnAnimation],
 };
