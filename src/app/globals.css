@@ -12,6 +12,37 @@
   :root {
     --radius: 0.5rem;
   }
+
+  body::-webkit-scrollbar {
+    background: #ffffff;
+    width: 8px;
+    height: 8px;
+  }
+
+  body::-webkit-scrollbar-thumb {
+    background: #c5c5c5;
+    border-radius: 6px;
+    border: 1px solid rgb(247, 247, 247);
+  }
+
+  body::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+
+  .dark body::-webkit-scrollbar {
+    background: #2f3544;
+    width: 8px;
+  }
+
+  .dark body::-webkit-scrollbar-thumb {
+    background: #15203a;
+    border-radius: 6px;
+    border: 1px solid #34324e;
+  }
+
+  .dark body::-webkit-scrollbar-thumb:hover {
+    background: #10192c;
+  }
 }
 body,*{
   margin: 0;

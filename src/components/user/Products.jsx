@@ -27,11 +27,13 @@ export default function Products({ cartProducts, setCartProducts }) {
 
   const [filters, setFilters] = useState({
     categories: [],
-    prices: [],
     colors: [],
     sizes: [],
   });
   const [sortList, setSortList] = useState([]);
+  const [pricesList, setPricesList] = useState([]);
+  const [ratingList, setRatingList] = useState([]);
+  const [resultsList, setResultsList] = useState([]);
 
   useEffect(() => {
     setProducts([
@@ -167,12 +169,6 @@ export default function Products({ cartProducts, setCartProducts }) {
       },
     ]);
 
-    setSortList([
-      { id: 1, name: "most popular" },
-      { id: 2, name: "newest arrivals" },
-      { id: 3, name: "best rating" },
-    ]);
-
     setFilters({
       categories: [
         { id: 1, name: "fashion" },
@@ -180,13 +176,6 @@ export default function Products({ cartProducts, setCartProducts }) {
         { id: 3, name: "beauty" },
         { id: 4, name: "sport" },
         { id: 5, name: "toys" },
-      ],
-      prices: [
-        { id: 1, name: 50 },
-        { id: 2, name: 100 },
-        { id: 3, name: 200 },
-        { id: 4, name: 300 },
-        { id: 5, name: 500 },
       ],
       colors: [
         { id: 1, name: "Red" },
@@ -202,6 +191,34 @@ export default function Products({ cartProducts, setCartProducts }) {
         { id: 4, name: "Extra Large" },
       ],
     });
+
+    setSortList([
+      { id: 1, name: "most popular" },
+      { id: 2, name: "newest arrivals" },
+      { id: 3, name: "best rating" },
+    ]);
+
+    setPricesList([
+      { id: 1, name: 50 },
+      { id: 2, name: 100 },
+      { id: 3, name: 200 },
+      { id: 4, name: 300 },
+      { id: 5, name: 500 },
+    ]);
+
+    setRatingList([
+      { id: 1, name: 1 },
+      { id: 2, name: 2 },
+      { id: 3, name: 3 },
+      { id: 4, name: 4 },
+      { id: 5, name: 5 },
+    ]);
+
+    setResultsList([
+      { id: 1, name: 24 },
+      { id: 2, name: 48 },
+      { id: 3, name: 96 },
+    ]);
   }, []);
 
   const [productsQuantity, setProductsQuantity] = useState(1);
@@ -214,21 +231,24 @@ export default function Products({ cartProducts, setCartProducts }) {
         <div className="absolute -z-0 w-96 h-0.5 bg-slate-800 transition-colors dark:bg-slate-300" />
       </div>
 
-      <div className="w-full flex justify-between items-start">
+      <div className="w-full flex md:flex-row flex-col justify-between items-start px-4">
         <CategoriesSide
           filters={filters}
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
         />
 
-        <div className="w-full bg-white flex flex-col gap-4 transition-colors dark:bg-slate-900">
+        <div className="w-full bg-white flex flex-col gap-4 px-3 transition-colors dark:bg-slate-900">
           <FiltersBar
+            pricesList={pricesList}
+            ratingList={ratingList}
             sortList={sortList}
+            resultsList={resultsList}
             selectedFilters={selectedFilters}
-            setSelectedFilters={setSelectedFilters}
+            setSelectedFilters={(value)=>setSelectedFilters(value)}
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-4 py-4 gap-10">
+          <div className="flex flex-wrap justify-center sm:justify-around lg:justify-between py-8 sm:py-4 gap-10">
             {products.map((item) => {
               return (
                 <div
@@ -278,7 +298,7 @@ export default function Products({ cartProducts, setCartProducts }) {
                         }}
                       >
                         <DialogTrigger>
-                          <div className="w-32 hover:bg-[#222] duration-500 overflow-hidden h-9 rounded-xl bg-white dark:bg-gray-800 dark:hover:bg-zinc-900">
+                          <div className="w-32 hover:hover:bg-zinc-900 duration-500 overflow-hidden h-9 rounded-xl bg-white dark:bg-gray-800 dark:hover:bg-zinc-900">
                             <div className="h-16 w-full flex flex-col translate-y-px duration-300 ease-in-out hover:-translate-y-[30px]">
                               <div className="w-full h-1/2 flex justify-center items-center text-gray-900 dark:text-gray-200">
                                 Quick view
@@ -559,7 +579,7 @@ export default function Products({ cartProducts, setCartProducts }) {
                                   </p>
                                   <i className="fa-solid fa-arrow-right-long w-6 group-hover:translate-x-2 ease-in-out duration-300"></i>{" "}
                                 </motion.div>
-                              </div>
+                            </div>
                             </div>
                           </div>
                         </DialogContent>

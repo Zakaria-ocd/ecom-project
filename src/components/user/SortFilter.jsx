@@ -1,31 +1,24 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import DropdownMenu from "./DropdownMenu";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function SortFilter({
   selectedFilter,
   setSelectedFilter,
-  filters,
+  sortList,
 }) {
-  const [sortVisibility, setSortVisibility] = useState(false);
-
-  const dropdownsRef = useRef(null);
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const dropdownRef = useRef(null);
 
   const handleDropdownToggle = () => {
-    setSortVisibility((prev) => !prev);
+    setDropdownVisible((prev) => !prev);
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      Object.keys(dropdownsRef.current).forEach((key) => {
-        if (
-          dropdownsRef.current[key] &&
-          !dropdownsRef.current[key].contains(event.target)
-        ) {
-          setSortVisibility((prev) => ({ ...prev, [key]: false }));
-        }
-      });
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownVisible(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -35,47 +28,51 @@ export default function SortFilter({
     };
   }, []);
 
+  const handleOptionSelect = (option) => {
+    setSelectedFilter(option);
+    setDropdownVisible(false);
+  };
+
   return (
-    <div className="w-1/4 bg-white/95 flex items-center text-sm font-semibold text-slate-700 p-6 border-y backdrop-blur-sm transition-colors dark:bg-slate-800/95 dark:border-y-slate-700">
-      <div className="flex flex-col">
-        {Object.keys(selectedFilter).map((key) => {
-          return (
-            <div
-              key={key}
-              className="relative flex flex-col items-center space-y-6 px-4"
-              ref={(el) => (dropdownsRef.current = el)}
-            >
-              <button
-                className="flex items-center space-x-1 rounded-md group transition-colors"
-                onClick={handleDropdownToggle}
-              >
-                <span className="text-slate-600 font-medium capitalize transition-colors group-hover:text-slate-700 dark:text-slate-200 dark:group-hover:text-slate-300">
-                  {key}
-                </span>
-                {selectedFilter[key].length !== 0 && (
-                  <motion.span
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 0.2 }}
-                    className="size-5 bg-slate-200 text-slate-600 rounded-md dark:bg-slate-600 dark:text-slate-200 dark:group-hover:text-slate-300 transition-colors"
-                  >
-                    {selectedFilter[key].length}
-                  </motion.span>
-                )}
-                <i className="fa-regular fa-angle-down text-slate-400 transition-colors group-hover:text-slate-500 dark:text-slate-200 dark:group-hover:text-slate-400"></i>
-              </button>
-              <DropdownMenu
-                selectedFilter={selectedFilter[key]}
-                setSelectedFilter={(value) =>
-                  setSelectedFilter({ ...selectedFilter, [key]: value })
-                }
-                filterVisibility={sortVisibility[key]}
-                filter={filters[key]}
-              />
-            </div>
-          );
-        })}
-      </div>
+    <div className="relative bg-white flex items-center transition-colors dark:bg-slate-800"
+            ref={dropdownRef}>
+      <button
+        className="w-full h-full flex items-center justify-between gap-1 text-slate-800 text-sm font-semibold px-2 rounded-md group transition-colors hover:text-slate-900 dark:text-slate-200 dark:hover:text-slate-400"
+        onClick={handleDropdownToggle}
+      >
+        Sorted by:
+        <span className="text-slate-600 font-medium capitalize transition-colors group-hover:text-slate-700 dark:text-slate-200 dark:group-hover:text-slate-300">
+          {selectedFilter.name}
+        </span>
+        <i className="fa-regular fa-angle-down"></i>
+      </button>
+
+      <AnimatePresence>
+        {isDropdownVisible && (
+          <motion.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            className="absolute top-full z-10 bg-white mt-px shadow-lg rounded-md dark:bg-slate-800"
+          >
+            <ul className="flex flex-col items-start">
+              {sortList.map((option) => (
+                <li
+                  key={option.id}
+                  className={`w-full px-3 py-2 cursor-pointer first:rounded-t-md last:rounded-b-md transition-colors hover:bg-slate-200 dark:hover:bg-slate-700 ${
+                    selectedFilter?.id === option.id
+                      ? "bg-emerald-200 text-emerald-700 dark:bg-emerald-700"
+                      : "text-slate-600"
+                  }`}
+                  onClick={() => handleOptionSelect(option)}
+                >
+                  {option.name}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
