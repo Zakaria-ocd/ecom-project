@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
           href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css"
         />
       </head>
-      <body
+      <body      
         className="font-sans antialiased"
       >
         {children}
