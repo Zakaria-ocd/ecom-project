@@ -10,6 +10,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { ScrollArea } from "../ui/scroll-area";
+import Image from "next/image";
 
 export default function Navbar() {
   const isLogged = true; // for testing
@@ -43,13 +45,41 @@ export default function Navbar() {
 
               <Sheet>
                 <SheetTrigger>
-                  <div className="p-1"  title="Shopping cart">
+                  <div className="p-1" title="Shopping cart">
                     <i className="fa-light fa-cart-shopping text-xl text-amber-400"></i>
                   </div>
                 </SheetTrigger>
-                <SheetContent>
-                  <div className="h-full w-full bg-slate-500">
-
+                <SheetContent className="p-0 ">
+                  <SheetDescription></SheetDescription>
+                  <div className="h-full  w-full">
+                    <h1 className="text-xl shadow-lg h-16 flex items-center font-bold pl-4 text-slate-800">
+                      SHOPPING CART
+                    </h1>
+                    {console.log(
+                      JSON.parse(localStorage.getItem("productsCard"))
+                    )}
+                    <ScrollArea className="h-[320px] rounded-none  w-full   px-4 ">
+                      {JSON.parse(localStorage.getItem("productsCard"))?.length >
+                        0 &&
+                        JSON.parse(localStorage.getItem("productsCard")).map(
+                          (item) => (
+<><div
+                              key={item.id}
+                              className="h-56 pt-4 border-b-2 w-full"
+                            >
+                              <Image
+                                className="w-[40%] rounded-md h-[180px]"
+                                src={item.image}
+                                alt={item.name}
+                                width={500}
+                                height={300}
+                              />
+                            </div>
+                            <div></div></>
+                          )
+                        )}
+                    </ScrollArea>
+                    <div className=" ">smdlsmdl</div>
                   </div>
                 </SheetContent>
               </Sheet>
