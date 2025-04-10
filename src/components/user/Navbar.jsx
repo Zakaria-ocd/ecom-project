@@ -18,9 +18,10 @@ import {
 import { ScrollArea } from "../ui/scroll-area";
 import Image from "next/image";
 
-export default function Navbar() {
+export default function Navbar({ cartProducts }) {
   const isLogged = true; // for testing
 
+  
   function enableDarkMode() {
     localStorage.setItem("theme", "dark");
     document.documentElement.classList.add("dark");
@@ -57,46 +58,44 @@ export default function Navbar() {
             <i className="fa-light fa-heart text-xl text-rose-400"></i>
           </Link>
 
-              <Sheet>
-                <SheetTrigger>
-                  <div className="p-1" title="Shopping cart">
-                    <i className="fa-light fa-cart-shopping text-xl text-amber-400"></i>
-                  </div>
-                </SheetTrigger>
-                <SheetContent className="p-0 ">
-                  <SheetDescription></SheetDescription>
-                  <div className="h-full  w-full">
-                    <h1 className="text-xl shadow-lg h-16 flex items-center font-bold pl-4 text-slate-800">
-                      SHOPPING CART
-                    </h1>
-                    {console.log(
-                      JSON.parse(localStorage.getItem("productsCard"))
-                    )}
-                    <ScrollArea className="h-[320px] rounded-none  w-full   px-4 ">
-                      {JSON.parse(localStorage.getItem("productsCard"))?.length >
-                        0 &&
-                        JSON.parse(localStorage.getItem("productsCard")).map(
-                          (item) => (
-<><div
-                              key={item.id}
-                              className="h-56 pt-4 border-b-2 w-full"
-                            >
-                              <Image
-                                className="w-[40%] rounded-md h-[180px]"
-                                src={item.image}
-                                alt={item.name}
-                                width={500}
-                                height={300}
-                              />
-                            </div>
-                            <div></div></>
-                          )
-                        )}
-                    </ScrollArea>
-                    <div className=" ">smdlsmdl</div>
-                  </div>
-                </SheetContent>
-              </Sheet>
+          <Sheet>
+            <SheetTrigger>
+              <div className="p-1" title="Shopping cart">
+                <i className="fa-light fa-cart-shopping text-xl text-amber-400"></i>
+              </div>
+            </SheetTrigger>
+            <SheetContent className="p-0 ">
+              <SheetDescription></SheetDescription>
+              <div className="h-full  w-full">
+                <h1 className="text-xl shadow-lg h-16 flex items-center font-bold pl-4 text-slate-800">
+                  SHOPPING CART
+                </h1>
+
+                <ScrollArea className="h-[320px] rounded-none  w-full   px-4 ">
+                  {
+                    cartProducts?.length > 0 &&
+                    cartProducts.map((item) => (
+                      <>
+                        <div
+                          key={item.id}
+                          className="h-56 pt-4 border-b-2 w-full"
+                        >
+                          <Image
+                            className="w-[40%] rounded-md h-[180px]"
+                            src={item.image}
+                            alt={item.name}
+                            width={500}
+                            height={300}
+                          />
+                        </div>
+                        <div></div>
+                      </>
+                    ))}
+                </ScrollArea>
+                <div className=" ">smdlsmdl</div>
+              </div>
+            </SheetContent>
+          </Sheet>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
