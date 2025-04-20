@@ -13,6 +13,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 export default function Products({ cartProducts, setCartProducts }) {
   const [products, setProducts] = useState([]);
@@ -245,7 +246,7 @@ export default function Products({ cartProducts, setCartProducts }) {
             sortList={sortList}
             resultsList={resultsList}
             selectedFilters={selectedFilters}
-            setSelectedFilters={(value)=>setSelectedFilters(value)}
+            setSelectedFilters={(value) => setSelectedFilters(value)}
           />
 
           <div className="flex flex-wrap justify-center sm:justify-around lg:justify-between py-8 sm:py-4 gap-10">
@@ -310,7 +311,11 @@ export default function Products({ cartProducts, setCartProducts }) {
                           </div>
                         </DialogTrigger>
                         <DialogContent>
-                          <DialogTitle></DialogTitle>
+                          <VisuallyHidden>
+                            <DialogTitle>
+                              Product Details: {item.name}
+                            </DialogTitle>
+                          </VisuallyHidden>
                           <DialogDescription></DialogDescription>
                           <div className="w-full absolute h-full flex">
                             <Image
@@ -579,7 +584,7 @@ export default function Products({ cartProducts, setCartProducts }) {
                                   </p>
                                   <i className="fa-solid fa-arrow-right-long w-6 group-hover:translate-x-2 ease-in-out duration-300"></i>{" "}
                                 </motion.div>
-                            </div>
+                              </div>
                             </div>
                           </div>
                         </DialogContent>
@@ -601,7 +606,11 @@ export default function Products({ cartProducts, setCartProducts }) {
                           </div>
                         </DialogTrigger>
                         <DialogContent className="w-[28%]  h-[80%] rounded">
-                          <DialogTitle></DialogTitle>
+                          <VisuallyHidden>
+                            <DialogTitle>
+                              Product Details: {item.name}
+                            </DialogTitle>
+                          </VisuallyHidden>
                           <div className="w-full  flex absolute h-full gap-4 flex-col p-5">
                             <div className="w-full items-start  flex gap-6 justify-start h-[30%] ">
                               <Image

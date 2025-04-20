@@ -1,7 +1,12 @@
 "use client";
 import Link from "next/link";
 import Logo from "@/components/Logo";
-import { Sheet, SheetContent, SheetDescription, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,7 +26,6 @@ import Image from "next/image";
 export default function Navbar({ cartProducts }) {
   const isLogged = true; // for testing
 
-  
   function enableDarkMode() {
     localStorage.setItem("theme", "dark");
     document.documentElement.classList.add("dark");
@@ -72,13 +76,12 @@ export default function Navbar({ cartProducts }) {
                 </h1>
 
                 <ScrollArea className="h-[320px] rounded-none  w-full   px-4 ">
-                  {
-                    cartProducts?.length > 0 &&
+                  {cartProducts?.length > 0 &&
                     cartProducts.map((item) => (
                       <>
                         <div
                           key={item.id}
-                          className="h-56 pt-4 border-b-2 w-full"
+                          className="h-56 flex gap-8 pt-4 border-b-2 w-full"
                         >
                           <Image
                             className="w-[40%] rounded-md h-[180px]"
@@ -87,6 +90,13 @@ export default function Navbar({ cartProducts }) {
                             width={500}
                             height={300}
                           />
+                          <div className="flex flex-col">
+                            <div><p className="font-semibold text-[1.1rem]">
+                              {item.name}
+                            </p>
+                            <p className="text-gray-700">{item.color.name}</p></div>
+                            <p className="text-rose-600">$ {item.price}</p>
+                          </div>
                         </div>
                         <div></div>
                       </>
