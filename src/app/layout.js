@@ -1,3 +1,4 @@
+import App from "./App";
 import "./globals.css";
 
 export const metadata = {
@@ -14,10 +15,8 @@ export default function RootLayout({ children }) {
           href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css"
         />
       </head>
-      <body      
-        className="font-sans antialiased"
-      >
-        {children}
+      <body className="font-sans antialiased">
+        <App>{children}</App>
       </body>
     </html>
   );

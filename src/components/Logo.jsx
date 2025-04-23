@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function Logo({ className = "" }) {
+export default function Logo({ className = "", fullLogo = false }) {
   return (
     <div className="flex items-center gap-1">
       <Image
@@ -10,9 +10,11 @@ export default function Logo({ className = "" }) {
         alt="logo"
         className={className}
       />
-      <span className="bg-gradient-to-br bg-colored-gradient-text bg-clip-text text-transparent font-semibold text-lg">
-        3z shop
-      </span>
+      {fullLogo && (
+        <span className="bg-gradient-to-br bg-colored-gradient-text bg-clip-text text-transparent font-semibold text-lg">
+          3z shop
+        </span>
+      )}
     </div>
   );
 }

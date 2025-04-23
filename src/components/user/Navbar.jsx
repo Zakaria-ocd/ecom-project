@@ -22,30 +22,59 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "../ui/scroll-area";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { LucideSunMedium } from "lucide-react";
+import { FaBrush, FaMoon, FaUserPlus } from "react-icons/fa";
+import {
+  FaArrowRightToBracket,
+  FaGear,
+  FaMoneyCheckDollar,
+  FaUserGear,
+} from "react-icons/fa6";
 
 export default function Navbar({ cartProducts }) {
   const isLogged = true; // for testing
+  const [selectedTheme, setSelectedTheme] = useState("");
+  const [systemIsDark, setSystemIsDark] = useState(false);
 
-  function enableDarkMode() {
-    localStorage.setItem("theme", "dark");
-    document.documentElement.classList.add("dark");
-  }
-
-  function enableLightMode() {
-    localStorage.setItem("theme", "light");
+  function applyTheme(theme) {
     document.documentElement.classList.remove("dark");
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else if (theme === "system") {
+      const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.classList.toggle("dark", isDark);
+    }
   }
 
-  function enableSystemMode() {
-    localStorage.removeItem("theme");
-    const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    document.documentElement.classList.toggle("dark", isDark);
+  function changeTheme(theme) {
+    if (typeof window === "undefined") return;
+    if (theme === "light") {
+      localStorage.setItem("theme", "light");
+    } else if (theme === "dark") {
+      localStorage.setItem("theme", "dark");
+    } else {
+      localStorage.removeItem("theme");
+    }
+    setSelectedTheme(theme);
+    applyTheme(theme);
   }
+
+  useEffect(() => {
+    const stored = localStorage.getItem("theme");
+    setSelectedTheme(stored ?? "system");
+    applyTheme(stored ?? "system");
+
+    const isDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setSystemIsDark(isDark);
+  }, []);
 
   return (
     <nav className="sticky top-0 z-50 w-full h-14 bg-white backdrop-blur-sm flex flex-row justify-between items-center px-3 py-1 border-b border-b-slate-400/30 transition-colors dark:bg-slate-900 dark:border-b-slate-400/30">
       <Link href={"/"}>
-        <Logo className="w-8" />
+        <Logo className="w-8" fullLogo={true} />
       </Link>
 
       <div className="h-[38px] flex items-center ring-1 ring-gray-200 rounded-md transition-all focus-within:ring focus-within:ring-sky-200/50 bg-white dark:bg-slate-700 dark:ring-gray-700 dark:ring-1 dark:focus-within:ring-2 dark:focus-within:ring-blue-500/50">
@@ -75,7 +104,7 @@ export default function Navbar({ cartProducts }) {
                   SHOPPING CART
                 </h1>
 
-                <ScrollArea className="h-[320px] rounded-none  w-full   px-4 ">
+                <ScrollArea className="h-[320px] rounded-none w-full px-4 ">
                   {cartProducts?.length > 0 &&
                     cartProducts.map((item) => (
                       <>
@@ -91,10 +120,12 @@ export default function Navbar({ cartProducts }) {
                             height={300}
                           />
                           <div className="flex flex-col">
-                            <div><p className="font-semibold text-[1.1rem]">
-                              {item.name}
-                            </p>
-                            <p className="text-gray-700">{item.color.name}</p></div>
+                            <div>
+                              <p className="font-semibold text-[1.1rem]">
+                                {item.name}
+                              </p>
+                              <p className="text-gray-700">{item.color.name}</p>
+                            </div>
                             <p className="text-rose-600">$ {item.price}</p>
                           </div>
                         </div>
@@ -102,7 +133,7 @@ export default function Navbar({ cartProducts }) {
                       </>
                     ))}
                 </ScrollArea>
-                <div className=" ">smdlsmdl</div>
+                <div className="">smdlsmdl</div>
               </div>
             </SheetContent>
           </Sheet>
@@ -114,32 +145,81 @@ export default function Navbar({ cartProducts }) {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="min-w-40 mr-4">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel className="text-slate-700 dark:text-slate-200">
+                My Account
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuGroup className="text-slate-800 dark:text-slate-300">
+                {isLogged ? (
+                  <>
+                    <DropdownMenuItem>
+                      <FaUserGear className="text-slate-400 dark:text-slate-500" />
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <FaMoneyCheckDollar className="text-slate-400 dark:text-slate-500" />
+                      Billing
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem>
+                      <FaArrowRightToBracket className="text-slate-400 dark:text-slate-500" />
+                      Login
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <FaUserPlus className="text-slate-400 dark:text-slate-500" />
+                      Sign up
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuSub>
-                <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
+                <DropdownMenuSubTrigger className="text-slate-800 dark:text-slate-300">
+                  <FaBrush className="text-slate-400 dark:text-slate-500" />
+                  Theme
+                </DropdownMenuSubTrigger>
+                <DropdownMenuItem className="text-slate-800 dark:text-slate-300">
+                  <FaGear className="text-slate-400 dark:text-slate-500" />
+                  Settings
+                </DropdownMenuItem>
                 <DropdownMenuPortal>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuItem>
-                      <button onClick={enableDarkMode}>Dark</button>
+                  <DropdownMenuSubContent className="text-slate-800 dark:text-slate-300">
+                    <DropdownMenuItem
+                      onClick={() => changeTheme("dark")}
+                      className={`${
+                        selectedTheme === "dark" &&
+                        "bg-emerald-100 dark:bg-emerald-800/60"
+                      } flex justify-between items-center`}
+                    >
+                      Dark
+                      {selectedTheme === "dark" && <FaMoon />}
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <button onClick={enableLightMode}>Light</button>
+                    <DropdownMenuItem
+                      onClick={() => changeTheme("light")}
+                      className={`${
+                        selectedTheme === "light" &&
+                        "bg-emerald-100 dark:bg-emerald-800/60"
+                      } flex justify-between items-center`}
+                    >
+                      Light
+                      {selectedTheme === "light" && <LucideSunMedium />}
                     </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <button onClick={enableSystemMode}>System</button>
+                    <DropdownMenuItem
+                      onClick={() => changeTheme("system")}
+                      className={`${
+                        selectedTheme === "system" &&
+                        "bg-emerald-100 dark:bg-emerald-800/60"
+                      } flex justify-between items-center`}
+                    >
+                      System
+                      {selectedTheme === "system" &&
+                        (systemIsDark ? <FaMoon /> : <LucideSunMedium />)}
                     </DropdownMenuItem>
                   </DropdownMenuSubContent>
                 </DropdownMenuPortal>
               </DropdownMenuSub>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Log out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
