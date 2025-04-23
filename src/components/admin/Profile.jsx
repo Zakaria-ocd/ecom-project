@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import ProfileAvatar from "./ProfileAvatar";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { Button } from "../ui/button";
+import { FaBell } from "react-icons/fa";
 
 export default function Profile() {
   const [profileVisibility, setProfileVisibility] = useState(false);
@@ -28,7 +30,15 @@ export default function Profile() {
   }, []);
 
   return (
-    <div className="flex w-[84px] justify-between items-center">
+    <div className="flex justify-between items-center gap-4">
+      <Button
+        variant="ghost"
+        size="icon"
+        title="Notifications"
+        className="[&_svg]:size-6"
+      >
+        <FaBell className="text-sky-500" size={24} />
+      </Button>
       <div className="relative" ref={profileRef}>
         <ProfileAvatar
           profileVisibility={profileVisibility}
@@ -82,9 +92,6 @@ export default function Profile() {
             </button>
           </div>
         </div>
-      </div>
-      <div>
-        <i className="text-sky-500 cursor-pointer text-2xl fa-solid fa-bell"></i>
       </div>
     </div>
   );

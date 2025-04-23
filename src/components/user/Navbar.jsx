@@ -23,7 +23,7 @@ import {
 import { ScrollArea } from "../ui/scroll-area";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Check, LucideSunMedium } from "lucide-react";
+import { LucideSunMedium } from "lucide-react";
 import { FaBrush, FaMoon, FaUserPlus } from "react-icons/fa";
 import {
   FaArrowRightToBracket,
@@ -36,7 +36,6 @@ export default function Navbar({ cartProducts }) {
   const isLogged = true; // for testing
   const [selectedTheme, setSelectedTheme] = useState("");
   const [systemIsDark, setSystemIsDark] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   function applyTheme(theme) {
     document.documentElement.classList.remove("dark");
@@ -65,7 +64,6 @@ export default function Navbar({ cartProducts }) {
     const stored = localStorage.getItem("theme");
     setSelectedTheme(stored ?? "system");
     applyTheme(stored ?? "system");
-    setMounted(true);
 
     const isDark =
       window.matchMedia &&
@@ -93,21 +91,20 @@ export default function Navbar({ cartProducts }) {
             <i className="fa-light fa-heart text-xl text-rose-400"></i>
           </Link>
 
-          {mounted && (
-            <Sheet>
-              <SheetTrigger>
-                <div className="p-1" title="Shopping cart">
-                  <i className="fa-light fa-cart-shopping text-xl text-amber-400"></i>
-                </div>
-              </SheetTrigger>
-              <SheetContent className="p-0 ">
-                <SheetDescription></SheetDescription>
-                <div className="h-full  w-full">
-                  <h1 className="text-xl shadow-lg h-16 flex items-center font-bold pl-4 text-slate-800">
-                    SHOPPING CART
-                  </h1>
+          <Sheet>
+            <SheetTrigger>
+              <div className="p-1" title="Shopping cart">
+                <i className="fa-light fa-cart-shopping text-xl text-amber-400"></i>
+              </div>
+            </SheetTrigger>
+            <SheetContent className="p-0 ">
+              <SheetDescription></SheetDescription>
+              <div className="h-full  w-full">
+                <h1 className="text-xl shadow-lg h-16 flex items-center font-bold pl-4 text-slate-800">
+                  SHOPPING CART
+                </h1>
 
-                <ScrollArea className="h-[320px] rounded-none  w-full   px-4 ">
+                <ScrollArea className="h-[320px] rounded-none w-full px-4 ">
                   {cartProducts?.length > 0 &&
                     cartProducts.map((item) => (
                       <>
@@ -123,10 +120,12 @@ export default function Navbar({ cartProducts }) {
                             height={300}
                           />
                           <div className="flex flex-col">
-                            <div><p className="font-semibold text-[1.1rem]">
-                              {item.name}
-                            </p>
-                            <p className="text-gray-700">{item.color.name}</p></div>
+                            <div>
+                              <p className="font-semibold text-[1.1rem]">
+                                {item.name}
+                              </p>
+                              <p className="text-gray-700">{item.color.name}</p>
+                            </div>
                             <p className="text-rose-600">$ {item.price}</p>
                           </div>
                         </div>
@@ -134,7 +133,7 @@ export default function Navbar({ cartProducts }) {
                       </>
                     ))}
                 </ScrollArea>
-                <div className=" ">smdlsmdl</div>
+                <div className="">smdlsmdl</div>
               </div>
             </SheetContent>
           </Sheet>
@@ -216,7 +215,6 @@ export default function Navbar({ cartProducts }) {
                     >
                       System
                       {selectedTheme === "system" &&
-                        mounted &&
                         (systemIsDark ? <FaMoon /> : <LucideSunMedium />)}
                     </DropdownMenuItem>
                   </DropdownMenuSubContent>

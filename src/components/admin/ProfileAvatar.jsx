@@ -13,10 +13,10 @@ export default function ProfileAvatar({
     >
       <Image
         src={"/assets/avatar.jpg"}
-        width={40}
-        height={40}
+        width={36}
+        height={36}
         alt="Avatar"
-        className="rounded-full p-px ring-2"
+        className="rounded-full ring-2"
       />
       <span
         className="bottom-px left-px absolute w-3.5 h-3.5 bg-green-400 border-2 border-green-100 rounded-full"
