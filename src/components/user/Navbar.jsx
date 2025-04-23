@@ -107,31 +107,37 @@ export default function Navbar({ cartProducts }) {
                     SHOPPING CART
                   </h1>
 
-                  <ScrollArea className="h-[320px] rounded-none w-full px-4">
-                    {cartProducts?.length > 0 &&
-                      cartProducts.map((item) => (
-                        <>
-                          <div
-                            key={item.id}
-                            className="h-56 pt-4 border-b-2 w-full"
-                          >
-                            <Image
-                              className="w-[40%] rounded-md h-[180px]"
-                              src={item.image}
-                              alt={item.name}
-                              width={500}
-                              height={300}
-                            />
+                <ScrollArea className="h-[320px] rounded-none  w-full   px-4 ">
+                  {cartProducts?.length > 0 &&
+                    cartProducts.map((item) => (
+                      <>
+                        <div
+                          key={item.id}
+                          className="h-56 flex gap-8 pt-4 border-b-2 w-full"
+                        >
+                          <Image
+                            className="w-[40%] rounded-md h-[180px]"
+                            src={item.image}
+                            alt={item.name}
+                            width={500}
+                            height={300}
+                          />
+                          <div className="flex flex-col">
+                            <div><p className="font-semibold text-[1.1rem]">
+                              {item.name}
+                            </p>
+                            <p className="text-gray-700">{item.color.name}</p></div>
+                            <p className="text-rose-600">$ {item.price}</p>
                           </div>
-                          <div></div>
-                        </>
-                      ))}
-                  </ScrollArea>
-                  <div className=" ">smdlsmdl</div>
-                </div>
-              </SheetContent>
-            </Sheet>
-          )}
+                        </div>
+                        <div></div>
+                      </>
+                    ))}
+                </ScrollArea>
+                <div className=" ">smdlsmdl</div>
+              </div>
+            </SheetContent>
+          </Sheet>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

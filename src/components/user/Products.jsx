@@ -13,6 +13,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { motion } from "framer-motion";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 export default function Products({ cartProducts, setCartProducts }) {
   const [products, setProducts] = useState([]);

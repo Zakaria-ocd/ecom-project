@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const Option = ({ Icon, title, selected, setSelected, open, notifs }) => {
   return (
-    <Link href={title.toLowerCase()}>
+    <Link href={"/admin/category"}>
       <motion.button
         layout
         onClick={() => setSelected(title)}
