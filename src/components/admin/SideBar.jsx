@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Option from "./SidebarOption";
 import SidebarToggleClose from "./SidebarToggleClose";
@@ -10,10 +10,12 @@ import { TbUserDollar, TbDeviceAnalytics } from "react-icons/tb";
 import { MdAddCard } from "react-icons/md";
 import { useSelector } from "react-redux";
 
-const Sidebar = () => {
+const Sidebar = ({section='Dashboard'}) => {
   const [open, setOpen] = useState(true);
-  const [selected, setSelected] = useState("Dashboard");
-
+  const [selected, setSelected] = useState("");
+  useEffect(()=>{
+    setSelected(section)
+  },[section])
   const adminUsername = useSelector((state) => state.dashboard.adminUsername);
 
   return (

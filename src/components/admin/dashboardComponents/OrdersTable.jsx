@@ -6,7 +6,7 @@ function OrdersTable() {
   const [orders,setOrders]=useState([]);
   useEffect(()=>{
       async function getData(){
-        const data =await fetch("http://localhost:8000/api/orders/7");
+        const data =await fetch("http://localhost:8000/api/orders/6");
         setOrders(await data.json());
       }
       getData()

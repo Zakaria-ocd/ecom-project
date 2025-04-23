@@ -2,8 +2,10 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 
 const Option = ({ Icon, title, selected, setSelected, open, notifs }) => {
+      console.log(selected)
+
   return (
-    <Link href={"/admin/category"}>
+    <Link href={`/admin/${title.toLowerCase()}`}>
       <motion.button
         layout
         onClick={() => setSelected(title)}

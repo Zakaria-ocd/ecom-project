@@ -6,10 +6,10 @@ import TotalSales from "./TotalSales";
 import TotalProducts from "./TotalProducts";
 import TotalSellers from "./TotalSellers";
 import TotalOrders from "./TotalOrders";
-import RecentSellerMessages from "./RecentSellerMessages";
 import { Button } from "../ui/button";
 import OrdersTable from "./dashboardComponents/OrdersTable";
 import ShowUsers from "./dashboardComponents/ShowUsers";
+import Link from "next/link";
 
 const Dashboard = () => {
   return (
@@ -40,7 +40,7 @@ const Dashboard = () => {
                   Recent orders
                 </p>
                 <Button className="  p-2 h-8 bg-sky-500  hover:bg-sky-600">
-                  View All
+                  <Link href='/admin/orders'>View All</Link>
                 </Button>
               </div>
               <OrdersTable></OrdersTable>
