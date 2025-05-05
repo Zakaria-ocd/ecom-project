@@ -18,7 +18,6 @@ import { MdOutlineLocalShipping, MdPendingActions } from "react-icons/md";
 function OrdersTable() {
   const [orders, setOrders] = useState([]);
   let total = 0;
-
   function getStatus(status) {
     if (status == "pending") {
       return (

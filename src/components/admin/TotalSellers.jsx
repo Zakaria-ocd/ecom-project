@@ -15,3 +15,4 @@ const TotalSellers = () => {
     </div>
   );
 }
+export default TotalSellers;
