@@ -9,33 +9,49 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ArrowUpRightFromSquare, PackageCheck } from "lucide-react";
 import { useState, useEffect } from "react";
-import { FaCircle, FaEye } from "react-icons/fa";
+import { MdOutlineLocalShipping, MdPendingActions } from "react-icons/md";
 
 function OrdersTable() {
   const [orders, setOrders] = useState([]);
   let total = 0;
 
-  function getStatusColor(status) {
+  function getStatus(status) {
     if (status == "pending") {
-      return "text-sky-400/80";
+      return (
+        <div className="flex items-center gap-1 text-sky-400">
+          <MdPendingActions size={16} />
+          <span className="text-sky-400/80">{status}</span>
+        </div>
+      );
     } else if (status == "shipped") {
-      return "text-yellow-400/80";
+      return (
+        <div className="flex items-center gap-1 text-yellow-400">
+          <MdOutlineLocalShipping size={16} />
+          <span className="text-yellow-400/80">{status}</span>
+        </div>
+      );
     } else if (status == "delivered") {
-      return "text-green-400/80";
+      return (
+        <div className="flex items-center gap-1 text-green-400">
+          <PackageCheck size={16} />
+          <span className="text-green-400/80">{status}</span>
+        </div>
+      );
     }
   }
 
   useEffect(() => {
-    async function getData() {
+    async function fetchOrders() {
       const data = await fetch("http://localhost:8000/api/orders/6");
       setOrders(await data.json());
     }
-    getData();
+    fetchOrders();
   }, []);
 
   return (
-    <Table className="-ml-2">
+    <Table className="w-full">
       <TableHeader>
         <TableRow>
           <TableHead className="text-slate-800">Name</TableHead>
@@ -49,25 +65,24 @@ function OrdersTable() {
           total += Number(order.total_price);
           return (
             <TableRow key={order.order_id}>
-              <TableCell className="font-medium py-4 text-black/55">
+              <TableCell className="font-medium py-4 text-slate-500">
                 {order.username}
               </TableCell>
-              <TableCell className="text-black/55">
+              <TableCell className="text-slate-500">
                 ${order.total_price}
               </TableCell>
-              <TableCell className="text-black/55">
-                <div
-                  className={`flex items-center gap-1.5 capitalize text-[13.5px] font-medium ${getStatusColor(
-                    order.status
-                  )}`}
-                >
-                  <FaCircle size={7} />
-                  {order.status}
+              <TableCell className="text-slate-500">
+                <div className="flex items-center gap-1.5 capitalize text-[13.5px] font-medium">
+                  {getStatus(order.status)}
                 </div>
               </TableCell>
-              <TableCell className="cursor-pointer text-slate-500">
-                <Button variant="ghost" size="icon">
-                  <FaEye className="p-1 cursor-pointer" />
+              <TableCell className="text-slate-500">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hover:bg-slate-200/70"
+                >
+                  <ArrowUpRightFromSquare />
                 </Button>
               </TableCell>
             </TableRow>
@@ -77,7 +92,7 @@ function OrdersTable() {
       <TableFooter>
         <TableRow>
           <TableCell>Total</TableCell>
-          <TableCell className=" text-black/55">${total}</TableCell>
+          <TableCell className=" text-slate-500">${total}</TableCell>
         </TableRow>
       </TableFooter>
     </Table>

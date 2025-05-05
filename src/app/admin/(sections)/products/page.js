@@ -1,6 +1,5 @@
 "use client";
 import TotalProducts from "@/components/admin/TotalProducts";
-import Sidebar from "@/components/admin/SideBar";
 import { Products } from "@/components/admin/products/Products";
 import { useEffect, useState } from "react";
 
