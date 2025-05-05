@@ -14,3 +14,4 @@ const TotalOrders = ({ordersCount}) => {
     </div>
   );
 }
+export default TotalOrders;
