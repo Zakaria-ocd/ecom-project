@@ -7,14 +7,14 @@ const TitleSection = ({ open }) => {
   const user = useSelector((state) => state.userReducer);
 
   return (
-    <div className="flex items-center justify-between rounded-md transition-colors">
-      <div className="h-[42px] flex items-center gap-x-1">
-        <Link
-          href={"/"}
-          className="grid size-[42px] shrink-0 place-content-center rounded-md hover:bg-slate-100"
-        >
-          <Logo className="w-8" />
-        </Link>
+    <Link
+      href={"/"}
+      className="flex items-center justify-between rounded-md mt-0.5"
+    >
+      <div className="h-10 flex items-center gap-x-1">
+        <div className="grid w-10 shrink-0 place-content-center rounded-md">
+          <Logo className="w-7" />
+        </div>
         {open && (
           <motion.div
             layout
@@ -30,7 +30,7 @@ const TitleSection = ({ open }) => {
           </motion.div>
         )}
       </div>
-    </div>
+    </Link>
   );
 };
 

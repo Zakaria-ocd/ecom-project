@@ -6,19 +6,19 @@ export default function ShowUsers() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    async function getData() {
+    async function fetchUsers() {
       const data = await fetch("http://localhost:8000/api/users/8");
       setUsers(await data.json());
     }
-    getData();
+    fetchUsers();
   }, []);
 
   return (
-    <div className="flex  mt-3 ml-2 flex-col gap-3">
+    <div className="flex mt-3 ml-2 flex-col gap-4">
       {users.map((item) => (
-        <div className="w-full h-9 flex gap-2" key={item.id}>
+        <div className="w-full h-9 flex items-center gap-2" key={item.id}>
           <Image
-            alt=""
+            alt={item.username}
             src={`/assets/users/${item.image}`}
             height={"300"}
             width={"500"}

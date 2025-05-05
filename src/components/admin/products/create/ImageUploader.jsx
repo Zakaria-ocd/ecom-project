@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -12,8 +11,11 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FaUpload, FaXmark } from "react-icons/fa6";
 import { IoIosCloudUpload } from "react-icons/io";
+import ProductOptions from "./ProductOptions";
+import { toast } from "sonner";
 
 export default function ImageUploader() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [categories, setCategories] = useState([]);
   const [selectedImages, setSelectedImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
@@ -21,9 +23,185 @@ export default function ImageUploader() {
     name: "",
     description: "",
     price: 0,
+    quantity: 1,
     category_id: "",
     seller_id: 2,
   });
+  const [productOptions, setProductOptions] = useState({
+    hasOptions: false,
+    options: [],
+  });
+  const [productOptionsKey, setProductOptionsKey] = useState(0);
+
+  function handleFileChange(event) {
+    const MAX_FILE_SIZE_MB = 5;
+    const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+    const MAX_FILE_COUNT = 10;
+    const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+    const files = Array.from(event.target.files);
+
+    const availableSlots = MAX_FILE_COUNT - selectedImages.length;
+    const validFiles = files.slice(0, availableSlots);
+
+    const filteredFiles = validFiles.filter((file) => {
+      if (!ALLOWED_TYPES.includes(file.type)) {
+        toast.error(`Invalid file type: ${file.name}`);
+        return false;
+      }
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        toast.error(
+          `File too big (${(file.size / 1024 / 1024).toFixed(1)}MB): ${
+            file.name
+          }`
+        );
+        return false;
+      }
+      return true;
+    });
+
+    if (files.length > validFiles.length) {
+      toast.warning(`Can only upload ${availableSlots} more files`);
+    }
+
+    setSelectedImages((prev) => [...prev, ...filteredFiles]);
+    setPreviewImages((prev) => [
+      ...prev,
+      ...filteredFiles.map((file) => URL.createObjectURL(file)),
+    ]);
+  }
+
+  function removeImage(index) {
+    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  async function createProduct(data) {
+    console.log(data);
+    const res = await fetch("http://localhost:8000/api/products/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to create product");
+    return await res.json();
+  }
+
+  async function uploadImages(productId, files) {
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append("images[]", file);
+    });
+    formData.append("product_id", productId);
+    const res = await fetch("http://localhost:8000/api/uploadImages", {
+      method: "POST",
+      body: formData,
+      headers: {
+        Accept: "application/json",
+      },
+    });
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Image upload failed");
+    }
+    return await res.json();
+  }
+
+  async function createProductWithImages(files) {
+    try {
+      const requestData = productOptions.hasOptions
+        ? {
+            name: productData.name,
+            description: productData.description,
+            category_id: productData.category_id,
+            seller_id: productData.seller_id,
+            options: productOptions.options,
+          }
+        : { ...productData };
+      const productId = await createProduct(requestData);
+      console.log(productId);
+      if (files.length > 0 && productId) {
+        await uploadImages(productId, files);
+      }
+      toast.success("Product created successfully!");
+      setSelectedImages([]);
+      setPreviewImages([]);
+      setProductData({
+        name: "",
+        description: "",
+        price: 0,
+        quantity: 1,
+        category_id: "",
+        seller_id: 2,
+      });
+      setProductOptions({
+        hasOptions: false,
+        options: [],
+      });
+      setProductOptionsKey((prev) => prev + 1);
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong!");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  const handleOptionsUpdate = (optionsData) => {
+    setProductOptions((prev) => ({
+      ...prev,
+      hasOptions: !optionsData.hasNoOptions,
+      options: optionsData.selectedOptions.map((opt) => ({
+        ...opt,
+        values: opt.values.filter(
+          (val) => val.option_value_id !== null && val.price > 0
+        ),
+      })),
+    }));
+
+    if (optionsData.hasNoOptions) {
+      setProductData((prev) => ({
+        ...prev,
+        price: optionsData.hasNoOptionsInputs.price,
+        quantity: optionsData.hasNoOptionsInputs.quantity,
+      }));
+    }
+  };
+
+  function handleSubmit() {
+    if (isSubmitting) return;
+    const { name, description, category_id, price, quantity } = productData;
+    if (!name || !description || !category_id) {
+      toast.warning("Fill all required fields!");
+      return;
+    }
+    if (!productOptions.hasOptions && (price <= 0 || quantity <= 0)) {
+      toast.warning("Price and quantity must be greater than zero");
+      return;
+    }
+    if (selectedImages.length === 0) {
+      toast.warning("Please select at least one image.");
+      return;
+    }
+    if (selectedImages.length > 10) {
+      toast.warning("Maximum 10 images allowed");
+      return;
+    }
+    if (productOptions.hasOptions) {
+      const hasInvalid = productOptions.options.some(
+        (opt) =>
+          !opt.option_id ||
+          opt.values.length === 0 ||
+          opt.values.some((v) => !v.option_value_id || v.price <= 0)
+      );
+      if (hasInvalid) {
+        toast.warning("Please complete all option values with valid prices");
+        return;
+      }
+    }
+    setIsSubmitting(true);
+    createProductWithImages(selectedImages);
+  }
 
   useEffect(() => {
     async function fetchCategories() {
@@ -37,86 +215,6 @@ export default function ImageUploader() {
     }
     fetchCategories();
   }, []);
-
-  const handleFileChange = (event) => {
-    const files = Array.from(event.target.files);
-    setSelectedImages((prev) => [...prev, ...files]);
-    const previews = files.map((file) => URL.createObjectURL(file));
-    setPreviewImages((prev) => [...prev, ...previews]);
-  };
-
-  const removeImage = (index) => {
-    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
-    setPreviewImages((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  async function createProduct(data) {
-    console.log(data);
-    const res = await fetch("http://localhost:8000/api/createProduct", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    if (!res.ok) throw new Error("Failed to create product");
-
-    const { product } = await res.json();
-    return product.id;
-  }
-
-  async function uploadImages(productId, files) {
-    const formData = new FormData();
-    files.forEach((file) => formData.append("images[]", file));
-    formData.append("product_id", productId);
-
-    const res = await fetch("http://localhost:8000/api/uploadImages", {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!res.ok) throw new Error("Failed to upload images");
-
-    const data = await res.json();
-    return data.images;
-  }
-
-  async function createProductWithImages(data, files) {
-    try {
-      const productId = await createProduct(data);
-      await uploadImages(productId, files);
-      alert("Product created successfully!");
-
-      setSelectedImages([]);
-      setPreviewImages([]);
-      setProductData({
-        name: "",
-        description: "",
-        price: 0,
-        category_id: "",
-        seller_id: 1,
-      });
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong!");
-    }
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { name, description, price, category_id } = productData;
-
-    if (!name || !description || !price || !category_id) {
-      alert("Fill all fields please!");
-      return;
-    }
-
-    if (selectedImages.length === 0) {
-      alert("Please select at least one image.");
-      return;
-    }
-
-    createProductWithImages(productData, selectedImages);
-  };
 
   return (
     <div className="flex flex-col gap-6 px-4 pt-8 pb-[60px]">
@@ -159,7 +257,7 @@ export default function ImageUploader() {
               <input
                 id="file-upload"
                 type="file"
-                accept="image/*"
+                accept="image/jpeg, image/jpg, image/avif, image/png, image/webp"
                 multiple
                 onChange={handleFileChange}
                 className="hidden"
@@ -171,7 +269,8 @@ export default function ImageUploader() {
               htmlFor="file-upload"
               className="cursor-pointer px-4 py-2 flex items-center gap-2"
             >
-              Upload Images <FaUpload />
+              Upload Images ({selectedImages.length}/10, max 5MB each)
+              <FaUpload />
             </label>
           </Button>
         </div>
@@ -205,33 +304,19 @@ export default function ImageUploader() {
         </div>
         <div className="w-full">
           <label className="block mb-1 text-sm font-medium text-gray-900">
-            Price:
-          </label>
-          <input
-            type="number"
-            min={0}
-            value={productData.price}
-            onChange={(e) => {
-              const value = e.target.value;
-              Number(value) >= 0 &&
-                setProductData({
-                  ...productData,
-                  price: parseFloat(value),
-                });
-            }}
-            className="w-full rounded-lg border border-gray-300 p-2.5 text-sm text-gray-900"
-            required
-          />
-        </div>
-        <div className="w-full">
-          <label className="block mb-1 text-sm font-medium text-gray-900">
             Category:
           </label>
           <Select
-            value={productData.category_id?.toString()}
-            onValueChange={(value) =>
-              setProductData({ ...productData, category_id: parseInt(value) })
-            }
+            value={productData.category_id?.toString() || ""}
+            onValueChange={(value) => {
+              const numValue = parseInt(value, 10);
+              if (!isNaN(numValue) && numValue !== productData.category_id) {
+                setProductData((prev) => ({
+                  ...prev,
+                  category_id: numValue,
+                }));
+              }
+            }}
           >
             <SelectTrigger className="w-full bg-white">
               <SelectValue placeholder="Select a category" />
@@ -245,12 +330,18 @@ export default function ImageUploader() {
             </SelectContent>
           </Select>
         </div>
-
+        <ProductOptions
+          key={productOptionsKey}
+          onOptionsUpdate={handleOptionsUpdate}
+          productData={productData}
+          setProductData={setProductData}
+        />
         <Button
           onClick={handleSubmit}
-          className="absolute bottom-3 bg-indigo-600 hover:bg-indigo-700"
+          className="absolute bottom-3 bg-indigo-500 hover:bg-indigo-600"
+          disabled={isSubmitting}
         >
-          Create Product
+          {isSubmitting ? "Creating..." : "Create Product"}
         </Button>
       </div>
     </div>
