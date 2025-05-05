@@ -3,8 +3,8 @@ import Logo from "@/components/Logo";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 
-const TitleSection = ({ open, username }) => {
-  const plan = useSelector((state) => state.dashboard.plan);
+const TitleSection = ({ open }) => {
+  const user = useSelector((state) => state.userReducer);
 
   return (
     <div className="flex items-center justify-between rounded-md transition-colors">
@@ -24,9 +24,9 @@ const TitleSection = ({ open, username }) => {
             className="flex flex-col gap-y-px"
           >
             <span className="block text-xs text-slate-700 font-bold">
-              {username}
+              {user.username}
             </span>
-            <span className="block text-xs text-slate-500">{plan}</span>
+            <span className="block text-xs text-slate-500 capitalize">{user.role} plan</span>
           </motion.div>
         )}
       </div>

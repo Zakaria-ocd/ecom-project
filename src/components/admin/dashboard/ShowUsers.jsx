@@ -22,7 +22,7 @@ export default function ShowUsers() {
             src={`/assets/users/${item.image}`}
             height={"300"}
             width={"500"}
-            className="size-9 rounded-full"
+            className="size-9 object-cover rounded-full"
           ></Image>
           <div className="flex w-[60%] h-full flex-col justify-between">
             <p className="font-semibold text-[0.9rem]">{item.username}</p>

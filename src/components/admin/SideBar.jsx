@@ -16,8 +16,7 @@ const Sidebar = ({section='Dashboard'}) => {
   useEffect(()=>{
     setSelected(section)
   },[section])
-  const adminUsername = useSelector((state) => state.dashboard.adminUsername);
-
+  const username = useSelector((state) => state.userReducer.username);
   return (
     <motion.nav
       layout
@@ -29,7 +28,6 @@ const Sidebar = ({section='Dashboard'}) => {
     >
       <SidebarTitleSection
         open={open}
-        username={adminUsername}
       />
 
       <span className="w-full h-px bg-slate-300 block my-3"></span>

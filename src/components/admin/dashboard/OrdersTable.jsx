@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { FaCircle, FaEye } from "react-icons/fa";
 
@@ -65,10 +66,8 @@ function OrdersTable() {
                   {order.status}
                 </div>
               </TableCell>
-              <TableCell className="cursor-pointer text-slate-500">
-                <Button variant="ghost" size="icon">
-                  <FaEye className="p-1 cursor-pointer" />
-                </Button>
+              <TableCell className="cursor-pointer w-14 text-center text-slate-500">
+                  <Link  href={`/admin/orders/${order.order_id}`}><FaEye className="p-1 hover:size-[30px] hover:ease-out hover:duration-300 size-7 cursor-pointer " /></Link>
               </TableCell>
             </TableRow>
           );
