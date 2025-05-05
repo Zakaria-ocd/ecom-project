@@ -2,8 +2,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function NotFound() {
+    const router = useRouter();
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -60,12 +62,12 @@ export default function NotFound() {
                 need to go.
               </motion.p>
               <motion.div variants={itemVariants}>
-                <Link
-                  href="/"
+                <button
+                  onClick={()=>{router.back()}}
                   className="inline-block sm:w-full lg:w-auto my-2 border rounded-md py-4 px-8 text-center bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50 transition duration-300"
                 >
-                  Take me there!
-                </Link>
+                  Go back!
+                </button>
               </motion.div>
             </motion.div>
             <motion.div className="relative mt-8" variants={itemVariants}>

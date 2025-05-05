@@ -20,15 +20,13 @@ export default function ShowUsers() {
           <Image
             alt={item.username}
             src={`/assets/users/${item.image}`}
-            height={36}
-            width={36}
-            className="size-9 rounded-full"
-          />
-          <div className="flex flex-col">
-            <p className="font-semibold text-[0.9rem] text-slate-700">
-              {item.username}
-            </p>
-            <p className="text-[0.8rem] text-slate-500">{item.email}</p>
+            height={"300"}
+            width={"500"}
+            className="size-9 object-cover rounded-full"
+          ></Image>
+          <div className="flex w-[60%] h-full flex-col justify-between">
+            <p className="font-semibold text-[0.9rem]">{item.username}</p>
+            <p className="text-[0.8rem] text-black/55">{item.email}</p>
           </div>
         </div>
       ))}

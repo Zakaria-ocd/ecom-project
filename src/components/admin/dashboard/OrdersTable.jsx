@@ -9,8 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowUpRightFromSquare, PackageCheck } from "lucide-react";
+import { PackageCheck } from "lucide-react";
+import Link from "next/link";
 import { useState, useEffect } from "react";
+import { FaEye } from "react-icons/fa";
 import { MdOutlineLocalShipping, MdPendingActions } from "react-icons/md";
 
 function OrdersTable() {
@@ -76,14 +78,8 @@ function OrdersTable() {
                   {getStatus(order.status)}
                 </div>
               </TableCell>
-              <TableCell className="text-slate-500">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-slate-200/70"
-                >
-                  <ArrowUpRightFromSquare />
-                </Button>
+              <TableCell className="cursor-pointer w-14 text-center text-slate-500">
+                  <Link  href={`/admin/orders/${order.order_id}`}><FaEye className="p-1 hover:size-[30px] hover:ease-out hover:duration-300 size-7 cursor-pointer " /></Link>
               </TableCell>
             </TableRow>
           );

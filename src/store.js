@@ -1,9 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit';
-import dashboardReducer from './reducers/dashboardReducer';
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./features/user/userSlice";
 
 const store = configureStore({
   reducer: {
-    dashboard: dashboardReducer,
+    userReducer: userReducer,
   },
 });
 

@@ -5,21 +5,18 @@ import Option from "./SidebarOption";
 import SidebarToggleClose from "./SidebarToggleClose";
 import SidebarTitleSection from "./SidebarTitleSection";
 import { FiHome, FiShoppingCart, FiMessageCircle } from "react-icons/fi";
+import { FaGear } from "react-icons/fa6";
 import { TbUserDollar, TbDeviceAnalytics } from "react-icons/tb";
 import { MdAddCard } from "react-icons/md";
 import { useSelector } from "react-redux";
-import { PackagePlus, Settings } from "lucide-react";
 
-export default function Sidebar({ section = "Dashboard" }) {
+const Sidebar = ({section='Dashboard'}) => {
   const [open, setOpen] = useState(true);
   const [selected, setSelected] = useState("");
-  const adminUsername = useSelector((state) => state.dashboard.adminUsername);
-  const Boxes = () => <i className="fa-regular fa-boxes" />;
-
-  useEffect(() => {
-    setSelected(section);
-  }, [section]);
-
+  useEffect(()=>{
+    setSelected(section)
+  },[section])
+  const username = useSelector((state) => state.userReducer.username);
   return (
     <motion.nav
       layout
@@ -29,11 +26,13 @@ export default function Sidebar({ section = "Dashboard" }) {
       animate={{ width: open ? "208px" : "59px" }}
       transition={{ duration: 0.3 }}
     >
-      <SidebarTitleSection open={open} username={adminUsername} />
+      <SidebarTitleSection
+        open={open}
+      />
 
-      <span className="w-full h-px bg-slate-300 block my-2.5" />
+      <span className="w-full h-px bg-slate-300 block my-3"></span>
 
-      <div className="flex flex-col gap-1">
+      <div className="space-y-1">
         <Option
           Icon={FiHome}
           title="Dashboard"
@@ -63,20 +62,6 @@ export default function Sidebar({ section = "Dashboard" }) {
           open={open}
         />
         <Option
-          Icon={Boxes}
-          title="Products"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-        />
-        <Option
-          Icon={PackagePlus}
-          title="Create Product"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-        />
-        <Option
           Icon={FiMessageCircle}
           title="Messages"
           selected={selected}
@@ -92,7 +77,7 @@ export default function Sidebar({ section = "Dashboard" }) {
           open={open}
         />
         <Option
-          Icon={Settings}
+          Icon={FaGear}
           title="Settings"
           selected={selected}
           setSelected={setSelected}
@@ -103,4 +88,6 @@ export default function Sidebar({ section = "Dashboard" }) {
       <SidebarToggleClose open={open} setOpen={setOpen} />
     </motion.nav>
   );
-}
+};
+
+export default Sidebar;
