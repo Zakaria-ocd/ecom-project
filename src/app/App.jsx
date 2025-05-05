@@ -1,4 +1,5 @@
 "use client";
+import { Toaster } from "@/components/ui/sonner";
 import store from "@/store";
 import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
@@ -16,5 +17,11 @@ export default function App({ children }) {
     document.documentElement.classList.toggle("dark", isDark);
   }, []);
 
-  return <Provider store={store}>{mounted && children}</Provider>;
+  return (
+    <Provider store={store}>
+      {mounted && children}
+      <Toaster />
+      
+    </Provider>
+  );
 }
