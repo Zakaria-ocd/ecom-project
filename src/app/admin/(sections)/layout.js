@@ -46,7 +46,7 @@ export default function DashboardLayout({ children }) {
         <Provider store={store}>
           <div className="flex bg-slate-50">
             <Sidebar />
-            <div className="w-full h-screen flex flex-col space-y-4">
+            <div className="w-full h-screen flex flex-col">
               <div className="w-full h-[63px] bg-white flex justify-between items-center border-b px-4 py-2 shadow-sm">
                 <Search />
                 <Profile />
