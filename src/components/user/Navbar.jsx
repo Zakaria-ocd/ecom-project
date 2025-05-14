@@ -32,10 +32,17 @@ import {
   FaUserGear,
 } from "react-icons/fa6";
 
-export default function Navbar({ cartProducts }) {
+export default function Navbar({ cartProducts, setCartProducts }) {
   const isLogged = true; // for testing
   const [selectedTheme, setSelectedTheme] = useState("");
   const [systemIsDark, setSystemIsDark] = useState(false);
+  const [totalPrice, setTotalPrice] = useState(0);
+
+  useEffect(() => {
+    // Calculate total price whenever cart changes
+    const total = cartProducts?.reduce((sum, item) => sum + (item.price * item.quantity), 0) || 0;
+    setTotalPrice(total);
+  }, [cartProducts]);
 
   function applyTheme(theme) {
     document.documentElement.classList.remove("dark");
@@ -71,6 +78,10 @@ export default function Navbar({ cartProducts }) {
     setSystemIsDark(isDark);
   }, []);
 
+  const removeFromCart = (productId) => {
+    setCartProducts(prev => prev.filter(item => item.id !== productId));
+  };
+
   return (
     <nav className="sticky top-0 z-50 w-full h-14 bg-white backdrop-blur-sm flex flex-row justify-between items-center px-3 py-1 border-b border-b-slate-400/30 transition-colors dark:bg-slate-900 dark:border-b-slate-400/30">
       <Link href={"/"}>
@@ -93,47 +104,85 @@ export default function Navbar({ cartProducts }) {
 
           <Sheet>
             <SheetTrigger>
-              <div className="p-1" title="Shopping cart">
+              <div className="p-1 relative" title="Shopping cart">
                 <i className="fa-light fa-cart-shopping text-xl text-amber-400"></i>
+                {cartProducts?.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                    {cartProducts.length}
+                  </span>
+                )}
               </div>
             </SheetTrigger>
-            <SheetContent className="p-0 ">
-              <SheetDescription></SheetDescription>
-              <div className="h-full  w-full">
-                <h1 className="text-xl shadow-lg h-16 flex items-center font-bold pl-4 text-slate-800">
+            <SheetContent className="p-0">
+              <div className="h-full w-full flex flex-col">
+                <h1 className="text-xl shadow-lg h-16 flex items-center font-bold pl-4 text-slate-800 dark:text-slate-200">
                   SHOPPING CART
                 </h1>
 
-                <ScrollArea className="h-[320px] rounded-none w-full px-4 ">
-                  {cartProducts?.length > 0 &&
+                <ScrollArea className="flex-1 w-full px-4">
+                  {cartProducts?.length > 0 ? (
                     cartProducts.map((item) => (
-                      <>
-                        <div
-                          key={item.id}
-                          className="h-56 flex gap-8 pt-4 border-b-2 w-full"
-                        >
+                      <div
+                        key={item.id}
+                        className="py-4 border-b border-gray-200 dark:border-gray-700 flex gap-4"
+                      >
+                        <div className="w-24 h-24 relative flex-shrink-0">
                           <Image
-                            className="w-[40%] rounded-md h-[180px]"
+                            className="rounded-md object-cover"
                             src={item.image}
                             alt={item.name}
-                            width={500}
-                            height={300}
+                            fill
+                            sizes="(max-width: 96px) 100vw, 96px"
                           />
-                          <div className="flex flex-col">
-                            <div>
-                              <p className="font-semibold text-[1.1rem]">
-                                {item.name}
-                              </p>
-                              <p className="text-gray-700">{item.color.name}</p>
-                            </div>
-                            <p className="text-rose-600">$ {item.price}</p>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                            {item.name}
+                          </h3>
+                          {item.color && (
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              Color: {item.color.name}
+                            </p>
+                          )}
+                          {item.size && (
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              Size: {item.size.name}
+                            </p>
+                          )}
+                          <div className="mt-1 flex items-center justify-between">
+                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                              ${item.price} × {item.quantity}
+                            </p>
+                            <button
+                              onClick={() => removeFromCart(item.id)}
+                              className="text-red-500 hover:text-red-700 dark:hover:text-red-400"
+                            >
+                              <i className="fa-regular fa-trash-can"></i>
+                            </button>
                           </div>
                         </div>
-                        <div></div>
-                      </>
-                    ))}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="h-full flex items-center justify-center">
+                      <p className="text-gray-500 dark:text-gray-400">Your cart is empty</p>
+                    </div>
+                  )}
                 </ScrollArea>
-                <div className="">smdlsmdl</div>
+
+                {cartProducts?.length > 0 && (
+                  <div className="border-t border-gray-200 dark:border-gray-700 p-4">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-base font-medium text-gray-900 dark:text-gray-100">Total</span>
+                      <span className="text-base font-medium text-gray-900 dark:text-gray-100">
+                        ${totalPrice.toFixed(2)}
+                      </span>
+                    </div>
+                    <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                      Checkout
+                    </button>
+                  </div>
+                )}
               </div>
             </SheetContent>
           </Sheet>
