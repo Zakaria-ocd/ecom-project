@@ -23,7 +23,7 @@ const nextConfig = {
   images: {
     domains: ["plus.unsplash.com", "images.unsplash.com", "localhost"],
   },
-  reactStrictMode: true,
+  reactStrictMode: false,
 };
 
 export default nextConfig;
