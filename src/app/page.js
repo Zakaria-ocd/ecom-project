@@ -3,6 +3,7 @@ import HeroSection from "@/components/user/HeroSection";
 import Navbar from "@/components/user/Navbar";
 import Products from "@/components/user/Products";
 import { useEffect, useState } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function Home() {
   const [cartProducts, setCartProducts] = useState([]);
@@ -24,6 +25,7 @@ export default function Home() {
       <Navbar cartProducts={cartProducts} setCartProducts={setCartProducts} />
       <HeroSection />
       <Products cartProducts={cartProducts} setCartProducts={setCartProducts} />
+      <Toaster position="bottom-right" />
     </div>
   );
 }

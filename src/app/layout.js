@@ -1,5 +1,8 @@
-import App from "./App";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Create Next App",
@@ -15,8 +18,9 @@ export default function RootLayout({ children }) {
           href="https://site-assets.fontawesome.com/releases/v6.5.1/css/all.css"
         />
       </head>
-      <body className="font-sans antialiased">
-        <App>{children}</App>
+      <body className={inter.className}>
+        {children}
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );
