@@ -287,17 +287,17 @@ export default function Products({ cartProducts, setCartProducts }) {
       console.log(sTypes);
       console.log(typesSelcet);
       console.log(valuesSelcet);
-      const productswithImages = await Promise.all(
-        productswithOptions.map(async (product) => {
-          const res = await fetch(
-            `http://localhost:8000/api/productImage/${product.id}`
-          );
-          const blob = await res.blob();
-          const image = URL.createObjectURL(blob);
-          return { ...product, image };
-        })
-      );
-      setProducts(productswithImages); // override previous state with prices
+      // const productswithImages = await Promise.all(
+      //   productswithOptions.map(async (product) => {
+      //     const res = await fetch(
+      //       `http://localhost:8000/api/productImage/${product.id}`
+      //     );
+      //     const blob = await res.blob();
+      //     const image = URL.createObjectURL(blob);
+      //     return { ...product, image };
+      //   })
+      // );
+      setProducts(productswithOptions); // override previous state with prices
       setSelectedTypes(sTypes);
       setProductsTypes(typesSelcet);
       setProductsTypeValues(valuesSelcet);
@@ -566,7 +566,7 @@ export default function Products({ cartProducts, setCartProducts }) {
                             <DialogDescription></DialogDescription>
                             <div className="w-full absolute h-full flex">
                                 <Image
-                                className="w-1/2 object-cover h-full"
+                                className="w-1/2 h-full"
                                 src={`http://localhost:8000/api/productImage/${item.id}`}
                                   alt={item.name}
                                   width={500}

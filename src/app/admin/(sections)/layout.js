@@ -1,6 +1,5 @@
 "use client";
-import { Provider, useDispatch } from "react-redux";
-import store from "@/store";
+import { useDispatch } from "react-redux";
 import Sidebar from "@/components/admin/SideBar";
 import Profile from "@/components/admin/Profile";
 import Search from "@/components/admin/Search";
@@ -14,7 +13,7 @@ export default function DashboardLayout({ children }) {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
-    async function checkAuuth() {
+    async function checkAuth() {
       if (!localStorage.getItem("token")) {
         return router.replace("/admin/login");
       }
@@ -39,24 +38,22 @@ export default function DashboardLayout({ children }) {
         router.replace("/admin/login");
       }
     }
-    checkAuuth();
+    checkAuth();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
       {loading ? (
-        <Provider store={store}>
-          <div className="flex bg-slate-50">
-            <Sidebar />
-            <div className="w-full h-screen flex flex-col">
-              <div className="w-full h-[63px] bg-white flex justify-between items-center border-b px-4 py-2 shadow-sm">
-                <Search />
-                <Profile />
-              </div>
-              <div className="size-full overflow-y-auto">{children}</div>
+        <div className="flex bg-slate-50">
+          <Sidebar />
+          <div className="w-full h-screen flex flex-col">
+            <div className="w-full h-[63px] bg-white flex justify-between items-center border-b px-4 py-2 shadow-sm">
+              <Search />
+              <Profile />
             </div>
+            <div className="size-full overflow-y-auto">{children}</div>
           </div>
-        </Provider>
+        </div>
       ) : (
         <div className="w-screen h-screen flex items-center justify-center">
           <Loader2 className="size-16 animate-spin text-blue-600" />

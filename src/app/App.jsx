@@ -20,8 +20,7 @@ export default function App({ children }) {
   return (
     <Provider store={store}>
       {mounted && children}
-      <Toaster />
-      
+      <Toaster position="top-right" richColors />
     </Provider>
   );
 }
