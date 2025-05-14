@@ -6,7 +6,8 @@ import Profile from "@/components/admin/Profile";
 import Search from "@/components/admin/Search";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { authUser,fetchUserImage} from "@/features/user/userSlice";
+import { authUser, fetchUserImage } from "@/features/user/userSlice";
+import { Loader2 } from "lucide-react";
 
 export default function DashboardLayout({ children }) {
   const router = useRouter();
@@ -33,12 +34,13 @@ export default function DashboardLayout({ children }) {
         const user = data.user;
         setLoading(true);
         dispatch(authUser(user));
-        dispatch(fetchUserImage(user.id))
+        dispatch(fetchUserImage(user.id));
       } else {
         router.replace("/admin/login");
       }
     }
     checkAuuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
@@ -56,7 +58,9 @@ export default function DashboardLayout({ children }) {
           </div>
         </Provider>
       ) : (
-        <p>loading...</p>
+        <div className="w-screen h-screen flex items-center justify-center">
+          <Loader2 className="size-16 animate-spin text-blue-600" />
+        </div>
       )}
     </>
   );

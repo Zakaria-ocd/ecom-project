@@ -56,7 +56,7 @@ export default function CreateProduct() {
     const MAX_FILE_SIZE_MB = 5;
     const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
     const MAX_FILE_COUNT = 10;
-    const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+    const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/avif", "image/png", "image/webp"];
 
     const files = Array.from(event.target.files);
     const availableSlots = MAX_FILE_COUNT - selectedImages.length;
@@ -127,19 +127,25 @@ export default function CreateProduct() {
   };
 
   async function uploadImages(productId, files) {
-    const formData = new FormData();
-    files.forEach((file) => formData.append("images[]", file));
-    formData.append("product_id", productId);
-    const res = await fetch("http://localhost:8000/api/uploadImages", {
-      method: "POST",
-      body: formData,
-      headers: { Accept: "application/json" },
-    });
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || "Image upload failed");
+    try {
+      const formData = new FormData();
+      files.forEach((file) => formData.append("images[]", file));
+      formData.append("product_id", productId);
+
+      const res = await fetch("http://localhost:8000/api/uploadImages", {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" },
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        return data;
+      }
+    } catch (error) {
+      console.error(data.message, error, "Image upload failed");
+      toast.error(data.message);
     }
-    return res.json();
   }
 
   const handleSubmit = async (e) => {
@@ -156,31 +162,41 @@ export default function CreateProduct() {
         body: JSON.stringify(newProduct),
       });
       if (!productRes.ok) throw new Error("Failed to create product");
-      const { data } = await productRes.json();
-      const productId = data.id;
+      const prData = await productRes.json();
+      const productId = prData.data.id;
 
       if (selectedImages.length && productId) {
         await uploadImages(productId, selectedImages);
       }
 
-      const choicePromises = productChoices.map((choice) =>
-        fetch(`http://localhost:8000/api/products/${productId}/choices`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            typeValuePairs: choice.typeValuePairs,
-            price: choice.price,
-            quantity: choice.quantity,
-          }),
-        })
-      );
+      const choicePromises = productChoices.map((choice) => {
+        const choiceData = {
+          typeValuePairs: choice.typeValuePairs.map((pair) => ({
+            typeId: pair.typeId,
+            valueId: pair.valueId,
+            colorCode: pair.colorCode,
+          })),
+          price: choice.price,
+          quantity: choice.quantity,
+        };
+        const res = fetch(
+          `http://localhost:8000/api/products/${productId}/choices`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(choiceData),
+          }
+        );
+
+        return res;
+      });
 
       const responses = await Promise.all(choicePromises);
       const failed = responses.filter((r) => !r.ok);
       if (failed.length)
         throw new Error(`Failed to create ${failed.length} choices`);
 
-      toast.success("Product created successfully");
+      toast.success(prData.message);
       setProductData({ name: "", description: "", category_id: null });
       setSelectedImages([]);
       setPreviewImages([]);
@@ -188,7 +204,7 @@ export default function CreateProduct() {
       setComponentKey((prev) => prev + 1);
     } catch (error) {
       console.error(error);
-      toast.error(error.message || "Failed to create product");
+      toast.error(error.message);
     } finally {
       setSubmitting(false);
     }
@@ -239,7 +255,7 @@ export default function CreateProduct() {
               <input
                 id="file-upload"
                 type="file"
-                accept="image/jpeg,image/png,image/webp"
+                accept="image/jpeg,image/jpg,image/avif,image/png,image/webp"
                 multiple
                 onChange={handleFileChange}
                 className="hidden"
@@ -339,7 +355,7 @@ export default function CreateProduct() {
         >
           {submitting ? (
             <>
-              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              <Loader2 className="size-4 animate-spin mr-2" />
               Creating...
             </>
           ) : (

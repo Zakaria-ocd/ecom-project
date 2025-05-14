@@ -41,6 +41,7 @@ export default function ProductChoices({ onChoicesUpdate }) {
 
   const [typeSelections, setTypeSelections] = useState({});
   const [valueSelections, setValueSelections] = useState({});
+  const [colorSelections, setColorSelections] = useState({});
 
   const [openDropdowns, setOpenDropdowns] = useState({
     type: null,
@@ -67,6 +68,10 @@ export default function ProductChoices({ onChoicesUpdate }) {
     const newValueSelections = { ...valueSelections };
     delete newValueSelections[choiceId];
     setValueSelections(newValueSelections);
+
+    const newColorSelections = { ...colorSelections };
+    delete newColorSelections[choiceId];
+    setColorSelections(newColorSelections);
 
     setOpenDropdowns({
       type: null,
@@ -96,12 +101,30 @@ export default function ProductChoices({ onChoicesUpdate }) {
     });
   };
 
+  const handleColorChange = (choiceId, color) => {
+    setColorSelections({
+      ...colorSelections,
+      [choiceId]: color,
+    });
+  };
+
+  const isColorType = (typeId) => {
+    const type = availableTypes.find((t) => t.id === typeId);
+    return type && type.name.toLowerCase().includes("color");
+  };
+
   const addTypeValuePair = (choiceId) => {
     const selectedType = typeSelections[choiceId];
     const selectedValue = valueSelections[choiceId];
+    const selectedColor = colorSelections[choiceId];
 
     if (!selectedType || !selectedValue) {
       toast.warning("Please select both type and value");
+      return;
+    }
+
+    if (isColorType(selectedType) && !selectedColor) {
+      toast.warning("Please select a color");
       return;
     }
 
@@ -118,6 +141,7 @@ export default function ProductChoices({ onChoicesUpdate }) {
             typeName: typeObj.name,
             valueId: selectedValue,
             value: valueObj.value,
+            colorCode: isColorType(selectedType) ? selectedColor : null,
           };
 
           return {
@@ -131,10 +155,13 @@ export default function ProductChoices({ onChoicesUpdate }) {
 
     const newTypeSelections = { ...typeSelections };
     const newValueSelections = { ...valueSelections };
+    const newColorSelections = { ...colorSelections };
     delete newTypeSelections[choiceId];
     delete newValueSelections[choiceId];
+    delete newColorSelections[choiceId];
     setTypeSelections(newTypeSelections);
     setValueSelections(newValueSelections);
+    setColorSelections(newColorSelections);
   };
 
   const removeTypeValuePair = (choiceId, typeId) => {
@@ -228,6 +255,7 @@ export default function ProductChoices({ onChoicesUpdate }) {
     ]);
     setTypeSelections({});
     setValueSelections({});
+    setColorSelections({});
     toast.success("All choices cleared");
 
     if (onChoicesUpdate) {
@@ -248,6 +276,7 @@ export default function ProductChoices({ onChoicesUpdate }) {
     if (choices.length === 0) {
       setTypeSelections({});
       setValueSelections({});
+      setColorSelections({});
     }
   }, [choices]);
 
@@ -458,10 +487,43 @@ export default function ProductChoices({ onChoicesUpdate }) {
                 </Popover>
               </div>
 
+              {/* Color Picker - Only visible when color type is selected */}
+              {typeSelections[choice.id] &&
+                isColorType(typeSelections[choice.id]) &&
+                valueSelections[choice.id] && (
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Color Code
+                    </label>
+                    <div className="flex gap-2 items-center">
+                      <input
+                        type="color"
+                        value={colorSelections[choice.id] || "#000000"}
+                        onChange={(e) =>
+                          handleColorChange(choice.id, e.target.value)
+                        }
+                        className="w-12 h-10 p-1 border rounded cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={colorSelections[choice.id] || ""}
+                        onChange={(e) =>
+                          handleColorChange(choice.id, e.target.value)
+                        }
+                        placeholder="#000000"
+                        className="flex-1 p-2 border rounded"
+                      />
+                    </div>
+                  </div>
+                )}
+
               <Button
                 onClick={() => addTypeValuePair(choice.id)}
                 disabled={
-                  !typeSelections[choice.id] || !valueSelections[choice.id]
+                  !typeSelections[choice.id] ||
+                  !valueSelections[choice.id] ||
+                  (isColorType(typeSelections[choice.id]) &&
+                    !colorSelections[choice.id])
                 }
                 className="bg-emerald-500 hover:bg-emerald-600 text-white"
               >
@@ -482,6 +544,12 @@ export default function ProductChoices({ onChoicesUpdate }) {
                         {pair.typeName}:
                       </span>
                       <span className="text-sm">{pair.value}</span>
+                      {pair.colorCode && (
+                        <div
+                          className="w-4 h-4 rounded-full border border-gray-300"
+                          style={{ backgroundColor: pair.colorCode }}
+                        />
+                      )}
                       <button
                         onClick={() =>
                           removeTypeValuePair(choice.id, pair.typeId)
