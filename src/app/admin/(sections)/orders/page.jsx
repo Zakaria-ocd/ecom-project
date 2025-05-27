@@ -1,6 +1,5 @@
 "use client";
-import TotalOrders from "@/components/admin/TotalOrders";
-import OrdersTable from "@/components/admin/orders/OrdersTable";
+import ExpandedOrdersTable from "@/components/admin/dashboard/ExpandedOrdersTable";
 import { useState, useEffect } from "react";
 
 export default function OrdersPage() {
@@ -9,7 +8,12 @@ export default function OrdersPage() {
 
   useEffect(() => {
     async function getData() {
-      const data = await fetch("http://localhost:8000/api/orders");
+      const data = await fetch("http://localhost:8000/api/orders", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       setOrders(await data.json());
     }
     getData();
@@ -18,8 +22,7 @@ export default function OrdersPage() {
   return (
     <div className="flex">
       <div className="flex-1 p-6">
-        <TotalOrders ordersCount={orders.length} />
-        <OrdersTable
+        <ExpandedOrdersTable
           orders={orders}
           expandedOrderId={expandedOrderId}
           setExpandedOrderId={setExpandedOrderId}

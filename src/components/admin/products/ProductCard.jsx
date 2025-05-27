@@ -190,12 +190,12 @@ export default function ProductCard({ product, handleDeleteProduct }) {
 
         setChoices(choicesData.data);
       } catch (error) {
-        console.error("Error fetching choices data:", error);
         setChoices([]);
       } finally {
         setChoicesLoading(false);
       }
     }
+
     async function fetchImages() {
       setImagesLoading(true);
       try {
@@ -204,26 +204,19 @@ export default function ProductCard({ product, handleDeleteProduct }) {
         );
         const imageIds = await imagesRes.json();
 
-        const imagePromises = (imageIds || []).map(async (imageId) => {
-          try {
-            const imageResponse = await fetch(
-              `http://localhost:8000/api/image/${imageId}`
-            );
-            const blob = await imageResponse.blob();
-            return {
-              id: imageId,
-              url: URL.createObjectURL(blob),
-            };
-          } catch (error) {
-            console.error("Error loading image:", error);
-            return null;
-          }
-        });
+        if (!imageIds || !Array.isArray(imageIds) || imageIds.length === 0) {
+          setImages([]);
+          return;
+        }
 
-        const loadedImages = (await Promise.all(imagePromises)).filter(Boolean);
-        setImages(loadedImages);
+        // Use direct URLs with a timestamp to avoid caching issues
+        const imageUrls = imageIds.map((imageId) => ({
+          id: imageId,
+          url: `http://localhost:8000/api/image/${imageId}`,
+        }));
+
+        setImages(imageUrls);
       } catch (error) {
-        console.error("Error fetching images data:", error);
         setImages([]);
       } finally {
         setImagesLoading(false);
@@ -233,14 +226,6 @@ export default function ProductCard({ product, handleDeleteProduct }) {
     fetchChoices();
     fetchImages();
   }, [product.id]);
-
-  useEffect(() => {
-    return () => {
-      images.forEach((image) => {
-        URL.revokeObjectURL(image.url);
-      });
-    };
-  }, [images]);
 
   return (
     <TooltipProvider delayDuration={100}>

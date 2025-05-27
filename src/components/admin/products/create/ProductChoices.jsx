@@ -27,7 +27,10 @@ import {
 import { Check, ChevronsUpDown, Loader2, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 
-export default function ProductChoices({ onChoicesUpdate }) {
+export default function ProductChoices({
+  onChoicesUpdate,
+  initialChoices = [],
+}) {
   const [availableTypes, setAvailableTypes] = useState([]);
   const [availableValues, setAvailableValues] = useState({});
   const [choices, setChoices] = useState([
@@ -50,6 +53,7 @@ export default function ProductChoices({ onChoicesUpdate }) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [initialChoicesLoaded, setInitialChoicesLoaded] = useState(false);
 
   const handleTypeSelect = (choiceId, typeId) => {
     const numericId = Number(typeId);
@@ -290,18 +294,32 @@ export default function ProductChoices({ onChoicesUpdate }) {
     const fetchAvailableChoices = async () => {
       try {
         setLoading(true);
-        const response = await fetch(
-          "http://localhost:8000/api/available-choices"
-        );
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch available choices");
+        // Fetch types
+        const typesResponse = await fetch("http://localhost:8000/api/types");
+
+        if (!typesResponse.ok) {
+          throw new Error("Failed to fetch available types");
         }
 
-        const data = await response.json();
+        const typesData = await typesResponse.json();
+        const types = typesData.data || [];
+        setAvailableTypes(types);
 
-        setAvailableTypes(data.availableTypes);
-        setAvailableValues(data.availableValues);
+        // Fetch values for each type
+        const valuesObj = {};
+        for (const type of types) {
+          const valuesResponse = await fetch(
+            `http://localhost:8000/api/types/${type.id}/values`
+          );
+
+          if (valuesResponse.ok) {
+            const valuesData = await valuesResponse.json();
+            valuesObj[type.id] = valuesData.data || [];
+          }
+        }
+
+        setAvailableValues(valuesObj);
       } catch (error) {
         console.error("Error fetching available choices:", error);
         toast.error("Failed to load available options");
@@ -312,6 +330,24 @@ export default function ProductChoices({ onChoicesUpdate }) {
 
     fetchAvailableChoices();
   }, []);
+
+  // Initialize with any existing choices
+  useEffect(() => {
+    if (!loading && initialChoices.length > 0 && !initialChoicesLoaded) {
+      if (initialChoices.length > 0) {
+        // Transform initial choices to match our format if needed
+        const formattedChoices = initialChoices.map((choice) => ({
+          id: choice.id || Date.now() + Math.random(),
+          typeValuePairs: choice.typeValuePairs || [],
+          price: choice.price || 0,
+          quantity: choice.quantity || 1,
+        }));
+
+        setChoices(formattedChoices);
+        setInitialChoicesLoaded(true);
+      }
+    }
+  }, [initialChoices, loading, initialChoicesLoaded]);
 
   if (loading) {
     return (

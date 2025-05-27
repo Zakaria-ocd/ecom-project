@@ -16,14 +16,14 @@ export default function ProductImages({
   useEffect(() => {
     setImageLoaded(false);
     setImageError(false);
-  }, [currentImageIndex]);
+  }, [currentImageIndex, currentImage]);
 
   // Check for invalid image
   useEffect(() => {
-    if (!currentImage || images[currentImageIndex]?.error) {
+    if (!currentImage) {
       setImageError(true);
     }
-  }, [currentImage, currentImageIndex, images]);
+  }, [currentImage]);
 
   return (
     <>
@@ -62,6 +62,7 @@ export default function ProductImages({
 
           {currentImage && !imageError && (
             <div className="absolute inset-0">
+              {" "}
               <Image
                 src={currentImage}
                 alt={`Product Image ${currentImageIndex + 1}`}
@@ -72,7 +73,8 @@ export default function ProductImages({
                 onError={() => setImageError(true)}
                 priority={currentImageIndex === 0}
                 unoptimized
-              />
+                crossOrigin="anonymous"
+              />{" "}
             </div>
           )}
         </>

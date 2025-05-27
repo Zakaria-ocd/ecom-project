@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Ellipsis, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +14,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import ProductImages from "./ProductImages";
 import Rating from "@/components/Rating";
 import Link from "next/link";
 
@@ -35,49 +34,30 @@ export default function Product() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [productLoading, setProductLoading] = useState(true);
   const [imagesLoading, setImagesLoading] = useState(true);
+  const [currentImageLoading, setCurrentImageLoading] = useState(false);
   const [choices, setChoices] = useState([]);
   const [choicesLoading, setChoicesLoading] = useState(true);
-  const [availableAttributes, setAvailableAttributes] = useState({});
   const [thumbnailErrors, setThumbnailErrors] = useState({});
   const [user, setUser] = useState(null);
   const [userLoading, setUserLoading] = useState(true);
   const [category, setCategory] = useState(null);
   const [categoryLoading, setCategoryLoading] = useState(true);
 
-  const groupChoicesByAttribute = () => {
-    const attributeGroups = {};
-    choices.forEach((choice) => {
-      choice.typeValuePairs.forEach((pair) => {
-        if (!attributeGroups[pair.typeName]) {
-          attributeGroups[pair.typeName] = {};
-        }
-        attributeGroups[pair.typeName][pair.value] = {
-          choice: choice,
-          colorCode: pair.colorCode || "",
-        };
-      });
-    });
-    return attributeGroups;
-  };
-
   const nextImage = () => {
+    setCurrentImageLoading(true);
     setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
   const prevImage = () => {
+    setCurrentImageLoading(true);
     setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
   const selectImage = (index) => {
-    setCurrentImageIndex(index);
-  };
-
-  const getChoiceAttribute = (choice, typeName) => {
-    if (!choice) return null;
-    const pair = choice.typeValuePairs.find(
-      (pair) => pair.typeName === typeName
-    );
-    return pair ? pair.value : null;
+    if (index !== currentImageIndex) {
+      setCurrentImageLoading(true);
+      setCurrentImageIndex(index);
+    }
   };
 
   const handleThumbnailError = (imageId) => {
@@ -94,6 +74,19 @@ export default function Product() {
       month: "long",
       day: "numeric",
     });
+  };
+
+  const getRoleColor = (role) => {
+    switch (role?.toLowerCase()) {
+      case "admin":
+        return "bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-100";
+      case "seller":
+        return "bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-100";
+      case "buyer":
+        return "bg-green-100 text-green-800 border-green-200 hover:bg-green-100";
+      default:
+        return "bg-slate-100 text-slate-800 border-slate-200 hover:bg-slate-100";
+    }
   };
 
   useEffect(() => {
@@ -138,28 +131,14 @@ export default function Product() {
 
         const userData = await response.json();
 
-        // Try to fetch user profile image
-        let imageUrl = null;
-        try {
-          const imageResponse = await fetch(
-            `http://localhost:8000/api/users/image/${sellerId}`
-          );
-
-          if (imageResponse.ok) {
-            const imageBlob = await imageResponse.blob();
-            imageUrl = URL.createObjectURL(imageBlob);
-          }
-        } catch (error) {
-          console.error("Error fetching user image:", error);
-        }
-
+        // Set user with direct image URL instead of blob conversion
         setUser({
           id: sellerId,
           username: userData.username || "",
           email: userData.email || "",
           role: userData.role || "Seller",
           createdAt: userData.created_at || "",
-          image: imageUrl,
+          image: `http://localhost:8000/api/users/image/${sellerId}`,
         });
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -228,44 +207,14 @@ export default function Product() {
           return;
         }
 
-        // Load all images without preloading
-        const imagePromises = imageIds.map(async (imageId) => {
-          try {
-            const imageResponse = await fetch(
-              `http://localhost:8000/api/image/${imageId}`
-            );
+        // Create direct image URL objects instead of fetching blobs
+        const loadedImages = imageIds.map((imageId) => ({
+          id: imageId,
+          url: `http://localhost:8000/api/image/${imageId}`,
+          error: false,
+        }));
 
-            if (!imageResponse.ok) {
-              console.error(
-                `Failed to load image ${imageId}: ${imageResponse.status}`
-              );
-              return {
-                id: imageId,
-                url: null,
-                error: true,
-              };
-            }
-
-            const blob = await imageResponse.blob();
-            const url = URL.createObjectURL(blob);
-
-            return {
-              id: imageId,
-              url,
-              error: false,
-            };
-          } catch (error) {
-            console.error(`Error loading image ${imageId}:`, error);
-            return {
-              id: imageId,
-              url: null,
-              error: true,
-            };
-          }
-        });
-
-        const loadedImages = await Promise.all(imagePromises);
-        setImages(loadedImages.filter((img) => img && !img.error));
+        setImages(loadedImages);
         setCurrentImageIndex(0); // Reset to first image when new images are loaded
       } catch (error) {
         console.error("Error fetching images:", error);
@@ -280,33 +229,10 @@ export default function Product() {
     fetchImages();
   }, [productId]);
 
-  useEffect(() => {
-    return () => {
-      images.forEach((image) => {
-        if (image.url) {
-          URL.revokeObjectURL(image.url);
-        }
-      });
-
-      // Clean up user image URL
-      if (user && user.image) {
-        URL.revokeObjectURL(user.image);
-      }
-    };
-  }, [images, user]);
-
-  useEffect(() => {
-    if (choices.length > 0) {
-      setAvailableAttributes(groupChoicesByAttribute());
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [choices]);
-
   return (
     <div className="bg-white min-h-screen">
       {/* Breadcrumb */}
-      <div className="p-2 bg-white">
+      <div className="px-3 py-2 bg-white">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -314,7 +240,9 @@ export default function Product() {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="/admin/products">Products</BreadcrumbLink>
+              <BreadcrumbLink href="/admin/categories">
+                {category ? category.name : "Category"}
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -338,11 +266,27 @@ export default function Product() {
                 </div>
               ) : (
                 <div className="relative w-full h-[500px] bg-gray-100 rounded-lg overflow-hidden">
-                  <ProductImages
-                    images={images}
-                    currentImageIndex={currentImageIndex}
-                    imagesLoading={imagesLoading}
-                  />
+                  <div className="relative w-full h-full">
+                    {currentImageLoading && (
+                      <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100">
+                        <Skeleton className="w-full h-full rounded-lg" />
+                      </div>
+                    )}
+                    {images[currentImageIndex] && (
+                      <Image
+                        src={images[currentImageIndex].url}
+                        alt={`Product image ${currentImageIndex + 1}`}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                        className="object-contain"
+                        onError={() =>
+                          handleThumbnailError(images[currentImageIndex].id)
+                        }
+                        onLoad={() => setCurrentImageLoading(false)}
+                        unoptimized
+                      />
+                    )}
+                  </div>
 
                   {images.length > 1 && (
                     <div className="absolute inset-0 flex items-center justify-between px-4 z-10">
@@ -451,7 +395,7 @@ export default function Product() {
                         {user.image ? (
                           <div className="relative h-16 w-16 rounded-full overflow-hidden border border-slate-200">
                             <Image
-                              src={user.image}
+                              src={`http://localhost:8000/api/users/imageById/${user.id}`}
                               alt={user.username || `User #${user.id}`}
                               width={64}
                               height={64}
@@ -482,7 +426,7 @@ export default function Product() {
                         <div className="flex items-center gap-2 mb-1">
                           <Badge
                             variant="outline"
-                            className="bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+                            className={getRoleColor(user.role)}
                           >
                             {user.role}
                           </Badge>
@@ -520,6 +464,14 @@ export default function Product() {
                           )}
                         </div>
                       </div>
+                      <Link href={`/admin/users/${user.id}`}>
+                        <Button
+                          variant="outline"
+                          className="[&_svg]:text-slate-500 [&_svg]:hover:text-slate-700 px-2.5 py-2"
+                        >
+                          <Eye />
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                 ) : (

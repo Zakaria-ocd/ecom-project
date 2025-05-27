@@ -56,7 +56,13 @@ export default function CreateProduct() {
     const MAX_FILE_SIZE_MB = 5;
     const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
     const MAX_FILE_COUNT = 10;
-    const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/avif", "image/png", "image/webp"];
+    const ALLOWED_TYPES = [
+      "image/jpeg",
+      "image/jpg",
+      "image/avif",
+      "image/png",
+      "image/webp",
+    ];
 
     const files = Array.from(event.target.files);
     const availableSlots = MAX_FILE_COUNT - selectedImages.length;

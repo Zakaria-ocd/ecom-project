@@ -10,7 +10,7 @@ import Link from "next/link";
 export default function Dashboard() {
   return (
     <>
-      <div className="flex flex-col gap-10 p-2">
+      <div className="flex flex-col gap-10 p-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <TotalSales totalSales={123} />
           <TotalProducts totalProducts={265} />
