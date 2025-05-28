@@ -116,6 +116,9 @@ export default function Navbar() {
           type="text"
           placeholder="Search"
         />
+        <button className="h-full bg-slate-100 flex justify-center items-center p-3 rounded-r-md transition-colors hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600/70">
+          <i className="fa-regular fa-magnifying-glass text-slate-400 transition-colors dark:text-slate-300"></i>
+        </button>
       </div>
 
       <div className="flex flex-row items-center gap-12">

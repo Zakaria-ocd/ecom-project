@@ -91,7 +91,10 @@ const Sidebar = ({ section = "Dashboard" }) => {
       return true;
     if (path === "/admin/products" && pathname === "/admin/products")
       return true;
-    if (path === "/admin/products/create" && pathname === "/admin/products/create")
+    if (
+      path === "/admin/products/create" &&
+      pathname === "/admin/products/create"
+    )
       return true;
     if (path === "/admin/orders" && pathname === "/admin/orders") return true;
     return false;
