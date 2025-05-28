@@ -27,7 +27,10 @@ import {
 import { Check, ChevronsUpDown, Loader2, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 
-export default function ProductChoices({ onChoicesUpdate }) {
+export default function ProductChoices({
+  onChoicesUpdate,
+  initialChoices = [],
+}) {
   const [availableTypes, setAvailableTypes] = useState([]);
   const [availableValues, setAvailableValues] = useState({});
   const [choices, setChoices] = useState([
@@ -41,6 +44,7 @@ export default function ProductChoices({ onChoicesUpdate }) {
 
   const [typeSelections, setTypeSelections] = useState({});
   const [valueSelections, setValueSelections] = useState({});
+  const [colorSelections, setColorSelections] = useState({});
 
   const [openDropdowns, setOpenDropdowns] = useState({
     type: null,
@@ -49,6 +53,7 @@ export default function ProductChoices({ onChoicesUpdate }) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [initialChoicesLoaded, setInitialChoicesLoaded] = useState(false);
 
   const handleTypeSelect = (choiceId, typeId) => {
     const numericId = Number(typeId);
@@ -67,6 +72,10 @@ export default function ProductChoices({ onChoicesUpdate }) {
     const newValueSelections = { ...valueSelections };
     delete newValueSelections[choiceId];
     setValueSelections(newValueSelections);
+
+    const newColorSelections = { ...colorSelections };
+    delete newColorSelections[choiceId];
+    setColorSelections(newColorSelections);
 
     setOpenDropdowns({
       type: null,
@@ -96,12 +105,30 @@ export default function ProductChoices({ onChoicesUpdate }) {
     });
   };
 
+  const handleColorChange = (choiceId, color) => {
+    setColorSelections({
+      ...colorSelections,
+      [choiceId]: color,
+    });
+  };
+
+  const isColorType = (typeId) => {
+    const type = availableTypes.find((t) => t.id === typeId);
+    return type && type.name.toLowerCase().includes("color");
+  };
+
   const addTypeValuePair = (choiceId) => {
     const selectedType = typeSelections[choiceId];
     const selectedValue = valueSelections[choiceId];
+    const selectedColor = colorSelections[choiceId];
 
     if (!selectedType || !selectedValue) {
       toast.warning("Please select both type and value");
+      return;
+    }
+
+    if (isColorType(selectedType) && !selectedColor) {
+      toast.warning("Please select a color");
       return;
     }
 
@@ -118,6 +145,7 @@ export default function ProductChoices({ onChoicesUpdate }) {
             typeName: typeObj.name,
             valueId: selectedValue,
             value: valueObj.value,
+            colorCode: isColorType(selectedType) ? selectedColor : null,
           };
 
           return {
@@ -131,10 +159,13 @@ export default function ProductChoices({ onChoicesUpdate }) {
 
     const newTypeSelections = { ...typeSelections };
     const newValueSelections = { ...valueSelections };
+    const newColorSelections = { ...colorSelections };
     delete newTypeSelections[choiceId];
     delete newValueSelections[choiceId];
+    delete newColorSelections[choiceId];
     setTypeSelections(newTypeSelections);
     setValueSelections(newValueSelections);
+    setColorSelections(newColorSelections);
   };
 
   const removeTypeValuePair = (choiceId, typeId) => {
@@ -228,6 +259,7 @@ export default function ProductChoices({ onChoicesUpdate }) {
     ]);
     setTypeSelections({});
     setValueSelections({});
+    setColorSelections({});
     toast.success("All choices cleared");
 
     if (onChoicesUpdate) {
@@ -248,6 +280,7 @@ export default function ProductChoices({ onChoicesUpdate }) {
     if (choices.length === 0) {
       setTypeSelections({});
       setValueSelections({});
+      setColorSelections({});
     }
   }, [choices]);
 
@@ -261,18 +294,32 @@ export default function ProductChoices({ onChoicesUpdate }) {
     const fetchAvailableChoices = async () => {
       try {
         setLoading(true);
-        const response = await fetch(
-          "http://localhost:8000/api/available-choices"
-        );
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch available choices");
+        // Fetch types
+        const typesResponse = await fetch("http://localhost:8000/api/types");
+
+        if (!typesResponse.ok) {
+          throw new Error("Failed to fetch available types");
         }
 
-        const data = await response.json();
+        const typesData = await typesResponse.json();
+        const types = typesData.data || [];
+        setAvailableTypes(types);
 
-        setAvailableTypes(data.availableTypes);
-        setAvailableValues(data.availableValues);
+        // Fetch values for each type
+        const valuesObj = {};
+        for (const type of types) {
+          const valuesResponse = await fetch(
+            `http://localhost:8000/api/types/${type.id}/values`
+          );
+
+          if (valuesResponse.ok) {
+            const valuesData = await valuesResponse.json();
+            valuesObj[type.id] = valuesData.data || [];
+          }
+        }
+
+        setAvailableValues(valuesObj);
       } catch (error) {
         console.error("Error fetching available choices:", error);
         toast.error("Failed to load available options");
@@ -283,6 +330,24 @@ export default function ProductChoices({ onChoicesUpdate }) {
 
     fetchAvailableChoices();
   }, []);
+
+  // Initialize with any existing choices
+  useEffect(() => {
+    if (!loading && initialChoices.length > 0 && !initialChoicesLoaded) {
+      if (initialChoices.length > 0) {
+        // Transform initial choices to match our format if needed
+        const formattedChoices = initialChoices.map((choice) => ({
+          id: choice.id || Date.now() + Math.random(),
+          typeValuePairs: choice.typeValuePairs || [],
+          price: choice.price || 0,
+          quantity: choice.quantity || 1,
+        }));
+
+        setChoices(formattedChoices);
+        setInitialChoicesLoaded(true);
+      }
+    }
+  }, [initialChoices, loading, initialChoicesLoaded]);
 
   if (loading) {
     return (
@@ -458,10 +523,43 @@ export default function ProductChoices({ onChoicesUpdate }) {
                 </Popover>
               </div>
 
+              {/* Color Picker - Only visible when color type is selected */}
+              {typeSelections[choice.id] &&
+                isColorType(typeSelections[choice.id]) &&
+                valueSelections[choice.id] && (
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Color Code
+                    </label>
+                    <div className="flex gap-2 items-center">
+                      <input
+                        type="color"
+                        value={colorSelections[choice.id] || "#000000"}
+                        onChange={(e) =>
+                          handleColorChange(choice.id, e.target.value)
+                        }
+                        className="w-12 h-10 p-1 border rounded cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={colorSelections[choice.id] || ""}
+                        onChange={(e) =>
+                          handleColorChange(choice.id, e.target.value)
+                        }
+                        placeholder="#000000"
+                        className="flex-1 p-2 border rounded"
+                      />
+                    </div>
+                  </div>
+                )}
+
               <Button
                 onClick={() => addTypeValuePair(choice.id)}
                 disabled={
-                  !typeSelections[choice.id] || !valueSelections[choice.id]
+                  !typeSelections[choice.id] ||
+                  !valueSelections[choice.id] ||
+                  (isColorType(typeSelections[choice.id]) &&
+                    !colorSelections[choice.id])
                 }
                 className="bg-emerald-500 hover:bg-emerald-600 text-white"
               >
@@ -482,6 +580,12 @@ export default function ProductChoices({ onChoicesUpdate }) {
                         {pair.typeName}:
                       </span>
                       <span className="text-sm">{pair.value}</span>
+                      {pair.colorCode && (
+                        <div
+                          className="w-4 h-4 rounded-full border border-gray-300"
+                          style={{ backgroundColor: pair.colorCode }}
+                        />
+                      )}
                       <button
                         onClick={() =>
                           removeTypeValuePair(choice.id, pair.typeId)

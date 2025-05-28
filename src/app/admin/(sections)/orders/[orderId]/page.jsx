@@ -1,6 +1,6 @@
 "use client";
 import TotalOrders from "@/components/admin/TotalOrders";
-import OrdersTable from "@/components/admin/orders/OrdersTable";
+import OrdersTable from "@/components/admin/dashboard/ExpandedOrdersTable";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 
@@ -17,7 +17,6 @@ export default function OrdersPage() {
     }
     getData();
   }, [params?.orderId]);
-  
 
   return (
     <div className="flex">

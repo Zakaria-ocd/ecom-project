@@ -21,7 +21,6 @@ export default function App({ children }) {
     <Provider store={store}>
       {mounted && children}
       <Toaster />
-      
     </Provider>
   );
 }

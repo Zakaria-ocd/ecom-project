@@ -12,21 +12,25 @@ import {
 import Image from "next/image";
 import { useState, useEffect, Fragment } from "react";
 import { FaCircle } from "react-icons/fa";
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from "framer-motion";
 
-function OrdersTable({ orders, expandedOrderId, setExpandedOrderId }) {
+export default function ExpandedOrdersTable({
+  orders,
+  expandedOrderId,
+  setExpandedOrderId,
+}) {
   const [userImage, setUserImage] = useState("");
 
   useEffect(() => {
     if (orders.length > 0 && expandedOrderId) {
       async function getUserImage(expandedOrderId) {
-        const buyer_id = orders.find(
+        const user_id = orders.find(
           (order) => order.order_id == expandedOrderId
-        ).buyer_id;
-        console.log(buyer_id);
-        if (buyer_id) {
+        ).user_id;
+        console.log(user_id);
+        if (user_id) {
           const res = await fetch(
-            `http://localhost:8000/api/users/image/${buyer_id}`
+            `http://localhost:8000/api/users/image/${user_id}`
           );
           console.log(expandedOrderId);
           const blob = await res.blob();
@@ -37,7 +41,7 @@ function OrdersTable({ orders, expandedOrderId, setExpandedOrderId }) {
       }
       getUserImage(expandedOrderId);
     }
-  }, [expandedOrderId,orders]);
+  }, [expandedOrderId, orders]);
 
   function getStatusColor(status) {
     if (status == "pending") {
@@ -149,7 +153,7 @@ function OrdersTable({ orders, expandedOrderId, setExpandedOrderId }) {
                           Order for
                         </h1>
                         <Table className="w-[980px]">
-                          <TableHeader >
+                          <TableHeader>
                             <TableRow className="bg-blue-500   hover:bg-blue-400">
                               <TableHead className="w-[130px]"></TableHead>
                               <TableHead className="text-slate-800 w-[100px]">
@@ -164,7 +168,6 @@ function OrdersTable({ orders, expandedOrderId, setExpandedOrderId }) {
                               <TableHead className="text-center text-slate-800">
                                 Products total
                               </TableHead>
-                              
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -194,7 +197,6 @@ function OrdersTable({ orders, expandedOrderId, setExpandedOrderId }) {
                               <TableCell className="text-black/70 text-center capitalize">
                                 {order.products_total}
                               </TableCell>
-                              
                             </TableRow>
                           </TableBody>
                         </Table>
@@ -220,5 +222,3 @@ function OrdersTable({ orders, expandedOrderId, setExpandedOrderId }) {
     </div>
   );
 }
-
-export default OrdersTable;
