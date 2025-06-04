@@ -1,45 +1,39 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { verifyAuth } from "@/lib/auth";
+import { getAuthToken } from "@/lib/auth";
 
 export async function GET(request, { params }) {
   try {
-    const token = request.headers.get("authorization")?.split(" ")[1];
-    const user = await verifyAuth(token);
+    const token =
+      request.headers.get("authorization")?.split(" ")[1] || getAuthToken();
 
-    if (!user) {
+    if (!token) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const userId = params.userId;
 
-    const userExists = await prisma.user.findUnique({
-      where: { id: userId },
-    });
+    // Get API base URL from env or use default
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
-    if (!userExists) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    if (user.role !== "admin" && user.id !== userId) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
-    const orders = await prisma.order.findMany({
-      where: { userId: userId },
-      include: {
-        orderItems: {
-          include: {
-            product: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
+    // Instead of using Prisma, fetch from the Laravel backend
+    const response = await fetch(`${API_URL}/api/users/${userId}/orders`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
     });
 
-    return NextResponse.json(orders);
+    const data = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: data.message || "Failed to fetch orders" },
+        { status: response.status }
+      );
+    }
+
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Error fetching user orders:", error);
     return NextResponse.json(

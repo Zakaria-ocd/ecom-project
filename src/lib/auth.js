@@ -9,9 +9,15 @@ export const isBuyer = async () => {
   return user && user.role === "buyer";
 };
 
+// Helper to get API URL
+const getApiUrl = () => {
+  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+};
+
 export const loginUser = async (email, password) => {
   try {
-    const response = await fetch("http://localhost:8000/api/login", {
+    const API_URL = getApiUrl();
+    const response = await fetch(`${API_URL}/api/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +53,8 @@ export const registerUser = async (
       password_confirmation,
     };
     console.log(enteredData);
-    const response = await fetch("http://localhost:8000/api/register", {
+    const API_URL = getApiUrl();
+    const response = await fetch(`${API_URL}/api/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -74,7 +81,8 @@ export const logoutUser = async () => {
     const token = getAuthToken();
     if (!token) return;
 
-    await fetch("http://localhost:8000/api/logout", {
+    const API_URL = getApiUrl();
+    await fetch(`${API_URL}/api/logout`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -100,7 +108,8 @@ export const getCurrentUser = async () => {
     const token = getAuthToken();
     if (!token) return null;
 
-    const response = await fetch("http://localhost:8000/api/user", {
+    const API_URL = getApiUrl();
+    const response = await fetch(`${API_URL}/api/user`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
