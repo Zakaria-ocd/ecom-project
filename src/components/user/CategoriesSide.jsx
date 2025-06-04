@@ -8,9 +8,9 @@ export default function CategoriesSide({
   setSelectedFilters,
 }) {
   const [filtersVisibility, setFiltersVisibility] = useState({
-    categories: false,
-    colors: false,
-    sizes: false,
+    categories: true,
+    colors: true,
+    sizes: true,
   });
 
   function handleFiltersChange(filterKey, selectedItem) {
@@ -28,7 +28,7 @@ export default function CategoriesSide({
   }
 
   return (
-    <div className="min-w-56 max-w-56 flex flex-col items-start">
+    <div className="w-60 flex flex-col items-start">
       <ul className="w-full flex flex-col gap-3 px-2 my-2">
         {Object.keys(filters).map((filterKey, index) => {
           return (

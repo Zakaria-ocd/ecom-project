@@ -21,14 +21,12 @@ export default function Profile() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
-  // Redirect if not authenticated
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push("/user/login");
     }
   }, [router]);
 
-  // Load user data
   useEffect(() => {
     if (user) {
       setProfileData((prev) => ({
@@ -63,7 +61,6 @@ export default function Profile() {
       return;
     }
 
-    // Check if passwords match when trying to change password
     if (
       profileData.password &&
       profileData.password !== profileData.password_confirmation
@@ -72,7 +69,6 @@ export default function Profile() {
       return;
     }
 
-    // Check if current password is provided when changing password or email
     if (
       (profileData.password || profileData.email !== user.email) &&
       !profileData.currentPassword
@@ -110,14 +106,12 @@ export default function Profile() {
         throw new Error(data.message || "Failed to update profile");
       }
 
-      // Update profile image if selected
       if (selectedImage) {
         await uploadProfileImage();
       }
 
       toast.success("Profile updated successfully");
 
-      // Clear password fields
       setProfileData((prev) => ({
         ...prev,
         password: "",
@@ -154,13 +148,10 @@ export default function Profile() {
         throw new Error(data.message || "Failed to upload profile image");
       }
 
-      // Clear selected image after successful upload
       setSelectedImage(null);
       setPreviewImage(null);
 
-      // Update user state with new image from response
       if (data.data && data.data.filename) {
-        // Update the user state with the new image
         toast.success("Profile image updated successfully");
       }
     } catch (error) {
@@ -170,7 +161,7 @@ export default function Profile() {
   };
 
   if (!isAuthenticated()) {
-    return null; // Will redirect in useEffect
+    return null;
   }
 
   return (
@@ -182,7 +173,7 @@ export default function Profile() {
 
         <Link
           href="/user/orders"
-          className="mt-2 sm:mt-0 flex items-center text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+          className="mt-2 sm:mt-0 flex items-center text-cyan-600 hover:text-cyan-700 dark:text-blue-400 dark:hover:text-blue-300"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -203,7 +194,6 @@ export default function Profile() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Profile Image Card */}
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
           <h2 className="text-lg font-medium mb-2 text-slate-800 dark:text-slate-200">
             Profile Image
@@ -260,7 +250,7 @@ export default function Profile() {
                   className="hidden"
                 />
                 {selectedImage && (
-                  <span className="absolute top-0 right-0 -mt-2 -mr-2 bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                  <span className="absolute top-0 right-0 -mt-2 -mr-2 bg-cyan-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                     ✓
                   </span>
                 )}
@@ -276,7 +266,6 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Profile Information Card */}
         <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow md:col-span-2">
           <h2 className="text-lg font-medium mb-2 text-slate-800 dark:text-slate-200">
             Personal Information
@@ -387,7 +376,7 @@ export default function Profile() {
               <button
                 type="submit"
                 disabled={saving}
-                className="w-full flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 disabled:bg-blue-400"
+                className="w-full flex items-center justify-center rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 disabled:bg-blue-400"
               >
                 {saving ? "Saving..." : "Save Changes"}
               </button>

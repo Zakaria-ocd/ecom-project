@@ -59,7 +59,6 @@ export default function SalesTab({ data, period, loading }) {
     );
   }
 
-  // Use real data from API or fall back to empty arrays/mock data if not available
   const weeklySalesData = data?.weeklySalesData || [
     { day: "Mon", revenue: 0, orders: 0 },
     { day: "Tue", revenue: 0, orders: 0 },
@@ -89,14 +88,18 @@ export default function SalesTab({ data, period, loading }) {
     { name: "No Products", sales: 0 },
   ];
 
-  // Get period text for display
   const getPeriodText = () => {
     switch (period) {
-      case "day": return "the last 24 hours";
-      case "week": return "the last 7 days";
-      case "month": return "the last 30 days";
-      case "year": return "the last year";
-      default: return "the selected period";
+      case "day":
+        return "the last 24 hours";
+      case "week":
+        return "the last 7 days";
+      case "month":
+        return "the last 30 days";
+      case "year":
+        return "the last year";
+      default:
+        return "the selected period";
     }
   };
 
@@ -117,12 +120,12 @@ export default function SalesTab({ data, period, loading }) {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip formatter={(value) => [`$${value}`, 'Revenue']} />
+                <Tooltip formatter={(value) => [`$${value}`, "Revenue"]} />
                 <Legend />
                 <Line
                   type="monotone"
                   dataKey="revenue"
-                  stroke="#8884d8"
+                  stroke="#63B3ED"
                   activeDot={{ r: 8 }}
                   strokeWidth={2}
                   name="This Year"
@@ -130,7 +133,7 @@ export default function SalesTab({ data, period, loading }) {
                 <Line
                   type="monotone"
                   dataKey="previousYear"
-                  stroke="#82ca9d"
+                  stroke="#9F7AEA"
                   strokeDasharray="5 5"
                   name="Last Year"
                 />
@@ -163,30 +166,40 @@ export default function SalesTab({ data, period, loading }) {
                       x2="0"
                       y2="1"
                     >
-                      <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-                      <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#9F7AEA" stopOpacity={0.8} />
+                      <stop offset="95%" stopColor="#9F7AEA" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <XAxis dataKey="day" />
-                  <YAxis 
+                  <YAxis
                     yAxisId="left"
-                    label={{ value: 'Revenue ($)', angle: -90, position: 'insideLeft' }} 
+                    label={{
+                      value: "Revenue ($)",
+                      angle: -90,
+                      position: "insideLeft",
+                    }}
                   />
-                  <YAxis 
-                    yAxisId="right" 
+                  <YAxis
+                    yAxisId="right"
                     orientation="right"
-                    label={{ value: 'Orders', angle: 90, position: 'insideRight' }} 
+                    label={{
+                      value: "Orders",
+                      angle: 90,
+                      position: "insideRight",
+                    }}
                   />
                   <CartesianGrid strokeDasharray="3 3" />
-                  <Tooltip formatter={(value, name) => {
-                    if (name === "revenue") return [`$${value}`, "Revenue"];
-                    return [value, name];
-                  }} />
+                  <Tooltip
+                    formatter={(value, name) => {
+                      if (name === "revenue") return [`$${value}`, "Revenue"];
+                      return [value, name];
+                    }}
+                  />
                   <Area
                     yAxisId="left"
                     type="monotone"
                     dataKey="revenue"
-                    stroke="#8884d8"
+                    stroke="#9F7AEA"
                     fillOpacity={1}
                     fill="url(#colorRevenue)"
                     name="Revenue"
@@ -195,7 +208,7 @@ export default function SalesTab({ data, period, loading }) {
                     yAxisId="right"
                     type="monotone"
                     dataKey="orders"
-                    stroke="#ff7300"
+                    stroke="#F6AD55"
                     name="Orders"
                   />
                 </AreaChart>
@@ -222,9 +235,9 @@ export default function SalesTab({ data, period, loading }) {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis type="number" />
                   <YAxis dataKey="name" type="category" width={100} />
-                  <Tooltip formatter={(value) => [`${value} units`, 'Sales']} />
+                  <Tooltip formatter={(value) => [`${value} units`, "Sales"]} />
                   <Legend />
-                  <Bar dataKey="sales" fill="#8884d8" name="Sales" />
+                  <Bar dataKey="sales" fill="#63B3ED" name="Sales" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

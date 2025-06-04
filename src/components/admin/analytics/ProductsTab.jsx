@@ -21,18 +21,16 @@ import {
   Pie,
   Cell,
   Legend,
-  Scatter,
-  ScatterChart,
-  ZAxis,
+  ReferenceLine,
 } from "recharts";
 
 const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#8884D8",
-  "#FF6B6B",
+  "#63B3ED",
+  "#34D399",
+  "#F6AD55",
+  "#9F7AEA",
+  "#FC8181",
+  "#4FD1C5",
 ];
 
 export default function ProductsTab({ data, period, loading }) {
@@ -72,7 +70,6 @@ export default function ProductsTab({ data, period, loading }) {
     );
   }
 
-  // Use real data from API or fall back to empty arrays/mock data if not available
   const categoryDistribution = data?.categoryDistribution || [
     { name: "No Categories", value: 1 },
   ];
@@ -83,11 +80,16 @@ export default function ProductsTab({ data, period, loading }) {
     { name: "Out of Stock", value: 0 },
   ];
 
-  const productPerformance = data?.productPerformance || [
-    { x: 0, y: 0, z: 100, name: "No Products" },
+  const topProductsByCategory = data?.topProductsByCategory || [
+    {
+      name: "No Products",
+      category: "Uncategorized",
+      price: 0,
+      stock: 0,
+      rating: 0,
+    },
   ];
 
-  // Get period text for display
   const getPeriodText = () => {
     switch (period) {
       case "day":
@@ -175,11 +177,11 @@ export default function ProductsTab({ data, period, loading }) {
                       <Cell
                         key={`cell-${index}`}
                         fill={
-                          index === 0
-                            ? "#00C49F"
-                            : index === 1
-                            ? "#FFBB28"
-                            : "#FF8042"
+                          entry.name === "In Stock"
+                            ? "#34D399"
+                            : entry.name === "Low Stock"
+                            ? "#F6AD55"
+                            : "#FC8181"
                         }
                       />
                     ))}
@@ -189,13 +191,13 @@ export default function ProductsTab({ data, period, loading }) {
             </div>
           </CardContent>
           <CardFooter className="flex gap-2 justify-center">
-            <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
+            <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-100">
               In Stock
             </Badge>
             <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">
               Low Stock
             </Badge>
-            <Badge className="bg-red-100 text-red-800 hover:bg-red-100">
+            <Badge className="bg-rose-100 text-rose-800 hover:bg-rose-100">
               Out of Stock
             </Badge>
           </CardFooter>
@@ -204,55 +206,49 @@ export default function ProductsTab({ data, period, loading }) {
 
       <Card>
         <CardHeader>
-          <CardTitle>Product Performance Analysis</CardTitle>
+          <CardTitle>Top Products by Category</CardTitle>
           <CardDescription>
-            Comparing sales volume, revenue, and stock level for{" "}
+            Comparing default prices (first choice) and stock levels for{" "}
             {getPeriodText()}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
-              <ScatterChart
+              <BarChart
+                data={topProductsByCategory}
                 margin={{
                   top: 20,
                   right: 20,
-                  bottom: 20,
+                  bottom: 80,
                   left: 20,
                 }}
+                layout="vertical"
               >
-                <CartesianGrid />
-                <XAxis type="number" dataKey="x" name="Sales" unit=" units" />
-                <YAxis type="number" dataKey="y" name="Revenue" unit="$" />
-                <ZAxis
-                  type="number"
-                  dataKey="z"
-                  range={[60, 400]}
-                  name="Stock Level"
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" />
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  width={150}
+                  tick={{ fontSize: 12 }}
+                  tickFormatter={(value) =>
+                    value.length > 20 ? `${value.substring(0, 20)}...` : value
+                  }
                 />
                 <Tooltip
-                  cursor={{ strokeDasharray: "3 3" }}
                   formatter={(value, name) => {
-                    if (name === "z") return [`${value} units`, "Stock Level"];
-                    if (name === "x") return [`${value} units`, "Sales"];
-                    if (name === "y") return [`$${value}`, "Revenue"];
+                    if (name === "price") return [`$${value}`, "Default Price"];
+                    if (name === "stock") return [`${value} units`, "Stock"];
                     return [value, name];
                   }}
+                  labelFormatter={(label) => `${label}`}
                 />
                 <Legend />
-                <Scatter
-                  name="Products"
-                  data={productPerformance}
-                  fill="#8884d8"
-                >
-                  {productPerformance.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Scatter>
-              </ScatterChart>
+                <Bar dataKey="price" name="Default Price ($)" fill="#63B3ED" />
+                <Bar dataKey="stock" name="Stock" fill="#34D399" />
+                <ReferenceLine y={0} stroke="#000" />
+              </BarChart>
             </ResponsiveContainer>
           </div>
         </CardContent>

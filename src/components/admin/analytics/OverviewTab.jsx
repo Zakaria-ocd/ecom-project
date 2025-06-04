@@ -24,12 +24,12 @@ import {
 } from "recharts";
 
 const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#8884D8",
-  "#FF6B6B",
+  "#63B3ED",
+  "#34D399",
+  "#F6AD55",
+  "#9F7AEA",
+  "#FC8181",
+  "#4FD1C5",
 ];
 
 export default function OverviewTab({ data, period, loading }) {
@@ -78,7 +78,6 @@ export default function OverviewTab({ data, period, loading }) {
     );
   }
 
-  // Use real data from API or fall back to empty arrays/mock data if not available
   const salesData = data?.salesData || [
     { name: "Jan", value: 0 },
     { name: "Feb", value: 0 },
@@ -110,7 +109,6 @@ export default function OverviewTab({ data, period, loading }) {
     { name: "Sun", pending: 0, delivered: 0, shipped: 0 },
   ];
 
-  // Get period text for display
   const getPeriodText = () => {
     switch (period) {
       case "day":
@@ -256,9 +254,9 @@ export default function OverviewTab({ data, period, loading }) {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="pending" stackId="a" fill="#FFBB28" />
-                  <Bar dataKey="shipped" stackId="a" fill="#0088FE" />
-                  <Bar dataKey="delivered" stackId="a" fill="#00C49F" />
+                  <Bar dataKey="pending" stackId="a" fill="#F6AD55" />
+                  <Bar dataKey="shipped" stackId="a" fill="#63B3ED" />
+                  <Bar dataKey="delivered" stackId="a" fill="#34D399" />
                 </BarChart>
               </ResponsiveContainer>
             </div>

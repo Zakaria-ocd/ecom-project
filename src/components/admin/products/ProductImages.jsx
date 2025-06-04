@@ -12,13 +12,11 @@ export default function ProductImages({
   const [imageError, setImageError] = useState(false);
   const currentImage = images[currentImageIndex]?.url;
 
-  // Reset loading states when changing images
   useEffect(() => {
     setImageLoaded(false);
     setImageError(false);
   }, [currentImageIndex, currentImage]);
 
-  // Check for invalid image
   useEffect(() => {
     if (!currentImage) {
       setImageError(true);

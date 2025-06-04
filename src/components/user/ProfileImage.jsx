@@ -14,7 +14,6 @@ export default function ProfileImage({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  // Add timeout to prevent infinite loading state
   useEffect(() => {
     const timer = setTimeout(() => {
       if (loading) setLoading(false);
@@ -25,7 +24,7 @@ export default function ProfileImage({
 
   const getInitials = () => {
     if (!username) return "U";
-    // Split the username by spaces and get the first character of each word
+
     if (username.includes(" ")) {
       const nameParts = username.split(" ");
       return (nameParts[0][0] + nameParts[1][0]).toUpperCase();
@@ -80,7 +79,7 @@ export default function ProfileImage({
           htmlFor="profile-image-upload"
           className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 flex items-center justify-center transition-all duration-200 cursor-pointer opacity-0 group-hover:opacity-100"
         >
-          <span className="text-white bg-blue-600 rounded-full p-2 shadow-lg">
+          <span className="text-white bg-cyan-600 rounded-full p-2 shadow-lg">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"

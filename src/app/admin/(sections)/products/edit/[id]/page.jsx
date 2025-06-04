@@ -51,7 +51,6 @@ export default function EditProductPage() {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Form state
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -63,7 +62,6 @@ export default function EditProductPage() {
   useEffect(() => {
     fetchProduct();
     fetchCategories();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId]);
 
   async function fetchProduct() {
@@ -90,7 +88,6 @@ export default function EditProductPage() {
         category_id: data.data.category_id?.toString() || "",
       });
 
-      // Fetch product choices and images
       fetchChoices();
       fetchImages();
     } catch (error) {
@@ -209,7 +206,6 @@ export default function EditProductPage() {
 
     const files = Array.from(e.dataTransfer.files);
     if (files.length > 0) {
-      // Filter for only image files
       const imageFiles = files.filter((file) => file.type.startsWith("image/"));
 
       if (imageFiles.length === 0) {
@@ -217,7 +213,6 @@ export default function EditProductPage() {
         return;
       }
 
-      // Check file sizes
       const validFiles = imageFiles.filter((file) => {
         if (file.size > 5 * 1024 * 1024) {
           toast.error(`File ${file.name} is too large. Maximum size is 5MB.`);
@@ -229,7 +224,6 @@ export default function EditProductPage() {
       if (validFiles.length > 0) {
         setNewImages((prevImages) => [...prevImages, ...validFiles]);
 
-        // Generate preview URLs
         const newPreviews = validFiles.map((file) => URL.createObjectURL(file));
         setPreviewUrls((prevUrls) => [...prevUrls, ...newPreviews]);
       }
@@ -239,7 +233,6 @@ export default function EditProductPage() {
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
-      // Check file sizes
       const validFiles = files.filter((file) => {
         if (file.size > 5 * 1024 * 1024) {
           toast.error(`File ${file.name} is too large. Maximum size is 5MB.`);
@@ -252,7 +245,6 @@ export default function EditProductPage() {
 
       setNewImages((prevImages) => [...prevImages, ...validFiles]);
 
-      // Generate preview URLs
       const newPreviews = validFiles.map((file) => URL.createObjectURL(file));
       setPreviewUrls((prevUrls) => [...prevUrls, ...newPreviews]);
     }
@@ -261,7 +253,6 @@ export default function EditProductPage() {
   const removeNewImage = (index) => {
     setNewImages((prevImages) => prevImages.filter((_, i) => i !== index));
 
-    // Revoke the URL to free memory
     URL.revokeObjectURL(previewUrls[index]);
     setPreviewUrls((prevUrls) => prevUrls.filter((_, i) => i !== index));
   };
@@ -285,7 +276,6 @@ export default function EditProductPage() {
     setSaving(true);
 
     try {
-      // Update product details
       const response = await fetch(
         `http://localhost:8000/api/products/${productId}`,
         {
@@ -302,10 +292,8 @@ export default function EditProductPage() {
         throw new Error("Failed to update product");
       }
 
-      // Handle product choices update
       if (choices.length > 0) {
         try {
-          // First, delete existing choices
           const existingChoicesResponse = await fetch(
             `http://localhost:8000/api/products/${productId}/choices`,
             {
@@ -319,7 +307,6 @@ export default function EditProductPage() {
             const existingChoicesData = await existingChoicesResponse.json();
             const existingChoices = existingChoicesData.data || [];
 
-            // Delete each existing choice
             for (const choice of existingChoices) {
               try {
                 const deleteResponse = await fetch(
@@ -344,7 +331,6 @@ export default function EditProductPage() {
             }
           }
 
-          // Then create new choices
           for (const choice of choices) {
             if (choice.typeValuePairs.length > 0) {
               try {
@@ -379,12 +365,10 @@ export default function EditProductPage() {
         }
       }
 
-      // Handle new images upload if needed
       if (newImages.length > 0) {
         await uploadNewImages();
       }
 
-      // Handle image deletion if needed
       if (imagesToDelete.length > 0) {
         await deleteImages();
       }
@@ -423,13 +407,10 @@ export default function EditProductPage() {
       throw new Error(errorData.message || "Failed to upload images");
     }
 
-    // Clean up preview URLs
     previewUrls.forEach((url) => URL.revokeObjectURL(url));
   }
 
   async function deleteImages() {
-    // This is a placeholder - the API doesn't appear to have an endpoint for deleting images
-    // You would need to implement this endpoint on the backend
     toast.warning("Image deletion is not implemented in the API");
   }
 
@@ -439,15 +420,19 @@ export default function EditProductPage() {
         <Breadcrumb className="mb-6">
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/admin/dashboard">Dashboard</BreadcrumbLink>
+              <Skeleton className="h-5 w-20" />
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="/admin/products">Products</BreadcrumbLink>
+              <Skeleton className="h-5 w-20" />
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Edit Product</BreadcrumbPage>
+              <Skeleton className="h-5 w-20" />
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <Skeleton className="h-5 w-20" />
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -531,7 +516,7 @@ export default function EditProductPage() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink href="/admin/products">Products</BreadcrumbLink>
+            <BreadcrumbLink href="/admin/categories">Categories</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -541,7 +526,9 @@ export default function EditProductPage() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Edit</BreadcrumbPage>
+            <BreadcrumbLink href={`/admin/products/edit/${productId}`}>
+              Edit
+            </BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -755,7 +742,7 @@ export default function EditProductPage() {
                 >
                   {saving ? (
                     <>
-                      <span className="animate-spin mr-2">⏳</span>
+                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
                       Saving...
                     </>
                   ) : (

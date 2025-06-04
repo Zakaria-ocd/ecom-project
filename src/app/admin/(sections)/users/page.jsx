@@ -23,9 +23,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { PenLine, Trash2, UserCog, Eye } from "lucide-react";
+import { PenLine, Trash2, Eye, UserPlus } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -79,7 +86,7 @@ export default function UsersPage() {
       const data = await response.json();
       if (data.success) {
         toast.success("User deleted successfully");
-        // Remove the deleted user from the state
+
         setUsers(users.filter((user) => user.id !== userId));
       } else {
         throw new Error(data.message || "Failed to delete user");
@@ -123,12 +130,23 @@ export default function UsersPage() {
   if (loading) {
     return (
       <div className="container mx-auto p-6">
+        <Breadcrumb className="mb-6">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <Skeleton className="h-5 w-20" />
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <Skeleton className="h-5 w-20" />
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
         <h1 className="text-2xl font-semibold mb-6">Users Management</h1>
         <div className="bg-white rounded-lg shadow-sm">
           <div className="p-4">
             <Skeleton className="h-8 w-full max-w-md mb-6" />
             <div className="space-y-4">
-              {Array(5)
+              {Array(7)
                 .fill(0)
                 .map((_, i) => (
                   <div key={i} className="flex items-center space-x-4">
@@ -148,12 +166,23 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-4">
+      <Breadcrumb className="mb-6">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/admin/dashboard">Dashboard</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/admin/users">Users</BreadcrumbLink>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold">Users Management</h1>
         <Button asChild>
           <Link href="/admin/users/create">
-            <UserCog className="mr-2 h-4 w-4" />
+            <UserPlus className="mr-2 h-4 w-4" />
             Add New User
           </Link>
         </Button>
@@ -198,7 +227,7 @@ export default function UsersPage() {
                             className="object-cover"
                           />
                         ) : (
-                          <div className="h-10 w-10 flex items-center justify-center bg-blue-100 text-blue-600 font-semibold uppercase">
+                          <div className="h-10 w-10 flex items-center justify-center bg-blue-100 text-cyan-600 font-semibold uppercase">
                             {user.username?.charAt(0) || "U"}
                           </div>
                         )}

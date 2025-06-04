@@ -96,9 +96,8 @@ export default function Navbar() {
     return () => mediaQuery.removeEventListener("change", handleChange);
   }, []);
 
-  const handleRemoveFromCart = (cartItemId, choiceValueId) => {
-    console.log("Removing from cart:", { cartItemId, choiceValueId });
-    removeItem(cartItemId, choiceValueId);
+  const handleRemoveFromCart = (cartItemId) => {
+    removeItem(cartItemId);
   };
 
   const toggleSearchBar = () => {
@@ -124,50 +123,43 @@ export default function Navbar() {
         ) : cart?.length > 0 ? (
           cart.map((item) => (
             <div
-              key={`${item.product_id}-${item.choice_value_id || "no-choice"}`}
+              key={`${item.productId}-${item.choice_value_id || "no-choice"}`}
               className="py-4 border-b border-gray-200 dark:border-gray-700 flex gap-4"
             >
               <div className="w-24 h-24 relative flex-shrink-0">
                 <Image
                   className="rounded-md object-cover"
-                  src={`http://localhost:8000/api/productImage/${item.product_id}`}
-                  alt={item.product_name || "Product"}
+                  src={
+                    item.image ||
+                    `http://localhost:8000/api/productImage/${
+                      item.product_id || item.productId
+                    }`
+                  }
+                  alt={item.name}
                   fill
                   sizes="(max-width: 96px) 100vw, 96px"
                 />
               </div>
               <div className="flex-1 min-w-0">
                 <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                  {item.product_name || "Product"}
+                  {item.name}
                 </h3>
-                {item.choiceDetails &&
-                  item.choiceDetails.map((choice, index) => (
-                    <p
-                      key={index}
-                      className="text-sm text-gray-500 dark:text-gray-400"
-                    >
-                      {choice.type}:{" "}
-                      {choice.type.toLowerCase() === "color" ? (
-                        <span className="inline-flex items-center">
-                          <span
-                            className="inline-block w-3 h-3 mr-1 rounded-full"
-                            style={{ backgroundColor: choice.colorCode }}
-                          ></span>
-                          {choice.value}
-                        </span>
-                      ) : (
-                        choice.value
-                      )}
-                    </p>
-                  ))}
+                {item.color && (
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Color: {item.color.name}
+                  </p>
+                )}
+                {item.size && (
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Size: {item.size.name}
+                  </p>
+                )}
                 <div className="mt-1 flex items-center justify-between">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                     ${item.price} x {item.quantity}
                   </p>
                   <button
-                    onClick={() =>
-                      handleRemoveFromCart(item.id, item.choice_value_id)
-                    }
+                    onClick={() => handleRemoveFromCart(item.id)}
                     className="text-red-500 hover:text-red-700 dark:hover:text-red-400"
                   >
                     <i className="fa-regular fa-trash-can"></i>
@@ -281,7 +273,7 @@ export default function Navbar() {
               <TooltipTrigger asChild>
                 <Link href="/user/wishlist" onClick={handleNavigation}>
                   <Button variant="ghost" size="icon">
-                    <i className="fa-light fa-heart text-xl text-rose-400"></i>
+                    <Heart className="h-5 w-5 text-rose-400" />
                   </Button>
                 </Link>
               </TooltipTrigger>
@@ -340,44 +332,19 @@ export default function Navbar() {
                   <TooltipContent>
                     <p>Profile</p>
                   </TooltipContent>
-                  <DropdownMenuContent
-                    className="min-w-40 mr-4 sm:mr-0 w-[90vw] sm:w-auto max-w-[280px] sm:max-w-none"
-                    align="end"
-                    alignOffset={-5}
-                    sideOffset={8}
-                  >
-                    <DropdownMenuLabel className="text-slate-700 dark:text-slate-200 flex items-center gap-2 py-1.5 px-2">
-                      <div className="w-12 h-12 flex-shrink-0">
-                        <ProfileImage
-                          imageUrl={
-                            user?.image
-                              ? `http://localhost:8000/api/users/image/${user.image}`
-                              : null
-                          }
-                          previewUrl={null}
-                          username={user?.username}
-                          onImageChange={() => {}}
-                          className="w-12 h-12"
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="font-medium truncate">
-                          {user.username}
-                        </span>
-                        <span className="text-xs text-slate-500 dark:text-slate-400 truncate">
-                          {user.email || ""}
-                        </span>
-                      </div>
+                  <DropdownMenuContent className="min-w-40 mr-4">
+                    <DropdownMenuLabel className="text-slate-700 dark:text-slate-200">
+                      {`Welcome, ${user.username}`}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuGroup className="text-slate-800 dark:text-slate-300 py-1">
-                      <DropdownMenuItem asChild className="py-2">
+                    <DropdownMenuGroup className="text-slate-800 dark:text-slate-300">
+                      <DropdownMenuItem asChild>
                         <Link href="/user/profile" onClick={handleNavigation}>
                           <FaUserGear className="mr-2 text-slate-400 dark:text-slate-500" />
                           Profile
                         </Link>
                       </DropdownMenuItem>
-                      <DropdownMenuItem asChild className="py-2">
+                      <DropdownMenuItem asChild>
                         <Link href="/user/orders" onClick={handleNavigation}>
                           <FaMoneyCheckDollar className="mr-2 text-slate-400 dark:text-slate-500" />
                           Orders
@@ -386,13 +353,13 @@ export default function Navbar() {
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuSub>
-                      <DropdownMenuSubTrigger className="text-slate-800 dark:text-slate-300 py-2">
+                      <DropdownMenuSubTrigger className="text-slate-800 dark:text-slate-300">
                         <FaBrush className="mr-2 text-slate-400 dark:text-slate-500" />
                         Theme
                       </DropdownMenuSubTrigger>
                       <DropdownMenuItem
                         asChild
-                        className="text-slate-800 dark:text-slate-300 py-2"
+                        className="text-slate-800 dark:text-slate-300"
                       >
                         <Link href="/user/settings" onClick={handleNavigation}>
                           <FaGear className="mr-2 text-slate-400 dark:text-slate-500" />
@@ -400,15 +367,15 @@ export default function Navbar() {
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuPortal>
-                        <DropdownMenuSubContent className="text-slate-800 dark:text-slate-300 w-[180px] sm:w-auto">
+                        <DropdownMenuSubContent className="text-slate-800 dark:text-slate-300">
                           <DropdownMenuItem
                             onClick={() => changeTheme("dark")}
                             className={`${
                               selectedTheme === "dark" &&
                               "bg-emerald-100 dark:bg-emerald-800/60"
-                            } flex justify-between items-center py-2.5`}
+                            } flex justify-between items-center`}
                           >
-                            <span>Dark</span>
+                            Dark
                             {selectedTheme === "dark" && <FaMoon />}
                           </DropdownMenuItem>
                           <DropdownMenuItem
@@ -416,9 +383,9 @@ export default function Navbar() {
                             className={`${
                               selectedTheme === "light" &&
                               "bg-emerald-100 dark:bg-emerald-800/60"
-                            } flex justify-between items-center py-2.5`}
+                            } flex justify-between items-center`}
                           >
-                            <span>Light</span>
+                            Light
                             {selectedTheme === "light" && <LucideSunMedium />}
                           </DropdownMenuItem>
                           <DropdownMenuItem
@@ -426,9 +393,9 @@ export default function Navbar() {
                             className={`${
                               selectedTheme === "system" &&
                               "bg-emerald-100 dark:bg-emerald-800/60"
-                            } flex justify-between items-center py-2.5`}
+                            } flex justify-between items-center`}
                           >
-                            <span>System</span>
+                            System
                             {selectedTheme === "system" &&
                               (systemIsDark ? <FaMoon /> : <LucideSunMedium />)}
                           </DropdownMenuItem>
@@ -436,11 +403,8 @@ export default function Navbar() {
                       </DropdownMenuPortal>
                     </DropdownMenuSub>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      onClick={logout}
-                      className="text-red-600 dark:text-red-400 py-2"
-                    >
-                      <FaRightFromBracket className="mr-2" />
+                    <DropdownMenuItem onClick={logout}>
+                      <FaRightFromBracket className="mr-2 text-slate-400 dark:text-slate-500" />
                       Logout
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -458,12 +422,12 @@ export default function Navbar() {
             aria-label="Search"
             className="text-slate-600 dark:text-slate-300"
           >
-            <i className="fa-light fa-magnifying-glass text-[17px] mt-px"></i>
+            <Search className="h-5 w-5" />
           </Button>
 
           <Link href="/user/wishlist" onClick={handleNavigation}>
             <Button variant="ghost" size="icon">
-              <i className="fa-light fa-heart text-xl text-rose-400"></i>
+              <Heart className="h-5 w-5 text-rose-400" />
             </Button>
           </Link>
 
@@ -492,9 +456,9 @@ export default function Navbar() {
             className="text-slate-600 dark:text-slate-300"
           >
             {mobileMenuOpen ? (
-              <i className="fa-light fa-xmark text-xl mt-0.5"></i>
+              <X className="h-5 w-5" />
             ) : (
-              <i className="fa-light fa-bars text-xl mt-0.5"></i>
+              <Menu className="h-5 w-5" />
             )}
           </Button>
         </div>
@@ -585,17 +549,12 @@ export default function Navbar() {
               </div>
 
               <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                <div
-                  onClick={() => {
-                    changeTheme(selectedTheme === "dark" ? "light" : "dark");
-                  }}
-                  className="flex items-center justify-between px-3 py-2 text-base font-medium rounded-md text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-                >
+                <div className="flex items-center justify-between px-3 py-2 text-base font-medium rounded-md text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
                   <div className="flex items-center">
                     <FaBrush className="mr-2 text-slate-400 dark:text-slate-500" />
                     Theme
                   </div>
-                  <div className="pointer-events-none">
+                  <div>
                     <ThemeToggleButton />
                   </div>
                 </div>

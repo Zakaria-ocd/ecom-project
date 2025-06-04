@@ -4,6 +4,7 @@ import { FaEnvelope, FaLock, FaSpinner } from "react-icons/fa";
 import Notification from "./Notification";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -51,8 +52,6 @@ export default function LoginForm() {
     setNotification({ ...notification, visible: false });
   };
 
-
-
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className={`bg-white p-8 rounded-lg shadow-xl w-96 form-container`}>
@@ -65,7 +64,6 @@ export default function LoginForm() {
         />
 
         <form onSubmit={handleSubmit}>
-          {/* Email Input */}
           <div className="mb-4 relative">
             <label
               className="block text-gray-700 font-medium mb-2"
@@ -87,7 +85,6 @@ export default function LoginForm() {
             </div>
           </div>
 
-          {/* Password Input */}
           <div className="mb-6 relative">
             <label
               className="block text-gray-700 font-medium mb-2"
@@ -109,26 +106,23 @@ export default function LoginForm() {
             </div>
           </div>
 
-          {/* Login Button */}
-          <button
-            className="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 ```javascript
-                        transition duration-300 focus:outline-none"
+          <Button
+            className="w-full bg-cyan-600 text-white p-2 rounded-lg hover:bg-cyan-700 transition duration-300 focus:outline-none"
             type="submit"
             disabled={loading}
           >
             {loading ? (
               <div className="flex items-center justify-center">
                 <FaSpinner className="text-white mr-2 animate-spin" />
-                <span>Loading...</span>
+                <span>Logging in...</span>
               </div>
             ) : (
               <span>Login</span>
             )}
-          </button>
+          </Button>
         </form>
       </div>
 
-      {/* Notification Component */}
       {notification.visible && (
         <Notification
           message={notification.message}

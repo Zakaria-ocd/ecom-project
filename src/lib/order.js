@@ -1,9 +1,7 @@
-// Order service for handling order operations
 import { getAuthToken, isAuthenticated } from "./auth";
 import { calculateCartTotal, fetchCart } from "./cart";
 import { toast } from "sonner";
 
-// Create a new order
 export const createOrder = async (orderData) => {
   try {
     if (!isAuthenticated()) {
@@ -17,10 +15,8 @@ export const createOrder = async (orderData) => {
       throw new Error("Your cart is empty");
     }
 
-    // Calculate total from cart items
     const totalPrice = calculateCartTotal(cartItems);
 
-    // Prepare simplified order data - only include fields that are in the database
     const orderPayload = {
       address: orderData.address,
       phone: orderData.phone,
@@ -56,7 +52,6 @@ export const createOrder = async (orderData) => {
   }
 };
 
-// Get list of user's orders
 export const getUserOrders = async () => {
   try {
     if (!isAuthenticated()) {
@@ -65,7 +60,6 @@ export const getUserOrders = async () => {
 
     const token = getAuthToken();
 
-    // Using the correct endpoint for user orders
     const response = await fetch("http://localhost:8000/api/orders/100/limit", {
       method: "GET",
       headers: {
@@ -80,7 +74,6 @@ export const getUserOrders = async () => {
       throw new Error(data.message || "Failed to fetch orders");
     }
 
-    // Format the response to match what the frontend expects
     return {
       orders: data.map((order) => ({
         id: order.id,
@@ -101,7 +94,6 @@ export const getUserOrders = async () => {
   }
 };
 
-// Get a specific order by ID
 export const getOrderById = async (orderId) => {
   try {
     if (!isAuthenticated()) {

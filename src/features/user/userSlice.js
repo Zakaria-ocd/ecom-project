@@ -34,7 +34,7 @@ const userSlice = createSlice({
 
 export const fetchUserImage = (userId) => async (dispatch) => {
   try {
-    const res = await fetch(`http://localhost:8000/api/users/image/${userId}`);
+    const res = await fetch(`http://localhost:8000/api/users/imageById/${userId}`);
     const blob = await res.blob();
     const objectURL = URL.createObjectURL(blob);
     dispatch(setUserImage(objectURL));

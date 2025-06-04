@@ -45,7 +45,6 @@ export default function CartProducts() {
     payment_method: "cash_on_delivery",
   });
 
-  // Ensure cart is refreshed when component mounts
   useEffect(() => {
     refreshCart();
   }, [refreshCart]);
@@ -56,11 +55,9 @@ export default function CartProducts() {
       0
     );
 
-    // Calculate shipping, tax, etc. if needed
-
     return {
       subtotal: subtotal.toFixed(2),
-      total: subtotal.toFixed(2), // Add shipping, discounts, etc. if needed
+      total: subtotal.toFixed(2),
     };
   }
 
@@ -76,7 +73,6 @@ export default function CartProducts() {
     e.preventDefault();
 
     if (!isAuthenticated) {
-      // Redirect to login page with return URL
       router.push("/user/login?redirectTo=/user/cart");
       return;
     }
@@ -89,7 +85,6 @@ export default function CartProducts() {
     setCheckoutLoading(true);
 
     try {
-      // Navigate to checkout page
       router.push("/user/checkout");
     } catch (error) {
       toast.error("Failed to process checkout");
@@ -100,13 +95,11 @@ export default function CartProducts() {
   }
 
   useEffect(() => {
-    // Load cart items when component mounts
     dispatch(fetchCartItems());
   }, [dispatch]);
 
   useEffect(() => {
     calculateTotals();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [items]);
 
   function removeFromCart(cartItemId) {
@@ -116,7 +109,7 @@ export default function CartProducts() {
   if (loading && items.length === 0) {
     return (
       <div className="py-20 flex justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-cyan-600" />
       </div>
     );
   }
@@ -141,7 +134,7 @@ export default function CartProducts() {
                     </p>
                     <Link
                       href="/products"
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg inline-block transition-colors"
+                      className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg inline-block transition-colors"
                     >
                       Continue Shopping
                     </Link>
@@ -310,7 +303,7 @@ export default function CartProducts() {
 
                 <button
                   onClick={() => setShowCheckoutForm(!showCheckoutForm)}
-                  className="flex w-full items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800"
+                  className="flex w-full items-center justify-center rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800"
                 >
                   {showCheckoutForm ? "Cancel Checkout" : "Proceed to Checkout"}
                 </button>
@@ -322,7 +315,7 @@ export default function CartProducts() {
                     </span>
                     <Link
                       href="/products"
-                      className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 underline hover:no-underline dark:text-blue-500"
+                      className="inline-flex items-center gap-2 text-sm font-medium text-cyan-600 underline hover:no-underline dark:text-blue-500"
                     >
                       Continue Shopping
                       <svg
@@ -461,7 +454,7 @@ export default function CartProducts() {
                                 payment_method: e.target.value,
                               })
                             }
-                            className="h-4 w-4 text-blue-600"
+                            className="h-4 w-4 text-cyan-600"
                           />
                           <label
                             htmlFor="cash"
@@ -475,7 +468,7 @@ export default function CartProducts() {
                     <button
                       type="submit"
                       disabled={checkoutLoading || cart.length === 0}
-                      className="flex w-full items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 disabled:opacity-70"
+                      className="flex w-full items-center justify-center rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 disabled:opacity-70"
                     >
                       {checkoutLoading ? (
                         <>

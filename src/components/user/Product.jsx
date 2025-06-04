@@ -46,14 +46,12 @@ export default function Product() {
   const [category, setCategory] = useState(null);
   const [categoryLoading, setCategoryLoading] = useState(true);
 
-  // Selected variant/choice
   const [selectedChoice, setSelectedChoice] = useState(null);
   const [selectedFilters, setSelectedFilters] = useState({});
 
   const [isInCart, setIsInCart] = useState(false);
 
   function handleQuantityChange(productId, choiceId, newQuantity) {
-    // Make sure quantity doesn't exceed available stock
     const maxQuantity =
       choices.length > 0 && selectedChoice
         ? selectedChoice.quantity
@@ -100,10 +98,13 @@ export default function Product() {
         return;
       }
 
-      // Get the currently selected choice
-      const choiceValueId = selectedChoice ? selectedChoice.id : null;
+      const choiceValueId = selectedChoice
+        ? selectedChoice.choice_value_id
+        : null;
 
-      // Create the cart item object
+      console.log("Selected choice:", selectedChoice);
+      console.log("Using choice_value_id:", choiceValueId);
+
       const cartItem = {
         id: product.id,
         productId: product.id,
@@ -112,8 +113,8 @@ export default function Product() {
         image: `http://localhost:8000/api/image/${images[currentImageIndex]}`,
         quantity: quantity,
         choiceDetails: selectedChoice
-          ? selectedChoice.typeValues.map((tv) => ({
-              type: tv.type?.name || "Option",
+          ? selectedChoice.typeValuePairs.map((tv) => ({
+              type: tv.typeName || "Option",
               value: tv.value,
               colorCode: tv.colorCode,
             }))
@@ -121,10 +122,8 @@ export default function Product() {
         choice_value_id: choiceValueId,
       };
 
-      // Use the updated addItem function that will trigger notifications
       await addItem(cartItem, quantity, choiceValueId);
       setIsInCart(true);
-      // No need for additional toast as addItem already shows one
     } catch (error) {
       toast.error(error?.message || "Failed to add product to cart");
     } finally {
@@ -136,14 +135,12 @@ export default function Product() {
     if (!product || !cart) return false;
 
     if (choices.length > 0 && selectedChoice) {
-      // Check if this specific choice is in cart
       return cart.some(
         (item) =>
           item.product_id === product.id &&
-          item.choice_value_id === selectedChoice.id
+          item.choice_value_id === selectedChoice.choice_value_id
       );
     } else {
-      // Check if the product (without choices) is in cart
       return cart.some(
         (item) => item.product_id === product.id && !item.choice_value_id
       );
@@ -154,11 +151,9 @@ export default function Product() {
     setIsInCart(checkIfInCart());
   }, [checkIfInCart, product?.id, selectedChoice?.id]);
 
-  // Select a choice based on the selected attributes/filters
   const selectChoice = () => {
     if (choices.length === 0) return;
 
-    // Find a choice that matches all selected filters
     const selected = choices.find((choice) => {
       return Object.entries(selectedFilters).every(([typeName, value]) => {
         if (!value) return true;
@@ -176,7 +171,6 @@ export default function Product() {
     }
   };
 
-  // Group choices by attribute types
   const groupChoicesByAttribute = () => {
     const attributeGroups = {};
 
@@ -189,7 +183,6 @@ export default function Product() {
       });
     });
 
-    // Convert Sets to Arrays
     const result = {};
     Object.keys(attributeGroups).forEach((key) => {
       result[key] = Array.from(attributeGroups[key]);
@@ -202,14 +195,12 @@ export default function Product() {
     if (choices.length > 0) {
       setAvailableAttributes(groupChoicesByAttribute());
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [choices]);
 
   useEffect(() => {
     if (Object.keys(selectedFilters).length > 0) {
       selectChoice();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedFilters]);
 
   useEffect(() => {
@@ -222,7 +213,6 @@ export default function Product() {
         const data = await response.json();
         setProduct(data.data);
 
-        // Fetch category if available
         if (data.data?.category_id) {
           fetchCategory(data.data.category_id);
         }
@@ -262,19 +252,21 @@ export default function Product() {
           `http://localhost:8000/api/products/${productId}/choices`
         );
         const data = await response.json();
+
+        console.log("Choices data from API:", data.data);
+
         setChoices(data.data);
 
-        // If there are choices, select the first one by default
         if (data.data.length > 0) {
           const firstChoice = data.data[0];
 
-          // Extract the filters from the first choice
+          console.log("First choice structure:", firstChoice);
+
           const initialFilters = {};
           firstChoice.typeValuePairs.forEach((pair) => {
             initialFilters[pair.typeName.toLowerCase()] = pair.value;
           });
 
-          // Set the initial filters which will trigger selectChoice
           setSelectedFilters(initialFilters);
           setSelectedChoice(firstChoice);
         }
@@ -324,7 +316,6 @@ export default function Product() {
     }
   };
 
-  // Display loading state
   if (productLoading) {
     return (
       <div className="container py-10">
@@ -366,7 +357,6 @@ export default function Product() {
   return (
     <div className="w-full py-10">
       <div className="w-full px-20">
-        {/* Breadcrumb */}
         <Breadcrumb className="mb-6 overflow-x-auto pb-1">
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -597,7 +587,7 @@ export default function Product() {
                             <button
                               className={`w-9 h-9 rounded-full flex items-center justify-center transition-all text-sm font-medium ${
                                 selectedFilters.size === value
-                                  ? "bg-blue-600 text-white"
+                                  ? "bg-cyan-600 text-white"
                                   : "bg-white text-slate-800 border border-slate-300 hover:bg-blue-50 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-600 dark:hover:border-blue-500"
                               }`}
                               onClick={() =>
@@ -633,7 +623,7 @@ export default function Product() {
                           key={value}
                           className={`${
                             selectedFilters[attributeName] === value
-                              ? "bg-blue-100 text-blue-800 border-blue-400 dark:bg-blue-900 dark:text-blue-300 dark:border-blue-700"
+                              ? "bg-blue-100 text-blue-800 border-blue-400 dark:bg-blue-900 dark:text-blue-300 dark:border-cyan-700"
                               : "bg-white text-slate-700 border-slate-300 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-700"
                           } px-3 py-1.5 text-sm font-medium capitalize rounded-md border transition-all`}
                           onClick={() =>
@@ -662,10 +652,10 @@ export default function Product() {
                     selectedChoice.quantity <= 0) ||
                   (choices.length === 0 &&
                     (!product?.quantity || product.quantity <= 0))
-                    ? "bg-blue-600 opacity-70 cursor-not-allowed"
+                    ? "bg-cyan-600 opacity-70 cursor-not-allowed"
                     : isInCart
                     ? "bg-green-600 hover:bg-green-700"
-                    : "bg-blue-600 hover:bg-blue-700"
+                    : "bg-cyan-600 hover:bg-cyan-700"
                 }`}
                 onClick={addProductToCart}
                 disabled={
@@ -717,7 +707,6 @@ export default function Product() {
               </button>
             </div>
 
-            {/* Category badges below add to cart */}
             {category && !categoryLoading && (
               <div className="mt-4 flex flex-col gap-2">
                 <p className="text-sm text-slate-600 dark:text-slate-400">

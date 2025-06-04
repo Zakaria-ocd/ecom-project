@@ -17,7 +17,6 @@ export default function RegisterPage() {
   });
 
   useEffect(() => {
-    // Redirect if already logged in
     if (isAuthenticated) {
       router.push("/");
     }
@@ -34,7 +33,6 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (formData.password !== formData.password_confirmation) {
       toast.error("Passwords do not match");
       return;
@@ -48,7 +46,6 @@ export default function RegisterPage() {
         formData.password_confirmation
       );
 
-      // Redirect will happen in the useEffect when isAuthenticated changes
       toast.success("Registration successful!");
     } catch (err) {
       toast.error(err.message || "Registration failed. Please try again.");
@@ -67,7 +64,7 @@ export default function RegisterPage() {
               Or{" "}
               <Link
                 href="/user/login"
-                className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
+                className="font-medium text-cyan-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
               >
                 sign in to your existing account
               </Link>
@@ -160,7 +157,7 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400 disabled:cursor-not-allowed dark:focus:ring-offset-gray-900"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400 disabled:cursor-not-allowed dark:focus:ring-offset-gray-900"
               >
                 {loading ? (
                   <span className="absolute left-0 inset-y-0 flex items-center pl-3">

@@ -21,7 +21,6 @@ export default function useAuth() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // Check auth status on mount
   useEffect(() => {
     async function checkAuth() {
       setLoading(true);
@@ -44,7 +43,6 @@ export default function useAuth() {
     checkAuth();
   }, [dispatch]);
 
-  // Login function
   const login = async (email, password) => {
     setLoading(true);
     setError(null);
@@ -53,7 +51,6 @@ export default function useAuth() {
       dispatch(authUser(userData));
       setIsAuthState(true);
 
-      // Merge localStorage cart with server cart after login
       await mergeCartsAfterLogin();
 
       router.push("/");
@@ -66,7 +63,6 @@ export default function useAuth() {
     }
   };
 
-  // Register function
   const register = async (username, email, password, password_confirmation) => {
     setLoading(true);
     setError(null);
@@ -80,8 +76,6 @@ export default function useAuth() {
       dispatch(authUser(userData));
       setIsAuthState(true);
 
-      // No need to merge carts for new users
-
       router.push("/");
       return userData;
     } catch (error) {
@@ -92,13 +86,11 @@ export default function useAuth() {
     }
   };
 
-  // Logout function
   const logout = async () => {
     await logoutUserService();
     dispatch(logoutUserAction());
     setIsAuthState(false);
 
-    // Instead of just navigating, refresh the page to ensure a clean state
     if (typeof window !== "undefined") {
       window.location.reload();
     } else {

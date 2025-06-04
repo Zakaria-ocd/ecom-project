@@ -39,7 +39,6 @@ export default function DashboardLayout({ children }) {
       }
     }
     checkAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
@@ -56,7 +55,7 @@ export default function DashboardLayout({ children }) {
         </div>
       ) : (
         <div className="w-screen h-screen flex items-center justify-center">
-          <Loader2 className="size-16 animate-spin text-blue-600" />
+          <Loader2 className="size-16 animate-spin text-cyan-600" />
         </div>
       )}
     </>

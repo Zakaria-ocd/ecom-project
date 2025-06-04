@@ -33,21 +33,18 @@ export default function EditUserPage() {
   const [saving, setSaving] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Form state
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     role: "",
   });
 
-  // Image upload state
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     fetchUser();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   async function fetchUser() {
@@ -149,7 +146,6 @@ export default function EditUserPage() {
     setPreviewUrl(null);
     fileInputRef.current.value = "";
 
-    // If this is an existing user image, delete it from the server
     if (user.image) {
       try {
         const response = await fetch(
@@ -166,7 +162,7 @@ export default function EditUserPage() {
         const data = await response.json();
         if (data.success) {
           toast.success("Profile image deleted");
-          // Update local user state
+
           setUser((prev) => ({
             ...prev,
             image: null,
@@ -186,7 +182,6 @@ export default function EditUserPage() {
     setSaving(true);
 
     try {
-      // First handle image upload if an image was selected
       if (selectedImage) {
         const formDataImage = new FormData();
         formDataImage.append("image", selectedImage);
@@ -205,7 +200,6 @@ export default function EditUserPage() {
         }
       }
 
-      // Update user details
       const response = await fetch(
         `http://localhost:8000/api/users/${userId}`,
         {
@@ -364,7 +358,6 @@ export default function EditUserPage() {
           <div className="flex flex-col md:flex-row gap-8">
             <div className="md:w-1/3">
               <div className="bg-slate-50 rounded-lg p-6 flex flex-col items-center justify-center">
-                {/* Image Upload Dropzone */}
                 <div
                   className={`relative cursor-pointer w-full pb-6 ${
                     isDragging ? "opacity-70" : ""
@@ -416,7 +409,6 @@ export default function EditUserPage() {
                     )}
                   </div>
 
-                  {/* Remove Button - Only shown when there's a preview or user image */}
                   {(previewUrl || user.image) && (
                     <button
                       type="button"

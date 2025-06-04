@@ -70,7 +70,6 @@ export default function ProductCard({ product, handleDeleteProduct }) {
         </h3>
         <div className="max-h-[160px] overflow-y-auto pr-1">
           {choices.map((choice, index) => {
-            // Sort attributes by type: colors first, then sizes, then others
             const sortedAttributes = [...choice.typeValuePairs].sort((a, b) => {
               const aType = a.typeName.toLowerCase();
               const bType = b.typeName.toLowerCase();
@@ -92,7 +91,6 @@ export default function ProductCard({ product, handleDeleteProduct }) {
                 <div className="flex-1">
                   <div className="flex flex-wrap gap-1.5 items-center mb-2">
                     {sortedAttributes.map((pair, idx) => {
-                      // Handle color attribute
                       if (pair.typeName.toLowerCase() === "color") {
                         return (
                           <Badge
@@ -111,7 +109,6 @@ export default function ProductCard({ product, handleDeleteProduct }) {
                         );
                       }
 
-                      // Handle size attribute
                       if (pair.typeName.toLowerCase() === "size") {
                         return (
                           <Badge
@@ -124,7 +121,6 @@ export default function ProductCard({ product, handleDeleteProduct }) {
                         );
                       }
 
-                      // Handle other attributes with a new style
                       return (
                         <Badge
                           key={`${pair.typeName}-${idx}`}
@@ -209,7 +205,6 @@ export default function ProductCard({ product, handleDeleteProduct }) {
           return;
         }
 
-        // Use direct URLs with a timestamp to avoid caching issues
         const imageUrls = imageIds.map((imageId) => ({
           id: imageId,
           url: `http://localhost:8000/api/image/${imageId}`,
@@ -297,13 +292,15 @@ export default function ProductCard({ product, handleDeleteProduct }) {
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="[&_svg]:size-5 w-14 transition-colors bg-white text-sky-500 hover:text-sky-700"
-              >
-                <Edit2 />
-              </Button>
+              <Link href={`/admin/products/edit/${product.id}`}>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="[&_svg]:size-5 w-14 transition-colors bg-white text-sky-500 hover:text-sky-700"
+                >
+                  <Edit2 />
+                </Button>
+              </Link>
             </TooltipTrigger>
             <TooltipContent>
               <p>Edit</p>

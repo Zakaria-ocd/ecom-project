@@ -23,22 +23,18 @@ export default function CartPage() {
   } = useCart();
   const { canCheckout } = useCheckout(cart, clearCart);
 
-  // State for optimistic UI updates
   const [updatingItems, setUpdatingItems] = useState({});
 
-  // Refresh cart when component mounts
   useEffect(() => {
     refreshCart();
   }, [refreshCart]);
 
   const handleQuantityChange = (productId, choiceValueId, newQuantity) => {
-    // Set updating flag for this specific item
     setUpdatingItems((prev) => ({
       ...prev,
       [`${productId}-${choiceValueId || "null"}`]: true,
     }));
 
-    // Update quantity and then clear the updating flag
     updateQuantity(productId, choiceValueId, newQuantity).finally(() => {
       setUpdatingItems((prev) => ({
         ...prev,
@@ -47,18 +43,15 @@ export default function CartPage() {
     });
   };
 
-  // Helper function to get the correct item ID for authenticated vs guest users
   const getItemId = (item) => {
     if (isAuthenticated()) {
-      return item.id; // For authenticated users, use the cart_item_id
+      return item.id;
     } else {
-      return item.productId || item.product_id; // For guests, use product ID
+      return item.product_id;
     }
   };
 
-  // Helper function to display choice details
   const renderChoiceDetails = (item) => {
-    // First try to use the choiceDetails array if it exists
     if (item.choiceDetails && item.choiceDetails.length > 0) {
       return (
         <div className="mt-2 space-y-1">
@@ -81,42 +74,14 @@ export default function CartPage() {
       );
     }
 
-    // Fallback to individual color and size properties
-    const hasOptions = item.color || item.size;
-    if (!hasOptions) return null;
-
-    return (
-      <div className="mt-2 space-y-1">
-        {item.color && (
-          <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center">
-            <span className="font-medium">Color:</span>
-            <span className="ml-1">{item.color.name}</span>
-            {item.color.colorCode && (
-              <span
-                className="ml-2 inline-block h-4 w-4 rounded-full border border-gray-300"
-                style={{ backgroundColor: item.color.colorCode }}
-              ></span>
-            )}
-          </p>
-        )}
-        {item.size && (
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            <span className="font-medium">Size:</span>{" "}
-            <span className="ml-1">{item.size.name}</span>
-          </p>
-        )}
-      </div>
-    );
+    return null;
   };
 
-  // Get the choice value ID for an item
   const getChoiceValueId = (item) => {
-    // For authenticated users, this comes directly from the API
-    if (item.choice_value_id) {
+    if (item.choice_value_id !== undefined) {
       return item.choice_value_id;
     }
 
-    // For old format items, try to get from choiceValue
     if (item.choiceValue && item.choiceValue.id) {
       return item.choiceValue.id;
     }
@@ -124,7 +89,6 @@ export default function CartPage() {
     return null;
   };
 
-  // Handle removing item from cart
   const handleRemoveItem = (item) => {
     try {
       const itemId = getItemId(item);
@@ -164,7 +128,7 @@ export default function CartPage() {
                       </p>
                       <Link
                         href="/products"
-                        className="mt-4 inline-block text-blue-600 hover:underline"
+                        className="mt-4 inline-block text-cyan-600 hover:underline"
                       >
                         Continue shopping
                       </Link>
@@ -173,80 +137,68 @@ export default function CartPage() {
                     cart.map((item) => {
                       const itemId = getItemId(item);
                       const choiceValueId = getChoiceValueId(item);
+                      const productName =
+                        item.product_name ||
+                        (item.product ? item.product.name : "Product");
+                      const productId =
+                        item.product_id ||
+                        (item.product ? item.product.id : "");
+                      const imageUrl =
+                        item.image ||
+                        `http://localhost:8000/api/productImage/${productId}`;
 
                       return (
                         <motion.div
                           layout
-                          key={item.id}
+                          key={`${productId}-${choiceValueId || "no-choice"}`}
                           className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-colors dark:border-gray-700 dark:bg-gray-800 md:p-6"
                         >
                           <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
                             <Link
-                              href={`/products/${
-                                item.productId || item.product_id
-                              }`}
+                              href={`/products/${productId}`}
                               className="shrink-0 md:order-1"
                             >
                               <div className="relative w-20 h-20">
                                 <Image
-                                  src={item.image}
+                                  src={imageUrl}
                                   fill
-                                  alt={item.name}
+                                  alt={productName}
                                   className="object-cover rounded-md"
                                 />
                               </div>
                             </Link>
 
                             <div className="flex items-center justify-between md:order-3 md:justify-end">
-                              <QuantityCalculator
-                                key={item.id}
-                                itemId={item.id}
-                                productId={itemId}
-                                choiceValueId={choiceValueId}
-                                itemQuantity={item.quantity}
-                                onQuantityChange={handleQuantityChange}
-                              />
-                              <div className="text-end md:order-4 md:w-32">
-                                <p className="text-base font-bold text-gray-900 transition-colors dark:text-white">
-                                  ${item.price}
-                                </p>
+                              <div className="flex items-center">
+                                <QuantityCalculator
+                                  productId={itemId}
+                                  choiceValueId={choiceValueId}
+                                  itemQuantity={item.quantity}
+                                  onQuantityChange={handleQuantityChange}
+                                  max={100}
+                                />
                               </div>
+
+                              <button
+                                onClick={() => handleRemoveItem(item)}
+                                className="ml-4 text-red-500 hover:text-red-700 dark:hover:text-red-400"
+                                aria-label="Remove from cart"
+                              >
+                                <i className="fa-regular fa-trash-can"></i>
+                              </button>
                             </div>
 
-                            <div className="w-full min-w-0 flex-1 space-y-4 md:order-2 md:max-w-md">
+                            <div className="flex-1 md:order-2">
                               <Link
-                                href={`/products/${
-                                  item.productId || item.product_id
-                                }`}
-                                className="text-base font-medium text-gray-900 transition-colors hover:underline dark:text-white"
+                                href={`/products/${productId}`}
+                                className="text-lg font-medium text-gray-900 hover:text-cyan-600 dark:text-white dark:hover:text-blue-400"
                               >
-                                {item.name}
+                                {productName}
                               </Link>
-
                               {renderChoiceDetails(item)}
-
-                              <div className="flex items-center gap-4">
-                                <button
-                                  type="button"
-                                  className="inline-flex items-center text-sm font-medium text-gray-500 transition-colors group hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                                >
-                                  <i className="fa-regular fa-heart me-1.5"></i>
-                                  <span className="group-hover:underline">
-                                    Add to Favorites
-                                  </span>
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={() => handleRemoveItem(item)}
-                                  className="inline-flex items-center text-sm font-medium text-red-600 transition-colors group dark:text-red-500"
-                                >
-                                  <i className="fa-regular fa-xmark me-1.5"></i>
-                                  <span className="group-hover:underline">
-                                    Remove
-                                  </span>
-                                </button>
-                              </div>
+                              <p className="mt-1 text-lg font-semibold text-gray-900 dark:text-white">
+                                ${Number(item.price).toFixed(2)}
+                              </p>
                             </div>
                           </div>
                         </motion.div>
@@ -320,7 +272,7 @@ export default function CartPage() {
                         router.push("/user/checkout");
                       }
                     }}
-                    className="flex w-full items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 disabled:bg-gray-400"
+                    className="flex w-full items-center justify-center rounded-lg bg-cyan-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-cyan-700 focus:outline-none focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 disabled:bg-gray-400"
                     disabled={!canCheckout()}
                   >
                     {isAuthenticated()

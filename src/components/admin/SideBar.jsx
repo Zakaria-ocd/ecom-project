@@ -10,8 +10,9 @@ import {
   FiMessageCircle,
   FiChevronDown,
   FiChevronLeft,
+  FiFolder,
 } from "react-icons/fi";
-import { FaGear } from "react-icons/fa6";
+import { GoGear } from "react-icons/go";
 import { TbDeviceAnalytics } from "react-icons/tb";
 import { FaListUl, FaPlus } from "react-icons/fa";
 import { useSelector } from "react-redux";
@@ -27,13 +28,13 @@ const Sidebar = ({ section = "Dashboard" }) => {
     products: false,
     users: false,
     orders: false,
+    categories: false,
   });
   const pathname = usePathname();
 
   useEffect(() => {
     setSelected(section);
 
-    // Auto-expand sections based on current path
     if (pathname.includes("/products")) {
       setExpandedSections((prev) => ({ ...prev, products: true }));
     }
@@ -42,6 +43,9 @@ const Sidebar = ({ section = "Dashboard" }) => {
     }
     if (pathname.includes("/orders")) {
       setExpandedSections((prev) => ({ ...prev, orders: true }));
+    }
+    if (pathname.includes("/categories")) {
+      setExpandedSections((prev) => ({ ...prev, categories: true }));
     }
   }, [section, pathname]);
 
@@ -54,7 +58,6 @@ const Sidebar = ({ section = "Dashboard" }) => {
     }));
   };
 
-  // Animation variants for dropdown content
   const dropdownVariants = {
     hidden: {
       opacity: 0,
@@ -82,7 +85,6 @@ const Sidebar = ({ section = "Dashboard" }) => {
     },
   };
 
-  // Check if a path is active
   const isActive = (path) => {
     if (path === "/admin/dashboard" && pathname === "/admin/dashboard")
       return true;
@@ -97,6 +99,13 @@ const Sidebar = ({ section = "Dashboard" }) => {
     )
       return true;
     if (path === "/admin/orders" && pathname === "/admin/orders") return true;
+    if (path === "/admin/categories" && pathname === "/admin/categories")
+      return true;
+    if (
+      path === "/admin/categories/create" &&
+      pathname === "/admin/categories/create"
+    )
+      return true;
     return false;
   };
 
@@ -123,13 +132,12 @@ const Sidebar = ({ section = "Dashboard" }) => {
           href="/admin/dashboard"
         />
 
-        {/* Users Section */}
         <div className="w-full">
           <button
             onClick={() => toggleSection("users")}
             className={`flex items-center w-full h-10 px-2 rounded-md text-xs font-semibold transition-colors ${
               pathname.includes("/users")
-                ? "bg-blue-50 text-blue-700"
+                ? "bg-blue-50 text-cyan-700"
                 : "text-slate-600 hover:bg-slate-100"
             }`}
           >
@@ -161,7 +169,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
                   href="/admin/users"
                   className={`flex items-center px-2 py-1.5 text-xs font-normal rounded-md ${
                     isActive("/admin/users")
-                      ? "bg-blue-50 text-blue-700"
+                      ? "bg-blue-50 text-cyan-700"
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
@@ -172,7 +180,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
                   href="/admin/users/create"
                   className={`flex items-center px-2 py-1.5 text-xs font-normal rounded-md ${
                     isActive("/admin/users/create")
-                      ? "bg-blue-50 text-blue-700"
+                      ? "bg-blue-50 text-cyan-700"
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
@@ -184,14 +192,13 @@ const Sidebar = ({ section = "Dashboard" }) => {
           </AnimatePresence>
         </div>
 
-        {/* Products Section */}
         <div className="w-full">
           <button
             onClick={() => toggleSection("products")}
             className={`flex items-center w-full h-10 px-2 rounded-md text-xs font-semibold transition-colors ${
               pathname.includes("/products") ||
               pathname.includes("/products/create")
-                ? "bg-blue-50 text-blue-700"
+                ? "bg-blue-50 text-cyan-700"
                 : "text-slate-600 hover:bg-slate-100"
             }`}
           >
@@ -223,7 +230,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
                   href="/admin/products"
                   className={`flex items-center px-2 py-1.5 text-xs font-normal rounded-md ${
                     isActive("/admin/products")
-                      ? "bg-blue-50 text-blue-700"
+                      ? "bg-blue-50 text-cyan-700"
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
@@ -234,7 +241,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
                   href="/admin/products/create"
                   className={`flex items-center px-2 py-1.5 text-xs font-normal rounded-md ${
                     isActive("/admin/products/create")
-                      ? "bg-blue-50 text-blue-700"
+                      ? "bg-blue-50 text-cyan-700"
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
@@ -246,13 +253,72 @@ const Sidebar = ({ section = "Dashboard" }) => {
           </AnimatePresence>
         </div>
 
-        {/* Orders Section */}
+        <div className="w-full">
+          <button
+            onClick={() => toggleSection("categories")}
+            className={`flex items-center w-full h-10 px-2 rounded-md text-xs font-semibold transition-colors ${
+              pathname.includes("/categories")
+                ? "bg-blue-50 text-cyan-700"
+                : "text-slate-600 hover:bg-slate-100"
+            }`}
+          >
+            <div className="text-lg pr-3 pl-1">
+              <FiFolder size={18} />
+            </div>
+            {open && (
+              <>
+                <span className="flex-1 text-left text-nowrap">Categories</span>
+                {expandedSections.categories ? (
+                  <FiChevronDown className="h-4 w-4 transition-transform" />
+                ) : (
+                  <FiChevronLeft className="h-4 w-4 transition-transform" />
+                )}
+              </>
+            )}
+          </button>
+
+          <AnimatePresence>
+            {open && expandedSections.categories && (
+              <motion.div
+                className="ml-7 space-y-1 border-l border-slate-200 pl-2"
+                variants={dropdownVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                <Link
+                  href="/admin/categories"
+                  className={`flex items-center px-2 py-1.5 text-xs font-normal rounded-md ${
+                    isActive("/admin/categories")
+                      ? "bg-blue-50 text-cyan-700"
+                      : "text-slate-600 hover:bg-slate-100"
+                  }`}
+                >
+                  <FaListUl className="h-3 w-3 mr-2" />
+                  <span className="text-nowrap">All Categories</span>
+                </Link>
+                <Link
+                  href="/admin/categories/create"
+                  className={`flex items-center px-2 py-1.5 text-xs font-normal rounded-md ${
+                    isActive("/admin/categories/create")
+                      ? "bg-blue-50 text-cyan-700"
+                      : "text-slate-600 hover:bg-slate-100"
+                  }`}
+                >
+                  <FaPlus className="h-3 w-3 mr-2" />
+                  <span className="text-nowrap">Add Category</span>
+                </Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
         <div className="w-full">
           <button
             onClick={() => toggleSection("orders")}
             className={`flex items-center w-full h-10 px-2 rounded-md text-xs font-semibold transition-colors ${
               pathname.includes("/orders")
-                ? "bg-blue-50 text-blue-700"
+                ? "bg-blue-50 text-cyan-700"
                 : "text-slate-600 hover:bg-slate-100"
             }`}
           >
@@ -284,7 +350,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
                   href="/admin/orders"
                   className={`flex items-center px-2 py-1.5 text-xs font-normal rounded-md ${
                     isActive("/admin/orders")
-                      ? "bg-blue-50 text-blue-700"
+                      ? "bg-blue-50 text-cyan-700"
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
@@ -319,7 +385,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
           open={open}
         />
         <Option
-          Icon={FaGear}
+          Icon={GoGear}
           title="Settings"
           selected={selected}
           setSelected={setSelected}

@@ -17,7 +17,6 @@ export default function LoginPage() {
   });
 
   useEffect(() => {
-    // Redirect if already logged in
     if (isAuthenticated) {
       const redirectPath = redirect ? `/${redirect}` : "/";
       router.push(redirectPath);
@@ -38,7 +37,6 @@ export default function LoginPage() {
     try {
       await login(formData.email, formData.password);
 
-      // Redirect will happen in the useEffect when isAuthenticated changes
       toast.success("Login successful!");
     } catch (err) {
       toast.error(err.message || "Login failed. Please try again.");
@@ -57,7 +55,7 @@ export default function LoginPage() {
               Or{" "}
               <Link
                 href="/user/register"
-                className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
+                className="font-medium text-cyan-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
               >
                 create a new account
               </Link>
@@ -105,7 +103,7 @@ export default function LoginPage() {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded dark:border-gray-700"
+                  className="h-4 w-4 text-cyan-600 focus:ring-blue-500 border-gray-300 rounded dark:border-gray-700"
                 />
                 <label
                   htmlFor="remember-me"
@@ -118,7 +116,7 @@ export default function LoginPage() {
               <div className="text-sm">
                 <Link
                   href="/user/forgot-password"
-                  className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
+                  className="font-medium text-cyan-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
                 >
                   Forgot your password?
                 </Link>
@@ -144,7 +142,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400 disabled:cursor-not-allowed dark:focus:ring-offset-gray-900"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-400 disabled:cursor-not-allowed dark:focus:ring-offset-gray-900"
               >
                 {loading ? (
                   <span className="absolute left-0 inset-y-0 flex items-center pl-3">

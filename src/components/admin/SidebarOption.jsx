@@ -4,32 +4,25 @@ import { usePathname } from "next/navigation";
 
 const Option = ({ Icon, title, selected, setSelected, open, notifs, href }) => {
   const pathname = usePathname();
-  // Use provided href or default to lowercase title path
+
   const linkHref = href || `/admin/${title.toLowerCase()}`;
 
-  // Check if current path matches this option with improved detection for nested routes
   const isActive = () => {
-    // Exact match
     if (pathname === linkHref) return true;
 
-    // For dashboard, only highlight on exact match
     if (linkHref === "/admin/dashboard") {
       return pathname === "/admin/dashboard";
     }
 
-    // For other sections, check if pathname includes the base path (excluding dashboard)
-    // This ensures section stays highlighted when viewing sub-pages
     const basePath = linkHref.replace("/admin/", "");
     if (basePath !== "dashboard" && pathname.includes(`/${basePath}`)) {
       return true;
     }
 
-    // Special case for analytics
     if (title === "Analytics" && pathname.includes("/admin/analytics")) {
       return true;
     }
 
-    // Fallback to selected state
     return selected === title;
   };
 
@@ -40,7 +33,7 @@ const Option = ({ Icon, title, selected, setSelected, open, notifs, href }) => {
         onClick={() => setSelected(title)}
         className={`relative flex h-10 w-full items-center rounded-md transition-colors ${
           isActive()
-            ? "bg-blue-50 text-blue-700"
+            ? "bg-blue-50 text-cyan-700"
             : "text-slate-600 hover:bg-slate-100"
         }`}
       >

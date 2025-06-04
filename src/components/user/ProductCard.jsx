@@ -83,7 +83,6 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     ];
   };
 
-  // Fetch product images
   useEffect(() => {
     if (!product?.id) {
       setAllImageIds([]);
@@ -117,14 +116,12 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     fetchProductImages();
   }, [product.id]);
 
-  // Fetch product choices/options
   useEffect(() => {
     if (!product?.id) return;
 
     const fetchProductChoices = async () => {
       setLoadingChoices(true);
       try {
-        // Use the RESTful endpoint structure
         const response = await fetch(
           `http://localhost:8000/api/products/${product.id}/choices`
         );
@@ -135,36 +132,26 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
 
         const responseData = await response.json();
 
-        // Load product choices response data
-
-        // Check if the data is in the expected format
         const data = responseData.data || responseData;
 
-        // Process the choices data based on the API response structure
         if (data && Array.isArray(data)) {
-          // Create a direct mapping of choiceId to price and quantity for later lookup
           const choicePriceMap = {};
           data.forEach((choice) => {
             if (
-              choice.id &&
+              choice.choice_value_id &&
               choice.price !== undefined &&
               choice.quantity !== undefined
             ) {
-              choicePriceMap[choice.id] = {
+              choicePriceMap[choice.choice_value_id] = {
                 price: choice.price,
                 quantity: choice.quantity,
               };
             }
           });
 
-          // Store this mapping for later price/quantity lookups
+          const typeMap = new Map();
 
-          // Process types and options for display
-          const typeMap = new Map(); // Use a Map to efficiently group by type
-
-          // Group choices by type
           data.forEach((choice) => {
-            // Extract type information from choice
             if (choice.typeValuePairs && Array.isArray(choice.typeValuePairs)) {
               choice.typeValuePairs.forEach((pair) => {
                 const typeId = pair.typeId;
@@ -178,37 +165,33 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
                   });
                 }
 
-                // Add this value if it doesn't exist
                 const type = typeMap.get(typeId);
                 const existingValueIndex = type.values.findIndex(
                   (v) => v.id === pair.valueId
                 );
 
                 if (existingValueIndex === -1) {
-                  // Add new value
                   type.values.push({
                     id: pair.valueId,
                     value: pair.value || `Option ${pair.valueId}`,
-                    choiceId: choice.id,
+                    choiceId: choice.choice_value_id,
                     colorCode: pair.colorCode,
                     price: choice.price,
                     quantity: choice.quantity,
                     available: choice.quantity > 0,
-                    // Store the original choice for validation later
+
                     originalChoice: choice,
                   });
                 } else if (type.values[existingValueIndex]) {
-                  // Value exists but might be for a different choice
-                  // Keep both so we maintain all possible combinations
                   type.values.push({
                     id: pair.valueId,
                     value: pair.value || `Option ${pair.valueId}`,
-                    choiceId: choice.id,
+                    choiceId: choice.choice_value_id,
                     colorCode: pair.colorCode,
                     price: choice.price,
                     quantity: choice.quantity,
                     available: choice.quantity > 0,
-                    // Store the original choice for validation later
+
                     originalChoice: choice,
                   });
                 }
@@ -216,23 +199,19 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
             }
           });
 
-          // Convert the Map to an array
           const processed = Array.from(typeMap.values());
 
           setProductTypes(processed);
 
-          // Default selections - select first available choice of each type
           const defaultSelections = {};
           const selectedTypes = {};
 
           processed.forEach((type) => {
-            // Find first available choice (quantity > 0)
             const availableChoice = type.values.find(
               (value) => value.quantity > 0
             );
 
             if (availableChoice) {
-              // Store by type name (color, size, etc.)
               const typeName = type.name.toLowerCase();
 
               if (typeName.includes("color")) {
@@ -252,18 +231,15 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
                 selectedTypes.size = true;
               }
 
-              // Track the selected choice ID (will use the last one if multiple types selected)
               defaultSelections.choiceId = availableChoice.choiceId;
               defaultSelections.price = availableChoice.price;
               defaultSelections.quantity = availableChoice.quantity;
             }
           });
 
-          // Set selected choice ID if we found any defaults
           if (defaultSelections.choiceId) {
             setSelectedChoiceId(defaultSelections.choiceId);
 
-            // Set price and quantity from the selected choice
             if (defaultSelections.price !== undefined) {
               setActivePrice(defaultSelections.price);
             }
@@ -272,16 +248,13 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
               setActiveQuantity(defaultSelections.quantity);
             }
           } else {
-            // No available choices found, use product defaults
             setActivePrice(product.price || 0);
             setActiveQuantity(product.quantity || 0);
 
-            // Clear selections
             setSelectedColor(null);
             setSelectedSize(null);
             setSelectedChoiceId(null);
 
-            // Show toast notification that no choices are available
             if (processed.length > 0) {
               toast.error("Product unavailable", {
                 description: "All variations of this product are out of stock",
@@ -293,13 +266,11 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
       } catch (error) {
         console.error("Error fetching product choices:", error);
 
-        // Show error toast
         toast.error("Could not load product options", {
           description: "Please try again later",
           duration: 3000,
         });
 
-        // Fallback to product defaults
         setActivePrice(product.price || 0);
         setActiveQuantity(product.quantity || 0);
       } finally {
@@ -310,9 +281,7 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     fetchProductChoices();
   }, [product.id, product.price, product.quantity]);
 
-  // Helper function to validate if the current combination of choices is valid
   const validateChoiceCombination = useCallback(() => {
-    // If no choices selected, return default product values
     if (!selectedColor && !selectedSize) {
       return {
         valid: true,
@@ -323,57 +292,48 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
       };
     }
 
-    // Get all choices from API data
     const choices = [];
     productTypes.forEach((type) => {
       type.values.forEach((value) => {
-        // Find the complete choice object
         const choiceData = value.originalChoice;
-        if (choiceData && !choices.find((c) => c.id === choiceData.id)) {
+        if (
+          choiceData &&
+          !choices.find((c) => c.choice_value_id === choiceData.choice_value_id)
+        ) {
           choices.push(choiceData);
         }
       });
     });
 
-    // Find a variant where all type-value pairs match exactly
     const exactMatchingChoice = choices.find((choice) => {
-      // Skip if no typeValuePairs
       if (!choice.typeValuePairs || !Array.isArray(choice.typeValuePairs)) {
         return false;
       }
 
-      // Count how many types are in this variant
       const variantTypeCount = choice.typeValuePairs.length;
 
-      // Count how many types the user has selected
       const selectedTypeCount =
         (selectedColor ? 1 : 0) + (selectedSize ? 1 : 0);
 
-      // If the counts don't match, this can't be an exact match
       if (variantTypeCount !== selectedTypeCount) {
         return false;
       }
 
-      // Check if all selected values match this variant's values exactly
       let allTypesMatch = true;
 
-      // Check if color is required and matches
       const hasColorType = choice.typeValuePairs.some(
         (pair) => pair.typeName.toLowerCase() === "color"
       );
 
       if (hasColorType) {
-        // If variant has color type, user must have selected color
         if (!selectedColor) {
           return false;
         }
 
-        // Find the color pair in this variant
         const colorPair = choice.typeValuePairs.find(
           (pair) => pair.typeName.toLowerCase() === "color"
         );
 
-        // Check if selected color matches variant's color
         if (
           !colorPair ||
           colorPair.value.toLowerCase() !== selectedColor.name.toLowerCase()
@@ -381,27 +341,22 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
           return false;
         }
       } else if (selectedColor) {
-        // If variant doesn't have color but user selected color, not a match
         return false;
       }
 
-      // Check if size is required and matches
       const hasSizeType = choice.typeValuePairs.some(
         (pair) => pair.typeName.toLowerCase() === "size"
       );
 
       if (hasSizeType) {
-        // If variant has size type, user must have selected size
         if (!selectedSize) {
           return false;
         }
 
-        // Find the size pair in this variant
         const sizePair = choice.typeValuePairs.find(
           (pair) => pair.typeName.toLowerCase() === "size"
         );
 
-        // Check if selected size matches variant's size
         if (
           !sizePair ||
           sizePair.value.toLowerCase() !== selectedSize.name.toLowerCase()
@@ -409,30 +364,25 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
           return false;
         }
       } else if (selectedSize) {
-        // If variant doesn't have size but user selected size, not a match
         return false;
       }
 
       return allTypesMatch;
     });
 
-    // If we found an exact match, return it
     if (exactMatchingChoice) {
       return {
         valid: true,
         price: exactMatchingChoice.price || product.price || 0,
         quantity: exactMatchingChoice.quantity || 0,
-        choiceId: exactMatchingChoice.id,
+        choiceId: exactMatchingChoice.choice_value_id,
         message: null,
       };
     }
 
-    // If no match found, return invalid with a message
     let message = "Please select all required options for this variant";
 
-    // Find the closest variant to suggest better options
     if (selectedColor || selectedSize) {
-      // Find any variants that contain the selected color
       if (selectedColor) {
         const variantsWithColor = choices.filter((choice) =>
           choice.typeValuePairs?.some(
@@ -462,7 +412,6 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
         }
       }
 
-      // Find any variants that contain the selected size
       if (selectedSize && !message.includes("available with")) {
         const variantsWithSize = choices.filter((choice) =>
           choice.typeValuePairs?.some(
@@ -496,23 +445,18 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     return {
       valid: false,
       price: product.price || 0,
-      quantity: 0, // Set quantity to 0 for unavailable combinations
+      quantity: 0,
       choiceId: null,
       message,
     };
   }, [selectedColor, selectedSize, product, productTypes]);
 
-  // Effect to validate and update price/quantity when color or size selections change
   useEffect(() => {
-    // Validate the current combination of selections
     const validation = validateChoiceCombination();
 
-    // Update UI state based on validation result
     setActivePrice(validation.price);
     setActiveQuantity(validation.quantity);
     setSelectedChoiceId(validation.choiceId);
-
-    // No toast notification for invalid combinations - UI will show availability state
   }, [
     selectedColor,
     selectedSize,
@@ -521,42 +465,35 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     validateChoiceCombination,
   ]);
 
-  // Helper functions
   const generateCartItemId = (productId, selectedColor, selectedSize) => {
     return `${productId}-${selectedColor?.id || "no-color"}-${
       selectedSize?.id || "no-size"
     }`;
   };
 
-  // Helper function to find a cart item based on current selections
   const findCartItem = () => {
     if (!cart || !Array.isArray(cart)) {
       return null;
     }
 
     return cart.find((item) => {
-      // Check product ID first
       if (item.productId !== product.id && item.product_id !== product.id)
         return false;
 
-      // For products with choice_value_id, compare directly
       if (selectedChoiceId && item.choice_value_id) {
         return selectedChoiceId === item.choice_value_id;
       }
 
-      // Check if this is a product with no choices/variants
       const isSimpleProduct =
         (!item.choiceDetails || item.choiceDetails.length === 0) &&
         !selectedColor &&
         !selectedSize;
 
       if (isSimpleProduct) {
-        return true; // Simple product match
+        return true;
       }
 
-      // If we have color and size selections, check if both match
       if (selectedColor && selectedSize) {
-        // Check choiceDetails for exact match
         const hasMatchingColor = item.choiceDetails?.some(
           (detail) =>
             detail.type?.toLowerCase() === "color" &&
@@ -572,16 +509,13 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
         return hasMatchingColor && hasMatchingSize;
       }
 
-      // If only color is selected
       if (selectedColor && !selectedSize) {
-        // Check if cart item only has color and matches selected color
         const hasMatchingColor = item.choiceDetails?.some(
           (detail) =>
             detail.type?.toLowerCase() === "color" &&
             detail.value === selectedColor.name
         );
 
-        // Cart item should only have color details (no size)
         const hasSizeDetail = item.choiceDetails?.some(
           (detail) => detail.type?.toLowerCase() === "size"
         );
@@ -589,16 +523,13 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
         return hasMatchingColor && !hasSizeDetail;
       }
 
-      // If only size is selected
       if (!selectedColor && selectedSize) {
-        // Check if cart item only has size and matches selected size
         const hasMatchingSize = item.choiceDetails?.some(
           (detail) =>
             detail.type?.toLowerCase() === "size" &&
             detail.value === selectedSize.name
         );
 
-        // Cart item should only have size details (no color)
         const hasColorDetail = item.choiceDetails?.some(
           (detail) => detail.type?.toLowerCase() === "color"
         );
@@ -610,38 +541,28 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     });
   };
 
-  // Check if item is in cart based on productId and combination of color/size
   const isProductInCart = () => {
     if (!cart || !Array.isArray(cart)) return false;
 
-    // Get exact matches from cart
     return cart.some((item) => {
-      // Check product ID first
       if (item.productId !== product.id && item.product_id !== product.id)
         return false;
 
-      // For products with choice_value_id, compare directly
       if (selectedChoiceId && item.choice_value_id) {
         return selectedChoiceId === item.choice_value_id;
       }
 
-      // Check if this is a product with no choices/variants
       const isSimpleProduct =
         (!item.choiceDetails || item.choiceDetails.length === 0) &&
         !selectedColor &&
         !selectedSize;
 
       if (isSimpleProduct) {
-        return true; // Simple product match
+        return true;
       }
 
-      // If user has made selections, require those selections to match
       if (selectedColor || selectedSize) {
-        // For exact variant matching
-
-        // If we have color and size selections, check if both match
         if (selectedColor && selectedSize) {
-          // Check choiceDetails for exact match
           const hasMatchingColor = item.choiceDetails?.some(
             (detail) =>
               detail.type?.toLowerCase() === "color" &&
@@ -657,16 +578,13 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
           return hasMatchingColor && hasMatchingSize;
         }
 
-        // If only color is selected
         if (selectedColor && !selectedSize) {
-          // Check if cart item only has color and matches selected color
           const hasMatchingColor = item.choiceDetails?.some(
             (detail) =>
               detail.type?.toLowerCase() === "color" &&
               detail.value === selectedColor.name
           );
 
-          // Cart item should only have color details (no size)
           const hasSizeDetail = item.choiceDetails?.some(
             (detail) => detail.type?.toLowerCase() === "size"
           );
@@ -674,16 +592,13 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
           return hasMatchingColor && !hasSizeDetail;
         }
 
-        // If only size is selected
         if (!selectedColor && selectedSize) {
-          // Check if cart item only has size and matches selected size
           const hasMatchingSize = item.choiceDetails?.some(
             (detail) =>
               detail.type?.toLowerCase() === "size" &&
               detail.value === selectedSize.name
           );
 
-          // Cart item should only have size details (no color)
           const hasColorDetail = item.choiceDetails?.some(
             (detail) => detail.type?.toLowerCase() === "color"
           );
@@ -713,7 +628,23 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
       return;
     }
 
-    // Make sure we have at least one image to use
+    if (productTypes.length > 0) {
+      const validChoice = validateChoiceCombination();
+      if (!validChoice.valid) {
+        toast.error("Invalid product selection", {
+          description:
+            validChoice.message ||
+            "Please select a valid combination of options",
+          duration: 3000,
+        });
+        return;
+      }
+
+      if (validChoice.choiceId) {
+        setSelectedChoiceId(validChoice.choiceId);
+      }
+    }
+
     const imageId =
       mainImageStates.currentImageId ||
       (allImageIds.length > 0 ? allImageIds[0] : null);
@@ -726,15 +657,17 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
       id: generateCartItemId(item.id, selectedColor, selectedSize),
       productId: item.id,
       name: item.name,
-      price: activePrice, // Use the state variable
+      price: activePrice,
       rating: item.rating,
       image: imageId
         ? `http://localhost:8000/api/productImage/${item.id}`
-        : `http://localhost:8000/api/productImage/${item.id}`,
+        : null,
       quantity: quantity,
       choice_value_id: selectedChoiceId,
       choiceDetails: [],
     };
+
+    console.log("Adding to cart with choice_value_id:", selectedChoiceId);
 
     if (selectedColor) {
       if (!cartItem.choiceDetails) cartItem.choiceDetails = [];
@@ -760,11 +693,10 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     }
 
     try {
-      // addItem already shows success toast, no need for duplicate
       addItem(cartItem, quantity, selectedChoiceId);
     } catch (error) {
       console.error("Failed to add to cart:", error);
-      // Only show error toast if addItem didn't already handle it
+
       if (!error.handled) {
         toast.error(
           "Failed to add to cart: " + (error.message || "Unknown error")
@@ -776,9 +708,7 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
   const handleQuantityChange = (productId, choiceValueId, newQuantity) => {
     setQuantity(newQuantity);
 
-    // If product is already in cart, update its quantity
     if (isProductInCart()) {
-      // Find the actual cart item based on color and size selections
       const cartItem = findCartItem();
 
       if (cartItem) {
@@ -787,24 +717,15 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     }
   };
 
-  // Refresh cart data at regular intervals
   useEffect(() => {
     if (isAuthenticated()) {
       refreshCart();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshCart]);
 
-  // Refresh component when cart changes
-  useEffect(() => {
-    // This effect runs whenever the cart changes
-    // Force re-render by updating a state variable
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cart, product.id, selectedChoiceId]);
+  useEffect(() => {}, [cart, product.id, selectedChoiceId]);
 
-  // Render functions
   const renderImage = () => {
-    // Show skeleton only during initial load or thumbnail fetch
     if (loadingThumbnails) {
       return (
         <div className="absolute inset-0 w-full h-full">
@@ -813,7 +734,6 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
       );
     }
 
-    // Show error placeholder if no images or error loading images
     if (mainImageStates.error || !mainImageStates.currentImageId) {
       return (
         <div className="absolute inset-0 w-full h-full flex flex-col items-center justify-center bg-gray-100 rounded-md">
@@ -854,7 +774,6 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
           }
         />
 
-        {/* Image thumbnails - shown on hover */}
         {allImageIds.length > 1 && (
           <div className="absolute bottom-2 left-0 right-0 flex justify-center gap-1 opacity-0 peer-hover:opacity-100 hover:opacity-100 transition-opacity duration-300">
             {allImageIds.map((imgId, idx) => (
@@ -896,10 +815,8 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     );
   };
 
-  // Use the fetched types for rendering options
   const groupChoicesByAttribute = () => {
     return productTypes.reduce((acc, type) => {
-      // Add null check for type.name
       if (!type || !type.name) {
         console.warn("Invalid type found in productTypes:", type);
         return acc;
@@ -929,13 +846,9 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
       );
     }
 
-    // Debug data
-
     if (!productTypes || productTypes.length === 0) return null;
 
-    // Use try-catch to handle any unexpected errors in attribute processing
     try {
-      // Render each type of attribute (regardless of name)
       return (
         <div className="space-y-3 mt-4">
           {productTypes.map((type) => (
@@ -945,7 +858,6 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
               </p>
               <div className="flex flex-wrap items-center gap-2">
                 {type.values.map((value) => {
-                  // Check if this could be a color (has colorCode property or name contains 'color')
                   const isColor =
                     value.colorCode ||
                     type.name.toLowerCase().includes("color");
@@ -975,11 +887,6 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
                               onClick={() =>
                                 handleChoiceSelection(type.id, value)
                               }
-                              title={
-                                value.quantity <= 0
-                                  ? `${value.value} (Out of stock)`
-                                  : value.value
-                              }
                             />
                           </TooltipTrigger>
                           <TooltipContent side="top" className="px-3 py-1.5">
@@ -994,7 +901,6 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
                       </TooltipProvider>
                     );
                   } else {
-                    // Render as standard button (for size, type, etc.)
                     return (
                       <button
                         key={`value-${value.id}-${value.choiceId}`}
@@ -1002,7 +908,7 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
                           selectedSize?.id === value.choiceId
                             ? value.quantity <= 0
                               ? "bg-red-100 text-red-800 border-red-400 dark:bg-red-900/30 dark:text-red-300 dark:border-red-700"
-                              : "bg-blue-100 text-blue-800 border-blue-400 dark:bg-blue-900 dark:text-blue-300 dark:border-blue-700"
+                              : "bg-blue-100 text-blue-800 border-blue-400 dark:bg-blue-900 dark:text-blue-300 dark:border-cyan-700"
                             : value.quantity <= 0
                             ? "bg-gray-100 text-gray-400 border-gray-300 dark:bg-gray-800 dark:text-gray-500 dark:border-gray-700"
                             : "bg-white text-slate-700 border-slate-300 hover:bg-slate-100 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-600 dark:hover:bg-slate-700"
@@ -1040,34 +946,27 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     }
   };
 
-  // Helper function for generating colors when colorCode is missing
   const getColorForValue = (value) => {
-    // Simple hash function to get a consistent color for the same value
     const hashCode = (str) => {
       let hash = 0;
       for (let i = 0; i < str.length; i++) {
         hash = (hash << 5) - hash + str.charCodeAt(i);
-        hash = hash & hash; // Convert to 32bit integer
+        hash = hash & hash;
       }
       return hash;
     };
 
-    // Generate a pastel color based on the hash
     const hash = Math.abs(hashCode(String(value)));
     const h = hash % 360;
     return `hsl(${h}, 70%, 80%)`;
   };
 
-  // Use useMemo to recalculate inCart whenever dependencies change
   const inCart = useMemo(() => {
-    // Use our local check based on productId and choice_value_id
     const result = isProductInCart();
 
     return result;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product.id, selectedChoiceId, cart, selectedColor, selectedSize]);
 
-  // Render add/remove cart button
   const renderCartButton = () => {
     if (loadingChoices) {
       return (
@@ -1094,7 +993,6 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
       );
     }
 
-    // Show a loading state when removal is in progress
     if (removingFromCart) {
       return (
         <button
@@ -1113,14 +1011,10 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
       return (
         <button
           onClick={async () => {
-            // Find the cart item to remove based on color and size
             const cartItem = findCartItem();
             if (cartItem) {
               try {
-                // Set removing state to true to show loading state
                 setRemovingFromCart(true);
-
-                // Call handleRemoveFromCart with the correct parameters
 
                 await handleRemoveFromCart(
                   cartItem,
@@ -1131,7 +1025,6 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
                 console.error("Error removing item:", error);
                 toast.error("Failed to remove item from cart");
               } finally {
-                // Always reset the removing state
                 setRemovingFromCart(false);
               }
             } else {
@@ -1153,17 +1046,20 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     }
 
     return (
-      <div className="flex items-center gap-2">
-        <QuantityCalculator
-          productId={product.id}
-          choiceValueId={selectedChoiceId}
-          itemQuantity={quantity}
-          onQuantityChange={handleQuantityChange}
-          max={activeQuantity}
-        />
+      <div className="w-full flex items-center gap-2">
+        <div className="w-1/2 flex items-center justify-center gap-4 border border-gray-300 rounded-lg p-2">
+          <p className="text-gray-500">Quantity</p>
+          <QuantityCalculator
+            productId={product.id}
+            choiceValueId={selectedChoiceId}
+            itemQuantity={quantity}
+            onQuantityChange={handleQuantityChange}
+            max={activeQuantity}
+          />
+        </div>
         <button
           onClick={() => handleAddToCart(product)}
-          className="group relative overflow-hidden rounded-lg bg-blue-600 px-6 py-2.5 transition-all duration-300 ease-in-out hover:bg-blue-700"
+          className="group relative overflow-hidden w-1/2 rounded-lg bg-cyan-600 px-4 py-2.5 transition-all duration-300 ease-in-out hover:bg-cyan-700"
         >
           <span className="relative flex items-center justify-center gap-2 text-white">
             <i className="fa-regular fa-cart-plus"></i>
@@ -1177,13 +1073,8 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     );
   };
 
-  // Recalculate cart status whenever selectedColor or selectedSize changes
   useEffect(() => {
-    // Force re-evaluation of cart status when options change
-
-    // Trigger a re-render to update UI
     setActiveQuantity((prev) => prev);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedColor, selectedSize, product.id, selectedChoiceId, cart]);
 
   useEffect(() => {
@@ -1197,9 +1088,8 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     }
   }, [allImageIds]);
 
-  // Function to handle selection of a choice value from any type
   const handleChoiceSelection = (typeId, value) => {
-    // Get the type information
+    console.log(value);
     const type = productTypes.find((t) => t.id === typeId);
     if (!type) return;
 
@@ -1207,10 +1097,11 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
     const isColorType = typeName.includes("color");
     const isSizeType = typeName.includes("size");
 
-    // Check if this is a deselection (clicking already selected item)
+    const choiceValueId = value.choiceId;
+
     if (isColorType && selectedColor?.id === value.choiceId) {
       setSelectedColor(null);
-      // If this was the only selection, reset choiceId
+
       if (!selectedSize) {
         setSelectedChoiceId(null);
       }
@@ -1219,21 +1110,18 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
 
     if (isSizeType && selectedSize?.id === value.choiceId) {
       setSelectedSize(null);
-      // If this was the only selection, reset choiceId
+
       if (!selectedColor) {
         setSelectedChoiceId(null);
       }
       return;
     }
 
-    // Always update the selectedChoiceId when a choice is selected
     if (value.choiceId) {
       setSelectedChoiceId(value.choiceId);
     }
 
-    // This is a new selection
     if (isColorType) {
-      // If selecting a color
       setSelectedColor({
         id: value.choiceId,
         name: value.value,
@@ -1241,34 +1129,25 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
         available: value.quantity > 0,
       });
     } else if (isSizeType) {
-      // If selecting a size
       setSelectedSize({
         id: value.choiceId,
         name: value.value,
         available: value.quantity > 0,
       });
     }
-
-    // The useEffect will handle validation of the new combination
   };
 
   return (
     <div className="w-full flex flex-col gap-4 place-self-center">
       <div className="w-full relative h-[350px] sm:h-72 flex flex-col justify-center items-center overflow-hidden rounded-md shadow-lg">
-        {/* Product image with thumbnails */}
         {renderImage()}
 
-        {/* Heart icon */}
         <i className="fa-solid fa-heart text-white absolute name-4 top-3 left-3 opacity-0 cursor-pointer peer-hover:opacity-100 ease-in-out duration-300 peer-hover:translate-x-0 hover:translate-x-0 -translate-x-8 hover:opacity-100 hover:text-rose-500" />
 
-        {/* Quick view and quick shop buttons */}
         <div className="absolute hover:translate-y-0 -translate-y-6 opacity-0 peer-hover:opacity-100 ease-in-out duration-500 peer-hover:translate-y-0 hover:opacity-100 flex flex-col h-24 justify-center gap-4">
-          {/* Quick view dialog button */}
           <Dialog
             onOpenChange={(open) => {
-              // Don't reset choices when dialog is closed to preserve user selections
               if (!open) {
-                // Only reset quantity to 1 for a better UX when reopening
                 setQuantity(1);
               }
             }}
@@ -1438,7 +1317,7 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
                   </div>
                   <div className="text-[#878787] text-[0.85rem] transition-colors dark:text-gray-500">
                     {product.description}
-                    {/* Product options */}
+
                     {renderOptions()}
                     <div className="flex items-center gap-3 mt-4">
                       {renderCartButton()}
@@ -1461,12 +1340,9 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
           </Dialog>
           <Dialog
             onOpenChange={(open) => {
-              // Don't reset choices when dialog is closed to preserve user selections
               if (!open) {
-                // Only reset quantity to 1 for a better UX when reopening
                 setQuantity(1);
               } else if (open && allImageIds.length > 0) {
-                // Set the first image when opening quick shop
                 setQsImageStates((prev) => ({
                   ...prev,
                   currentImageId: allImageIds[0],
@@ -1532,8 +1408,6 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
                         }
                       />
                     )}
-
-                    {/* Thumbnails removed to show just one image */}
                   </div>
                   <div className="justify-between h-[3.25rem] flex flex-col">
                     <p className="text-gray-900 transition-colors font-extrabold dark:text-gray-200">
@@ -1545,15 +1419,12 @@ export default function ProductCard({ product, handleRemoveFromCart }) {
                   </div>
                 </div>
 
-                {/* Product options using the same render function as in quick view */}
                 {renderOptions()}
 
-                {/* Add to cart section */}
                 <div className="w-full flex flex-col items-center gap-4">
                   {renderCartButton()}
                 </div>
 
-                {/* View details link */}
                 <div className="w-full flex justify-center items-center">
                   <Link href={`/products/${product.id}`}>
                     <motion.div

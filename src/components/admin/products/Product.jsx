@@ -16,6 +16,13 @@ import {
 } from "@/components/ui/breadcrumb";
 import Rating from "@/components/Rating";
 import Link from "next/link";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import ProfileImage from "@/components/user/ProfileImage";
 
 export default function Product() {
   const { id: productId } = useParams();
@@ -101,12 +108,10 @@ export default function Product() {
         const data = await response.json();
         setProduct(data.data);
 
-        // Fetch user data if seller_id is available
         if (data.data && data.data.seller_id) {
           fetchUser(data.data.seller_id);
         }
 
-        // Fetch category data if category_id is available
         if (data.data && data.data.category_id) {
           fetchCategory(data.data.category_id);
         }
@@ -120,7 +125,6 @@ export default function Product() {
     async function fetchUser(sellerId) {
       setUserLoading(true);
       try {
-        // Fetch user details
         const response = await fetch(
           `http://localhost:8000/api/users/${sellerId}`
         );
@@ -131,7 +135,6 @@ export default function Product() {
 
         const userData = await response.json();
 
-        // Set user with direct image URL instead of blob conversion
         setUser({
           id: sellerId,
           username: userData.username || "",
@@ -207,7 +210,6 @@ export default function Product() {
           return;
         }
 
-        // Create direct image URL objects instead of fetching blobs
         const loadedImages = imageIds.map((imageId) => ({
           id: imageId,
           url: `http://localhost:8000/api/image/${imageId}`,
@@ -215,7 +217,7 @@ export default function Product() {
         }));
 
         setImages(loadedImages);
-        setCurrentImageIndex(0); // Reset to first image when new images are loaded
+        setCurrentImageIndex(0);
       } catch (error) {
         console.error("Error fetching images:", error);
         setImages([]);
@@ -231,8 +233,7 @@ export default function Product() {
 
   return (
     <div className="bg-white min-h-screen">
-      {/* Breadcrumb */}
-      <div className="px-3 py-2 bg-white">
+      <div className="px-4 py-3 bg-white">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -374,7 +375,6 @@ export default function Product() {
                 </div>
               )}
 
-              {/* User Information */}
               <div className="mt-8">
                 <h2 className="text-lg font-semibold text-slate-900 mb-4">
                   User Information
@@ -392,52 +392,22 @@ export default function Product() {
                   <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0">
-                        {user.image ? (
-                          <div className="relative h-16 w-16 rounded-full overflow-hidden border border-slate-200">
-                            <Image
-                              src={`http://localhost:8000/api/users/imageById/${user.id}`}
-                              alt={user.username || `User #${user.id}`}
-                              width={64}
-                              height={64}
-                              className="object-cover"
-                              unoptimized
-                            />
-                          </div>
-                        ) : (
-                          <div className="h-16 w-16 rounded-full bg-slate-200 flex items-center justify-center">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-8 w-8 text-slate-400"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={1.5}
-                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                              />
-                            </svg>
-                          </div>
-                        )}
+                        <ProfileImage
+                          imageUrl={`http://localhost:8000/api/users/imageById/${user.id}`}
+                          username={user.username}
+                          previewUrl={null}
+                          onImageChange={() => {}}
+                          className="w-16 h-16"
+                        />
                       </div>
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="mt-1 space-y-1 text-sm">
                           <Badge
                             variant="outline"
-                            className={getRoleColor(user.role)}
+                            className={`${getRoleColor(user.role)} mb-1`}
                           >
                             {user.role}
                           </Badge>
-                        </div>
-                        <div className="mt-1 space-y-1 text-sm">
-                          <div className="text-slate-600">
-                            <span className="font-medium text-slate-700">
-                              ID:
-                            </span>{" "}
-                            {user.id}
-                          </div>
                           {user.username && (
                             <div className="text-slate-600">
                               <span className="font-medium text-slate-700">
@@ -454,24 +424,25 @@ export default function Product() {
                               {user.email}
                             </div>
                           )}
-                          {user.createdAt && (
-                            <div className="text-slate-600">
-                              <span className="font-medium text-slate-700">
-                                Joined:
-                              </span>{" "}
-                              {formattedDate(user.createdAt)}
-                            </div>
-                          )}
                         </div>
                       </div>
-                      <Link href={`/admin/users/${user.id}`}>
-                        <Button
-                          variant="outline"
-                          className="[&_svg]:text-slate-500 [&_svg]:hover:text-slate-700 px-2.5 py-2"
-                        >
-                          <Eye />
-                        </Button>
-                      </Link>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Link href={`/admin/users/${user.id}`}>
+                              <Button
+                                variant="outline"
+                                className="[&_svg]:text-slate-500 [&_svg]:hover:text-slate-700 px-2.5 py-2"
+                              >
+                                <Eye />
+                              </Button>
+                            </Link>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>View User</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
                   </div>
                 ) : (
@@ -513,34 +484,6 @@ export default function Product() {
                     </div>
                   </div>
 
-                  {/* Category */}
-                  {!categoryLoading && category && (
-                    <div className="mt-3">
-                      <Badge
-                        variant="outline"
-                        className="bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
-                      >
-                        <span className="flex items-center gap-1.5">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="w-3.5 h-3.5"
-                          >
-                            <path d="M3 6h18"></path>
-                            <path d="M7 12h10"></path>
-                            <path d="M10 18h4"></path>
-                          </svg>
-                          {category.name}
-                        </span>
-                      </Badge>
-                    </div>
-                  )}
-
                   {choicesLoading ? (
                     <div className="space-y-3 mt-6">
                       <Skeleton className="h-6 w-24" />
@@ -556,10 +499,9 @@ export default function Product() {
                         <h3 className="text-sm font-medium text-gray-700 mb-2">
                           Variants ({choices.length})
                         </h3>
-                        <div className="max-h-[400px] overflow-y-auto pr-1 border rounded-md">
+                        <div className="max-h-[400px] overflow-y-auto border rounded-md">
                           {choices
                             .sort((a, b) => {
-                              // Sort by color, then size, then other attributes
                               const aColor =
                                 a.typeValuePairs.find(
                                   (p) => p.typeName.toLowerCase() === "color"
@@ -587,7 +529,6 @@ export default function Product() {
                               return 0;
                             })
                             .map((choice, index) => {
-                              // Sort attributes by type: colors first, then sizes, then others
                               const sortedAttributes = [
                                 ...choice.typeValuePairs,
                               ].sort((a, b) => {
@@ -622,7 +563,6 @@ export default function Product() {
                                     <div className="flex-1">
                                       <div className="flex flex-wrap gap-2 items-center">
                                         {sortedAttributes.map((pair, idx) => {
-                                          // Handle color attribute
                                           if (
                                             pair.typeName.toLowerCase() ===
                                             "color"
@@ -649,7 +589,6 @@ export default function Product() {
                                             );
                                           }
 
-                                          // Handle size attribute
                                           if (
                                             pair.typeName.toLowerCase() ===
                                             "size"
@@ -665,7 +604,6 @@ export default function Product() {
                                             );
                                           }
 
-                                          // Handle other attributes with a new style
                                           return (
                                             <Badge
                                               key={`${pair.typeName}-${idx}`}
@@ -742,7 +680,7 @@ export default function Product() {
                         <div className="flex items-center">
                           <Badge
                             variant="outline"
-                            className="bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+                            className="bg-emerald-50 text-emerald-700 border-emerald-200"
                           >
                             <span className="flex items-center gap-1.5">
                               <svg
@@ -804,7 +742,7 @@ export default function Product() {
                   <div className="mt-8 flex gap-4">
                     <Link
                       href={`/admin/products/edit/${productId}`}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm flex-1 text-center"
+                      className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white font-medium rounded-lg text-sm flex-1 text-center"
                     >
                       Edit Product
                     </Link>

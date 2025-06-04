@@ -29,12 +29,12 @@ import {
 } from "recharts";
 
 const COLORS = [
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#8884D8",
-  "#FF6B6B",
+  "#63B3ED",
+  "#34D399",
+  "#F6AD55",
+  "#9F7AEA",
+  "#FC8181",
+  "#4FD1C5",
 ];
 
 export default function CustomersTab({ data, period, loading }) {
@@ -85,7 +85,6 @@ export default function CustomersTab({ data, period, loading }) {
     );
   }
 
-  // Use real data from API or fall back to empty arrays/mock data if not available
   const userRegistrations = data?.userRegistrations || [
     { month: "Jan", registrations: 0 },
     { month: "Feb", registrations: 0 },
@@ -118,7 +117,6 @@ export default function CustomersTab({ data, period, loading }) {
     { name: "No Data", value: 1 },
   ];
 
-  // Get period text for display
   const getPeriodText = () => {
     switch (period) {
       case "day":

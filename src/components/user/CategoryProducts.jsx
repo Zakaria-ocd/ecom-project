@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 
-// Product skeleton for loading state
 const ProductSkeleton = () => (
   <div className="w-full flex flex-col gap-4 place-self-center">
     <div className="w-full relative h-72 flex flex-col justify-center items-center overflow-hidden rounded-md shadow-lg bg-gray-100 animate-pulse">
@@ -50,14 +49,12 @@ export default function CategoryProducts({
   const [totalProducts, setTotalProducts] = useState(0);
   const [sortBy, setSortBy] = useState("newest");
 
-  // Fetch products for the category
   useEffect(() => {
     if (!categoryId) return;
 
     async function fetchProductsByCategory() {
       setLoading(true);
       try {
-        // Use the dedicated API endpoint for products by category
         const response = await fetch(
           `http://localhost:8000/api/categories/${categoryId}/products`
         );
@@ -69,14 +66,12 @@ export default function CategoryProducts({
         const data = await response.json();
         const categoryProducts = data.products || [];
 
-        // If category wasn't provided separately, use the one from the response
         if (!category && data.category) {
           setCategory(data.category);
         }
 
         setTotalProducts(categoryProducts.length);
 
-        // Sort products based on sortBy value
         const sortedProducts = [...categoryProducts].sort((a, b) => {
           switch (sortBy) {
             case "price-asc":
@@ -90,7 +85,6 @@ export default function CategoryProducts({
             case "rating-desc":
               return b.rating - a.rating;
             default:
-              // "newest" - sort by id descending as a proxy for newest
               return b.id - a.id;
           }
         });
@@ -104,24 +98,18 @@ export default function CategoryProducts({
     }
 
     fetchProductsByCategory();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryId, sortBy]);
 
-  // Helper function to check if an item is in the cart
   const isItemInCart = (productId) => {
     if (!cart) return false;
     return cart.some((item) => item.productId === productId);
   };
 
-  // Handle removing from cart
   const handleRemoveFromCart = (product, selectedColor, selectedSize) => {
     try {
-      // Get the choice value ID either from passed parameters or from the product choices
       let choiceValueId = null;
 
-      // If color or size is provided, use them to determine choice ID
       if (selectedColor || selectedSize) {
-        // If we have both color and size, prefer the one that's not null
         if (selectedColor) {
           choiceValueId = selectedColor.id;
           console.log(`Using color choice ID: ${choiceValueId}`);
@@ -131,16 +119,13 @@ export default function CategoryProducts({
         }
       }
 
-      // Debug what's being passed to removeItem
       console.log("Removing item with:", {
         productId: product.id,
         choiceValueId,
       });
 
-      // Remove the item from cart with the appropriate choice ID
       removeItem(product.id, choiceValueId);
 
-      // Refresh cart immediately
       toast.success("Item removed from cart");
     } catch (error) {
       console.error("Failed to remove item from cart:", error);
@@ -148,7 +133,6 @@ export default function CategoryProducts({
     }
   };
 
-  // No category found
   if (!categoryLoading && !category) {
     return (
       <div className="container py-10">
@@ -174,7 +158,7 @@ export default function CategoryProducts({
             </p>
             <Link
               href="/categories"
-              className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 bg-cyan-600 text-white px-4 py-2 rounded-md hover:bg-cyan-700 transition-colors"
             >
               <ChevronLeft className="h-4 w-4" />
               Back to Categories
@@ -188,7 +172,6 @@ export default function CategoryProducts({
   return (
     <div className="p-10">
       <div className="w-full mx-auto">
-        {/* Breadcrumb */}
         <Breadcrumb className="mb-6">
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -205,7 +188,6 @@ export default function CategoryProducts({
           </BreadcrumbList>
         </Breadcrumb>
 
-        {/* Category Header */}
         <div className="mb-8">
           <div className="text-3xl font-bold mb-2">
             {categoryLoading ? (
@@ -223,7 +205,6 @@ export default function CategoryProducts({
           </div>
         </div>
 
-        {/* Sorting Controls */}
         <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
           <div className="text-sm text-gray-600 dark:text-gray-400">
             {loading ? (
@@ -253,7 +234,6 @@ export default function CategoryProducts({
           </div>
         </div>
 
-        {/* Products Grid */}
         {loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {[...Array(8)].map((_, index) => (
@@ -279,7 +259,7 @@ export default function CategoryProducts({
             </p>
             <Link
               href="/products"
-              className="text-blue-600 hover:underline dark:text-blue-400"
+              className="text-cyan-600 hover:underline dark:text-blue-400"
             >
               Browse all products
             </Link>

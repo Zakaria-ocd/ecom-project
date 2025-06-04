@@ -11,7 +11,7 @@ export default function Logo({ className = "", fullLogo = false }) {
         className={className}
       />
       {fullLogo && (
-        <span className="bg-gradient-to-br bg-colored-gradient-text bg-clip-text text-transparent font-semibold text-lg">
+        <span className="bg-colored-gradient-text bg-clip-text text-transparent font-semibold text-lg">
           3z shop
         </span>
       )}

@@ -11,7 +11,9 @@ const RecentSellerMessages = () => {
 
   return (
     <div className="bg-white p-4 border border-slate-200/40 rounded-lg shadow-md">
-      <h2 className="text-lg text-slate-800 font-semibold mb-2">Recent Seller Messages</h2>
+      <h2 className="text-lg text-slate-800 font-semibold mb-2">
+        Recent Seller Messages
+      </h2>
       <ul>
         {lastThreeMessages.map((message, index) => (
           <li key={index} className="mb-4">
@@ -23,7 +25,7 @@ const RecentSellerMessages = () => {
           </li>
         ))}
       </ul>
-      <Link href="/live-chat" className="text-blue-500 hover:text-blue-700">
+      <Link href="/live-chat" className="text-blue-500 hover:text-cyan-700">
         View All
       </Link>
     </div>

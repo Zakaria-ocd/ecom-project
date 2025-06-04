@@ -295,7 +295,6 @@ export default function ProductChoices({
       try {
         setLoading(true);
 
-        // Fetch types
         const typesResponse = await fetch("http://localhost:8000/api/types");
 
         if (!typesResponse.ok) {
@@ -306,7 +305,6 @@ export default function ProductChoices({
         const types = typesData.data || [];
         setAvailableTypes(types);
 
-        // Fetch values for each type
         const valuesObj = {};
         for (const type of types) {
           const valuesResponse = await fetch(
@@ -331,11 +329,9 @@ export default function ProductChoices({
     fetchAvailableChoices();
   }, []);
 
-  // Initialize with any existing choices
   useEffect(() => {
     if (!loading && initialChoices.length > 0 && !initialChoicesLoaded) {
       if (initialChoices.length > 0) {
-        // Transform initial choices to match our format if needed
         const formattedChoices = initialChoices.map((choice) => ({
           id: choice.id || Date.now() + Math.random(),
           typeValuePairs: choice.typeValuePairs || [],
@@ -523,7 +519,6 @@ export default function ProductChoices({
                 </Popover>
               </div>
 
-              {/* Color Picker - Only visible when color type is selected */}
               {typeSelections[choice.id] &&
                 isColorType(typeSelections[choice.id]) &&
                 valueSelections[choice.id] && (

@@ -28,7 +28,6 @@ export default function CreateUserPage() {
   const [saving, setSaving] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Form state
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -37,7 +36,6 @@ export default function CreateUserPage() {
     password_confirmation: "",
   });
 
-  // Image upload state
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -115,7 +113,6 @@ export default function CreateUserPage() {
     e.preventDefault();
     setSaving(true);
 
-    // Basic validation
     if (
       !formData.username ||
       !formData.email ||
@@ -134,7 +131,6 @@ export default function CreateUserPage() {
     }
 
     try {
-      // Register new user
       const response = await fetch("http://localhost:8000/api/register", {
         method: "POST",
         headers: {
@@ -151,7 +147,6 @@ export default function CreateUserPage() {
 
       const userData = await response.json();
 
-      // Handle image upload if an image was selected
       if (selectedImage && userData.user && userData.user.id) {
         const formDataImage = new FormData();
         formDataImage.append("image", selectedImage);
@@ -210,7 +205,6 @@ export default function CreateUserPage() {
           <div className="flex flex-col md:flex-row gap-8">
             <div className="md:w-1/3">
               <div className="bg-slate-50 rounded-lg p-6 flex flex-col items-center justify-center">
-                {/* Image Upload Dropzone */}
                 <div
                   className={`relative cursor-pointer w-full pb-6 ${
                     isDragging ? "opacity-70" : ""
@@ -254,7 +248,6 @@ export default function CreateUserPage() {
                     )}
                   </div>
 
-                  {/* Remove Button - Only shown when there's a preview */}
                   {previewUrl && (
                     <button
                       type="button"

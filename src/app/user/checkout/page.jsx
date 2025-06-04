@@ -28,7 +28,6 @@ export default function CheckoutPage() {
     notes: "",
   });
 
-  // Redirect if not authenticated or cart is empty
   if (typeof window !== "undefined" && !loading) {
     if (!isAuthenticated()) {
       router.push("/user/login?redirect=checkout");
@@ -52,7 +51,6 @@ export default function CheckoutPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
     const requiredFields = ["fullName", "address", "city", "state", "phone"];
     const emptyFields = requiredFields.filter((field) => !deliveryInfo[field]);
 
@@ -63,8 +61,6 @@ export default function CheckoutPage() {
       return;
     }
 
-    // Format the address to include all address components in a single string
-    // Make sure not to include any fields that are empty
     const addressParts = [
       deliveryInfo.address,
       deliveryInfo.city,
@@ -87,7 +83,7 @@ export default function CheckoutPage() {
 
   return (
     <>
-      <section className="bg-white py-8 transition-colors dark:bg-gray-900 md:py-16">
+      <section className="bg-white py-8 transition-colors dark:bg-slate-900 md:py-16">
         <div className="mx-auto max-w-screen-xl px-6 2xl:px-0">
           <h2 className="text-xl font-semibold mt-12 md:mt-10 text-gray-800 transition-colors dark:text-white sm:text-2xl">
             Checkout
@@ -101,11 +97,10 @@ export default function CheckoutPage() {
             </div>
           ) : (
             <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
-              {/* Delivery Information Form */}
               <div className="lg:col-span-2">
                 <form
                   onSubmit={handleSubmit}
-                  className="space-y-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800"
+                  className="space-y-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-slate-950"
                 >
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                     Delivery Information
@@ -265,7 +260,7 @@ export default function CheckoutPage() {
                           id="cash-on-delivery"
                           name="payment-method"
                           type="radio"
-                          className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                          className="h-4 w-4 text-cyan-600 focus:ring-blue-500"
                           defaultChecked
                           disabled
                         />
@@ -284,9 +279,8 @@ export default function CheckoutPage() {
                 </form>
               </div>
 
-              {/* Order Summary */}
               <div>
-                <div className="sticky top-20 space-y-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                <div className="sticky top-20 space-y-4 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-slate-950">
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                     Order Summary
                   </h3>
@@ -300,7 +294,7 @@ export default function CheckoutPage() {
                         <div className="relative h-16 w-16 flex-shrink-0">
                           <Image
                             src={item.image}
-                            alt={item.name}
+                            alt={item.product_name}
                             fill
                             className="rounded-md object-cover"
                           />
@@ -309,6 +303,28 @@ export default function CheckoutPage() {
                           <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                             {item.name}
                           </p>
+                          {item.choiceDetails &&
+                            item.choiceDetails.length > 0 && (
+                              <div className="mt-1 flex flex-wrap gap-1">
+                                {item.choiceDetails.map((detail, idx) => (
+                                  <span
+                                    key={idx}
+                                    className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+                                  >
+                                    {detail.type}: {detail.value}
+                                    {detail.type.toLowerCase() === "color" &&
+                                      detail.colorCode && (
+                                        <span
+                                          className="ml-1 inline-block w-2 h-2 rounded-full"
+                                          style={{
+                                            backgroundColor: detail.colorCode,
+                                          }}
+                                        />
+                                      )}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
                           <p className="text-sm text-gray-500 dark:text-gray-400">
                             Qty: {item.quantity} x $
                             {Number(item.price).toFixed(2)}
@@ -366,7 +382,7 @@ export default function CheckoutPage() {
                     type="button"
                     onClick={handleSubmit}
                     disabled={checkoutLoading}
-                    className="mt-6 w-full rounded-md bg-blue-600 px-4 py-3 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-blue-400"
+                    className="mt-6 w-full rounded-md bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-blue-400"
                   >
                     {checkoutLoading ? "Processing..." : "Complete Order"}
                   </button>
@@ -380,7 +396,7 @@ export default function CheckoutPage() {
                   <div className="mt-4">
                     <Link
                       href="/user/cart"
-                      className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                      className="text-sm text-cyan-600 hover:text-cyan-700 dark:text-blue-400 dark:hover:text-blue-300"
                     >
                       Return to Cart
                     </Link>

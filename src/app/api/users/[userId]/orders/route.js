@@ -4,7 +4,6 @@ import { verifyAuth } from "@/lib/auth";
 
 export async function GET(request, { params }) {
   try {
-    // Verify authentication
     const token = request.headers.get("authorization")?.split(" ")[1];
     const user = await verifyAuth(token);
 
@@ -14,7 +13,6 @@ export async function GET(request, { params }) {
 
     const userId = params.userId;
 
-    // Check if user exists
     const userExists = await prisma.user.findUnique({
       where: { id: userId },
     });
@@ -23,12 +21,10 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Only allow admins to view other users' orders
     if (user.role !== "admin" && user.id !== userId) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    // Fetch user orders with related products
     const orders = await prisma.order.findMany({
       where: { userId: userId },
       include: {

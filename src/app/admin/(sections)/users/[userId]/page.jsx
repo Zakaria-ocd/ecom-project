@@ -29,7 +29,6 @@ export default function UserDetailPage() {
   useEffect(() => {
     fetchUser();
     fetchUserOrders();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   async function fetchUser() {
@@ -300,7 +299,7 @@ export default function UserDetailPage() {
                           unoptimized
                         />
                       ) : (
-                        <div className="h-48 w-48 flex items-center justify-center bg-blue-100 text-blue-600 text-6xl font-semibold uppercase">
+                        <div className="h-48 w-48 flex items-center justify-center bg-blue-100 text-cyan-600 text-6xl font-semibold uppercase">
                           {user.username?.charAt(0) || "U"}
                         </div>
                       )}
@@ -320,7 +319,6 @@ export default function UserDetailPage() {
                               "Are you sure you want to delete this profile image?"
                             )
                           ) {
-                            // Call the API to delete the image
                             fetch(
                               `http://localhost:8000/api/users/image/${user.id}`,
                               {
@@ -336,7 +334,7 @@ export default function UserDetailPage() {
                               .then((data) => {
                                 if (data.success) {
                                   toast.success("Profile image deleted");
-                                  // Refresh user data
+
                                   fetchUser();
                                 } else {
                                   toast.error(
@@ -441,16 +439,20 @@ export default function UserDetailPage() {
                         <div>
                           <h3 className="font-medium">Order #{order.id}</h3>
                           <p className="text-sm text-slate-500">
-                            {formatDate(order.createdAt)}
+                            {formatDate(order.created_at)}
                           </p>
                         </div>
                         <Badge
                           variant="outline"
                           className={
-                            order.status === "COMPLETED"
-                              ? "bg-green-100 text-green-800"
-                              : order.status === "PENDING"
+                            order.status === "delivered"
+                              ? "bg-emerald-100 text-emerald-800"
+                              : order.status === "pending"
+                              ? "bg-sky-100 text-sky-800"
+                              : order.status === "shipped"
                               ? "bg-yellow-100 text-yellow-800"
+                              : order.status === "cancelled"
+                              ? "bg-rose-100 text-rose-800"
                               : "bg-slate-100 text-slate-800"
                           }
                         >
@@ -459,31 +461,24 @@ export default function UserDetailPage() {
                       </div>
 
                       <div className="space-y-2">
-                        {order.orderItems.map((item) => (
+                        {order.items.map((item) => (
                           <div
                             key={item.id}
                             className="flex items-center gap-4 text-sm"
                           >
                             <div className="relative h-12 w-12 rounded overflow-hidden">
-                              {item.product.image ? (
-                                <Image
-                                  src={item.product.image}
-                                  alt={item.product.name}
-                                  fill
-                                  className="object-cover"
-                                />
-                              ) : (
-                                <div className="h-full w-full bg-slate-100 flex items-center justify-center">
-                                  <span className="text-slate-400">
-                                    No image
-                                  </span>
-                                </div>
-                              )}
+                              <Image
+                                src={`http://localhost:8000/api/productImage/${item.product.id}`}
+                                alt={item.product.name}
+                                fill
+                                className="object-cover"
+                                unoptimized
+                              />
                             </div>
                             <div className="flex-1">
                               <p className="font-medium">{item.product.name}</p>
                               <p className="text-slate-500">
-                                Quantity: {item.quantity} × ${item.price}
+                                Quantity: {item.quantity} x ${item.price}
                               </p>
                             </div>
                             <p className="font-medium">
@@ -496,14 +491,14 @@ export default function UserDetailPage() {
                       <div className="mt-4 pt-4 border-t flex justify-between items-center">
                         <p className="text-sm text-slate-500">
                           Total Items:{" "}
-                          {order.orderItems.reduce(
+                          {order.items.reduce(
                             (sum, item) => sum + item.quantity,
                             0
                           )}
                         </p>
                         <p className="font-medium">
                           Total: $
-                          {order.orderItems
+                          {order.items
                             .reduce(
                               (sum, item) => sum + item.quantity * item.price,
                               0
