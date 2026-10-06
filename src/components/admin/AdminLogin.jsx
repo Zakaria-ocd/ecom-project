@@ -24,6 +24,7 @@ function AdminLogin() {
         {
           method: "POST",
           headers: {
+            Accept: "application/json",
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -107,7 +108,7 @@ function AdminLogin() {
                   height={40}
                   className="absolute mt-7 object-cover"
                 ></Image>
-                <h1 className=" text-3xl mt-10 ">OLO ECOM</h1>
+                <h1 className="text-3xl mt-10">3Z Shop</h1>
               </div>
               <p className="text-gray-200">
                 Buy, and sell products securely with ease

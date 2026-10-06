@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Check, ChevronDown, X } from "lucide-react";
-import { FaStar } from "react-icons/fa";
+import { Star } from "lucide-react";
 
 export default function FiltersBar({
   pricesList,
@@ -167,14 +167,14 @@ export default function FiltersBar({
                         key={item.id}
                         value={item.id}
                         customIcon={
-                          <FaStar size={10} className="text-transparent" />
+                          <Star size={10} className="text-transparent" />
                         }
                         className={`${
                           isSelected &&
                           "bg-emerald-100 text-emerald-700 hover:bg-emerald-200 hover:text-emerald-800 dark:text-emerald-300 dark:hover:text-emerald-200 dark:bg-emerald-900 dark:hover:bg-emerald-800"
                         } pl-5 cursor-pointer group`}
                       >
-                        <FaStar
+                        <Star
                           size={10}
                           className={`${
                             isSelected
@@ -382,7 +382,7 @@ export default function FiltersBar({
             className="px-3 py-1.5 rounded-full text-sm bg-amber-100 text-amber-700 flex items-center gap-1 cursor-pointer hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-300 dark:hover:bg-amber-800/50"
           >
             {Array.from({ length: 5 }).map((_, i) => (
-              <FaStar
+              <Star
                 key={i}
                 className={`text-amber-400 ${
                   i < selectedFilters.rating.name ? "opacity-100" : "opacity-30"

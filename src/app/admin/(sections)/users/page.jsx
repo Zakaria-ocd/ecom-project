@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { getUserImageUrl } from "@/lib/userImage";
 import {
   Table,
   TableBody,
@@ -220,7 +221,7 @@ export default function UsersPage() {
                       <div className="relative h-10 w-10 rounded-full overflow-hidden bg-slate-100">
                         {user.image ? (
                           <Image
-                            src={`http://localhost:8000/api/users/imageById/${user.id}`}
+                            src={getUserImageUrl(user)}
                             alt={user.username || `User #${user.id}`}
                             fill
                             sizes="40px"

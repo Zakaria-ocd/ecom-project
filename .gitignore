@@ -1,2 +1,32 @@
-node_modules
-.next
+node_modules/
+.next/
+out
+build/
+dist/
+coverage/
+.vercel/
+
+# Local environment configuration; commit only the sanitized template.
+.env*
+!.env.example
+
+# Local logs and debug output.
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Local databases, credentials, and operating-system files.
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.pem
+*.key
+*.p12
+*.pfx
+.npmrc
+!.npmrc.example
+.DS_Store
+Thumbs.db

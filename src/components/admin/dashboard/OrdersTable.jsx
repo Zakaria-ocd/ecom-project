@@ -8,10 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Eye, PackageCheck } from "lucide-react";
+import { Eye, PackageCheck, CogIcon } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useMemo } from "react";
 import { MdOutlineLocalShipping, MdPendingActions } from "react-icons/md";
+import { RxCross2 } from "react-icons/rx";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAuthToken } from "@/lib/auth";
 import { toast } from "sonner";
@@ -42,6 +43,13 @@ function OrdersTable() {
           <span>{status}</span>
         </div>
       );
+    } else if (status === "processing") {
+      return (
+        <div className={`${base} text-orange-400`}>
+          <CogIcon size={16} />
+          <span>{status}</span>
+        </div>
+      );
     } else if (status === "delivered") {
       return (
         <div className={`${base} text-green-400`}>
@@ -49,7 +57,16 @@ function OrdersTable() {
           <span>{status}</span>
         </div>
       );
+    } else if (status === "cancelled") {
+      return (
+        <div className={`${base} text-red-400`}>
+          <RxCross2 size={16} />
+          <span>{status}</span>
+        </div>
+      );
     }
+
+    return <div className={`${base} text-slate-500`}>{status}</div>;
   }
 
   useEffect(() => {
@@ -57,7 +74,7 @@ function OrdersTable() {
       setLoading(true);
       try {
         const response = await fetch(
-          "http://localhost:8000/api/orders/8/limit",
+          "http://localhost:8000/api/admin/orders/8",
           {
             headers: {
               "Content-Type": "application/json",
@@ -66,7 +83,7 @@ function OrdersTable() {
           }
         );
         const data = await response.json();
-        setOrders(data);
+        setOrders(data.orders || []);
       } catch (error) {
         console.log(error);
         toast.error("Failed to fetch orders");

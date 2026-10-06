@@ -34,7 +34,13 @@ export default function useCheckout(cart) {
 
     try {
       const orderData = {
+        recipient_name: deliveryInfo.fullName,
+        email: deliveryInfo.email,
         address: deliveryInfo.address,
+        city: deliveryInfo.city,
+        state: deliveryInfo.state,
+        postal_code: deliveryInfo.zipCode,
+        notes: deliveryInfo.notes,
         phone: deliveryInfo.phone,
         payment_method: "cash_on_delivery",
       };

@@ -103,7 +103,7 @@ export const getRecentUsers = async (limit = 5) => {
       throw new Error(data.message || "Failed to fetch recent users");
     }
 
-    return data.users || [];
+    return Array.isArray(data) ? data : data.users || [];
   } catch (error) {
     console.error("Get recent users error:", error);
     toast.error("Failed to load recent users");

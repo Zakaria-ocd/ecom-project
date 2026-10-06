@@ -20,6 +20,7 @@ export const loginUser = async (email, password) => {
     const response = await fetch(`${API_URL}/api/login`, {
       method: "POST",
       headers: {
+        Accept: "application/json",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),

@@ -9,13 +9,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState, useEffect, Fragment } from "react";
-import { FaChevronDown } from "react-icons/fa";
+import { ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import ProfileImage from "@/components/user/ProfileImage";
+import { getUserImageUrl } from "@/lib/userImage";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Eye, PackageCheck, Trash2 } from "lucide-react";
+import { Eye, PackageCheck, Trash2, CogIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -27,8 +28,16 @@ import {
 import { toast } from "sonner";
 import { getAuthToken } from "@/lib/auth";
 import { MdOutlineLocalShipping, MdPendingActions } from "react-icons/md";
+import { RxCross2 } from "react-icons/rx";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function ExpandedOrdersTable({
   orders,
@@ -39,6 +48,7 @@ export default function ExpandedOrdersTable({
 }) {
   const [open, setOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [updatingOrderId, setUpdatingOrderId] = useState(null);
   const token = getAuthToken();
 
   const total = orders.reduce(
@@ -85,6 +95,49 @@ export default function ExpandedOrdersTable({
     }
   };
 
+  const updateOrderStatus = async (orderId, status) => {
+    setUpdatingOrderId(orderId);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/orders/${orderId}`,
+        {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ status }),
+        }
+      );
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to update order status");
+      }
+
+      setOrders((currentOrders) =>
+        currentOrders.map((order) =>
+          order.id === orderId
+            ? {
+                ...order,
+                ...data.order,
+                status: data.order.status,
+                delivery_status: data.order.delivery_status,
+              }
+            : order
+        )
+      );
+      toast.success("Order status updated");
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      toast.error(error.message || "Failed to update order status");
+    } finally {
+      setUpdatingOrderId(null);
+    }
+  };
+
   function getStatus(status) {
     const base = "flex items-center gap-1 capitalize font-medium text-[13.5px]";
     if (status === "pending") {
@@ -101,6 +154,13 @@ export default function ExpandedOrdersTable({
           <span>{status}</span>
         </div>
       );
+    } else if (status === "processing") {
+      return (
+        <div className={`${base} text-orange-400`}>
+          <CogIcon size={16} />
+          <span>{status}</span>
+        </div>
+      );
     } else if (status === "delivered") {
       return (
         <div className={`${base} text-green-400`}>
@@ -108,7 +168,16 @@ export default function ExpandedOrdersTable({
           <span>{status}</span>
         </div>
       );
+    } else if (status === "cancelled") {
+      return (
+        <div className={`${base} text-red-400`}>
+          <RxCross2 size={16} />
+          <span>{status}</span>
+        </div>
+      );
     }
+
+    return <span className={`${base} text-slate-500`}>{status}</span>;
   }
 
   function getColorBox(colorCode) {
@@ -194,7 +263,7 @@ export default function ExpandedOrdersTable({
                 >
                   <TableCell className="w-12">
                     <div className="flex items-center justify-center">
-                      <FaChevronDown
+                      <ChevronDown
                         className={`transition-transform duration-200 text-slate-400 group-hover:text-slate-600 ${
                           expandedOrderId === order.id ? "rotate-180" : ""
                         }`}
@@ -275,13 +344,9 @@ export default function ExpandedOrdersTable({
                             <div className="flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm">
                               <div className="relative w-16 h-16 overflow-hidden rounded-full flex-shrink-0 border-2 border-slate-200">
                                 <ProfileImage
-                                  imageUrl={
-                                    userData[order.user_id]?.image
-                                      ? `http://localhost:8000/api/users/imageById/${
-                                          userData[order.user_id].id
-                                        }`
-                                      : null
-                                  }
+                                  imageUrl={getUserImageUrl(
+                                    userData[order.user_id]
+                                  )}
                                   previewUrl={null}
                                   username={userData[order.user_id]?.username}
                                   onImageChange={() => {}}
@@ -317,6 +382,42 @@ export default function ExpandedOrdersTable({
                                 </p>
                                 <div className="mt-2">
                                   {getStatus(order.status)}
+                                </div>
+                                <div className="mt-3 w-48">
+                                  <label
+                                    htmlFor={`order-status-${order.id}`}
+                                    className="mb-1 block text-left text-xs font-medium text-slate-600"
+                                  >
+                                    Update status
+                                  </label>
+                                  <Select
+                                    value={order.status}
+                                    onValueChange={(status) =>
+                                      updateOrderStatus(order.id, status)
+                                    }
+                                    disabled={updatingOrderId === order.id}
+                                  >
+                                    <SelectTrigger
+                                      id={`order-status-${order.id}`}
+                                      aria-label={`Update order ${order.id} status`}
+                                      className="bg-white"
+                                    >
+                                      <SelectValue placeholder="Select status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {[
+                                        "pending",
+                                        "processing",
+                                        "shipped",
+                                        "delivered",
+                                        "cancelled",
+                                      ].map((status) => (
+                                        <SelectItem key={status} value={status}>
+                                          {status}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
                                 </div>
                               </div>
                             </div>
@@ -475,9 +576,9 @@ export default function ExpandedOrdersTable({
                                   <p className="text-sm text-slate-500">
                                     Status
                                   </p>
-                                  <p className="font-medium capitalize">
-                                    {order.status || "Not specified"}
-                                  </p>
+                                  <div className="font-medium capitalize">
+                                    {getStatus(order.status || "Not specified")}
+                                  </div>
                                 </div>
                                 {order.phone && (
                                   <div className="col-span-2">

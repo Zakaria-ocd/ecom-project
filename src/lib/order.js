@@ -1,6 +1,7 @@
 import { getAuthToken, isAuthenticated } from "./auth";
-import { calculateCartTotal, fetchCart } from "./cart";
 import { toast } from "sonner";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export const createOrder = async (orderData) => {
   try {
@@ -9,25 +10,19 @@ export const createOrder = async (orderData) => {
     }
 
     const token = getAuthToken();
-    const cartItems = await fetchCart();
-
-    if (!cartItems || cartItems.length === 0) {
-      throw new Error("Your cart is empty");
-    }
-
-    const totalPrice = calculateCartTotal(cartItems);
-
     const orderPayload = {
+      recipient_name: orderData.recipient_name,
+      email: orderData.email,
       address: orderData.address,
+      city: orderData.city,
+      state: orderData.state,
+      postal_code: orderData.postal_code,
+      notes: orderData.notes,
       phone: orderData.phone,
-      status: "pending",
       payment_method: orderData.payment_method || "cash_on_delivery",
-      total_price: totalPrice,
     };
 
-    console.log("Sending order payload:", orderPayload);
-
-    const response = await fetch("http://localhost:8000/api/orders", {
+    const response = await fetch(`${API_URL}/api/orders`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -40,7 +35,12 @@ export const createOrder = async (orderData) => {
 
     if (!response.ok) {
       console.error("Order creation failed:", data);
-      throw new Error(data.message || "Failed to create order");
+      const validationError = Object.values(data.errors || {})
+        .flat()
+        .join(" ");
+      throw new Error(
+        validationError || data.message || "Failed to create order"
+      );
     }
 
     toast.success("Order created successfully");

@@ -2,10 +2,11 @@
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { FaBell } from "react-icons/fa";
+import { Bell, Headset, LogOut, Settings, UserRoundCog } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { logoutUser } from "@/features/user/userSlice";
 import ProfileImage from "@/components/user/ProfileImage";
+import { getUserImageUrl } from "@/lib/userImage";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,12 +16,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  FaUserGear,
-  FaGear,
-  FaHeadset,
-  FaRightFromBracket,
-} from "react-icons/fa6";
 
 export default function Profile() {
   const user = useSelector((state) => state.userReducer);
@@ -45,24 +40,11 @@ export default function Profile() {
 
   return (
     <div className="flex justify-between items-center gap-4">
-      <Button
-        variant="ghost"
-        size="icon"
-        title="Notifications"
-        className="[&_svg]:size-6"
-      >
-        <FaBell className="text-sky-500" size={24} />
-      </Button>
-
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button className="focus:outline-none">
             <ProfileImage
-              imageUrl={
-                user?.image
-                  ? `http://localhost:8000/api/users/imageById/${user.id}`
-                  : null
-              }
+              imageUrl={getUserImageUrl(user)}
               previewUrl={null}
               username={user?.username}
               onImageChange={() => {}}
@@ -74,11 +56,7 @@ export default function Profile() {
         <DropdownMenuContent className="w-56 mr-4" align="end">
           <div className="flex items-center p-3 gap-3">
             <ProfileImage
-              imageUrl={
-                user?.image
-                  ? `http://localhost:8000/api/users/imageById/${user.id}`
-                  : null
-              }
+              imageUrl={getUserImageUrl(user)}
               previewUrl={null}
               username={user?.username}
               onImageChange={() => {}}
@@ -98,15 +76,15 @@ export default function Profile() {
 
           <DropdownMenuGroup>
             <DropdownMenuItem className="cursor-pointer">
-              <FaUserGear className="mr-2 h-4 w-4" />
+              <UserRoundCog className="mr-2 h-4 w-4" />
               <span>My Account</span>
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer">
-              <FaHeadset className="mr-2 h-4 w-4" />
+              <Headset className="mr-2 h-4 w-4" />
               <span>Service</span>
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer">
-              <FaGear className="mr-2 h-4 w-4" />
+              <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
             </DropdownMenuItem>
           </DropdownMenuGroup>
@@ -117,7 +95,7 @@ export default function Profile() {
             className="cursor-pointer text-rose-500 hover:text-rose-600 focus:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/50"
             onClick={logout}
           >
-            <FaRightFromBracket className="mr-2 h-4 w-4" />
+            <LogOut className="mr-2 h-4 w-4" />
             <span>Logout</span>
           </DropdownMenuItem>
         </DropdownMenuContent>

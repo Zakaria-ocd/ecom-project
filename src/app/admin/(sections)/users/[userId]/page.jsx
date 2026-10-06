@@ -17,6 +17,8 @@ import { toast } from "sonner";
 import { PenLine, Trash2, ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { getUserImageUrl } from "@/lib/userImage";
+import OrderStatusIcon from "@/components/orders/OrderStatusIcon";
 
 export default function UserDetailPage() {
   const { userId } = useParams();
@@ -94,7 +96,7 @@ export default function UserDetailPage() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/users/delete/${userId}`,
+        `http://localhost:8000/api/users/${userId}`,
         {
           method: "DELETE",
           headers: {
@@ -292,7 +294,7 @@ export default function UserDetailPage() {
                     <div className="relative h-48 w-48 rounded-full overflow-hidden mb-6">
                       {user.image ? (
                         <Image
-                          src={`http://localhost:8000/api/users/imageById/${user.id}`}
+                          src={getUserImageUrl(user)}
                           alt={user.username || `User #${user.id}`}
                           fill
                           className="object-cover"
@@ -444,18 +446,21 @@ export default function UserDetailPage() {
                         </div>
                         <Badge
                           variant="outline"
-                          className={
+                          className={`inline-flex items-center gap-1 ${
                             order.status === "delivered"
                               ? "bg-emerald-100 text-emerald-800"
                               : order.status === "pending"
                               ? "bg-sky-100 text-sky-800"
+                              : order.status === "processing"
+                              ? "bg-orange-100 text-orange-800"
                               : order.status === "shipped"
                               ? "bg-yellow-100 text-yellow-800"
                               : order.status === "cancelled"
                               ? "bg-rose-100 text-rose-800"
                               : "bg-slate-100 text-slate-800"
-                          }
+                          }`}
                         >
+                          <OrderStatusIcon status={order.status} />
                           {order.status}
                         </Badge>
                       </div>

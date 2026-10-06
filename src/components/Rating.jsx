@@ -1,34 +1,42 @@
 import React from "react";
+import { Star } from "lucide-react";
 
-export default function Rating({ rating, starClass = "" }) {
-  const fullStars = Math.floor(rating);
-  const partialStarWidth = (rating - fullStars) * 100;
+export default function Rating({ rating, size = 14 }) {
+  const numericRating = Number(rating);
+  const normalizedRating = Number.isFinite(numericRating)
+    ? Math.min(5, Math.max(0, numericRating))
+    : 0;
 
   return (
-    <div className="flex items-center">
-      {[...Array(fullStars)].map((_, index) => (
-        <i
-          key={index}
-          className={`fa-solid fa-star text-amber-500 ${starClass}`}
-        />
-      ))}
+    <div
+      className="flex items-center"
+      role="img"
+      aria-label={`Rating: ${normalizedRating} out of 5`}
+    >
+      {Array.from({ length: 5 }, (_, index) => {
+        const fill = Math.min(1, Math.max(0, normalizedRating - index));
+        const starKey = `star-${index}`;
 
-      {partialStarWidth > 0 && (
-        <div className="relative flex place-content-center">
-          <i className={`fa-light fa-star text-amber-500 ${starClass}`} />
-          <i
-            className={`fa-solid fa-star absolute left-0 overflow-x-hidden text-amber-500 ${starClass}`}
-            style={{ width: `${partialStarWidth}%` }}
-          />
-        </div>
-      )}
-
-      {[...Array(5 - Math.ceil(rating))].map((_, index) => (
-        <i
-          key={index}
-          className={`fa-light fa-star text-amber-500 ${starClass}`}
-        />
-      ))}
+        return (
+          <span key={starKey} className="relative inline-flex shrink-0">
+            <Star
+              size={size}
+              aria-hidden="true"
+              className="text-amber-500"
+            />
+            {fill > 0 && (
+              <Star
+                size={size}
+                aria-hidden="true"
+                className="pointer-events-none absolute left-0 top-0 fill-amber-500 text-amber-500"
+                style={{
+                  clipPath: `inset(0 ${(1 - fill) * 100}% 0 0)`,
+                }}
+              />
+            )}
+          </span>
+        );
+      })}
     </div>
   );
 }

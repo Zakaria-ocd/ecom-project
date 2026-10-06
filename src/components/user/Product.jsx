@@ -10,6 +10,8 @@ import { Loader2, ArrowLeft, ArrowRight, ChevronRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import useCart from "@/hooks/useCart";
+import { groupProductChoicesByAttribute } from "@/lib/productChoices";
+import { Check, Folder, Heart, ShoppingCart } from "lucide-react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -172,23 +174,12 @@ export default function Product() {
   };
 
   const groupChoicesByAttribute = () => {
-    const attributeGroups = {};
-
-    choices.forEach((choice) => {
-      choice.typeValuePairs.forEach((pair) => {
-        if (!attributeGroups[pair.typeName]) {
-          attributeGroups[pair.typeName] = new Set();
-        }
-        attributeGroups[pair.typeName].add(pair.value);
-      });
-    });
-
-    const result = {};
-    Object.keys(attributeGroups).forEach((key) => {
-      result[key] = Array.from(attributeGroups[key]);
-    });
-
-    return result;
+    return Object.fromEntries(
+      groupProductChoicesByAttribute(choices).map((type) => [
+        type.name.toLowerCase(),
+        type.values.map((value) => value.value),
+      ])
+    );
   };
 
   useEffect(() => {
@@ -513,7 +504,7 @@ export default function Product() {
               {product?.name}
             </h1>
 
-            <div className="flex items-center gap-2 mt-2">
+            <div className="flex items-center gap-2 mt-1">
               <Rating rating={product?.rating || 0} />
               <p className="text-sm font-medium text-slate-500 transition-colors dark:text-slate-400">
                 ({product?.rating || "0.0"})
@@ -675,12 +666,12 @@ export default function Product() {
                   </>
                 ) : isInCart ? (
                   <>
-                    <i className="fa-solid fa-check mr-1"></i>
+                    <Check className="mr-1 h-4 w-4" />
                     Added to Cart
                   </>
                 ) : (
                   <>
-                    <i className="fa-regular fa-cart-plus"></i>
+                    <ShoppingCart className="h-4 w-4" />
                     Add to Cart
                   </>
                 )}
@@ -703,7 +694,7 @@ export default function Product() {
               </div>
 
               <button className="w-10 h-10 flex items-center justify-center text-rose-500 bg-white rounded-lg border border-rose-500 hover:bg-rose-50 dark:bg-gray-900 dark:border-rose-500/60 dark:hover:bg-rose-900/20">
-                <i className="fa-regular fa-heart"></i>
+                <Heart className="h-4 w-4" />
               </button>
             </div>
 
@@ -720,7 +711,7 @@ export default function Product() {
                     variant="secondary"
                     className="group-hover:bg-slate-200 group-hover:text-slate-800 transition-colors"
                   >
-                    <i className="fa-regular fa-folder mr-2" />
+                    <Folder className="mr-2 h-4 w-4" />
                     {category.name}
                   </Badge>
                 </Link>

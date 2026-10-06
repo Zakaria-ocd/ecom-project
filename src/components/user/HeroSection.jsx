@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export default function HeroSection() {
   return (
@@ -23,7 +24,7 @@ export default function HeroSection() {
           className="inline-flex items-center justify-center mx-7 text-base font-semibold text-center text-slate-900 rounded-lg group transition-colors hover:text-cyan-700 dark:text-blue-500 dark:hover:text-cyan-600"
         >
           Learn more
-          <i className="fa-solid fa-arrow-right text-slate-800 ml-2 transition-all ease-out duration-300 group-hover:text-cyan-600 group-hover:translate-x-2 dark:text-blue-500 dark:group-hover:text-cyan-600"></i>
+          <ArrowRight className="ml-2 text-slate-800 transition-all duration-300 ease-out group-hover:translate-x-2 group-hover:text-cyan-600 dark:text-blue-500 dark:group-hover:text-cyan-600" />
         </Link>
       </div>
       <Image

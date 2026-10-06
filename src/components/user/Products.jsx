@@ -7,11 +7,11 @@ import { toast } from "sonner";
 import useCart from "../../hooks/useCart";
 import ProductCard from "./ProductCard";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, SlidersHorizontal, X } from "lucide-react";
+import { PackageOpen, RefreshCw, SlidersHorizontal, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { DialogTitle } from "../ui/dialog";
-import { FaStar } from "react-icons/fa6";
+import { Star } from "lucide-react";
 
 const ProductSkeleton = () => {
   return (
@@ -269,11 +269,13 @@ export default function Products() {
         : [];
 
       const sizes = sizeType
-        ? data.availableValues[sizeType.id]?.map((size) => ({
-            id: size.id,
-            name: size.value,
-            type: "size",
-          })) || []
+        ? data.availableValues[sizeType.id]
+            ?.filter((size) => !/^\d+(?:[.,]\d+)?$/.test(size.value.trim()))
+            .map((size) => ({
+              id: size.id,
+              name: size.value,
+              type: "size",
+            })) || []
         : [];
 
       return { colors, sizes };
@@ -774,7 +776,7 @@ export default function Products() {
                                   }
                                 >
                                   {Array.from({ length: 5 }).map((_, i) => (
-                                    <FaStar
+                                    <Star
                                       key={i}
                                       className={`text-amber-400 ${
                                         i < rating.name
@@ -867,7 +869,7 @@ export default function Products() {
                     {selectedFilters.rating.name}
                     <div className="flex items-center">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <FaStar
+                        <Star
                           key={i}
                           className={`text-amber-400 ${
                             i < selectedFilters.rating.name
@@ -909,7 +911,7 @@ export default function Products() {
             ) : filteredProducts.length === 0 ? (
               <div className="col-span-full flex flex-col items-center justify-center py-10">
                 <div className="text-gray-400 mb-4 text-5xl">
-                  <i className="fa-solid fa-box-open"></i>
+                  <PackageOpen className="h-12 w-12" />
                 </div>
                 <h3 className="text-xl font-medium text-gray-900 dark:text-gray-100">
                   No products found

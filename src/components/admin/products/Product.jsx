@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import Rating from "@/components/Rating";
 import Link from "next/link";
+import { getAuthToken } from "@/lib/auth";
+import { getUserImageUrl } from "@/lib/userImage";
 import {
   Tooltip,
   TooltipContent,
@@ -126,7 +128,12 @@ export default function Product() {
       setUserLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:8000/api/users/${sellerId}`
+          `http://localhost:8000/api/users/${sellerId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${getAuthToken()}`,
+            },
+          }
         );
 
         if (!response.ok) {
@@ -141,7 +148,7 @@ export default function Product() {
           email: userData.email || "",
           role: userData.role || "Seller",
           createdAt: userData.created_at || "",
-          image: `http://localhost:8000/api/users/image/${sellerId}`,
+          image: userData.image,
         });
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -393,7 +400,7 @@ export default function Product() {
                     <div className="flex items-start gap-4">
                       <div className="flex-shrink-0">
                         <ProfileImage
-                          imageUrl={`http://localhost:8000/api/users/imageById/${user.id}`}
+                          imageUrl={getUserImageUrl(user)}
                           username={user.username}
                           previewUrl={null}
                           onImageChange={() => {}}

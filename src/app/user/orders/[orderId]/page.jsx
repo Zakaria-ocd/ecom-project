@@ -12,7 +12,7 @@ import {
   PackageCheck,
   CheckIcon,
   TruckIcon,
-  PackageIcon,
+  CogIcon,
   ClockIcon,
   Package,
 } from "lucide-react";
@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
+import OrderStatusIcon from "@/components/orders/OrderStatusIcon";
 
 const timelineSteps = [
   {
@@ -43,8 +44,8 @@ const timelineSteps = [
     id: "processing",
     name: "Processing",
     description: "Order is being prepared for shipping",
-    icon: PackageIcon,
-    iconBackground: "bg-amber-500",
+    icon: CogIcon,
+    iconBackground: "bg-orange-500",
   },
   {
     id: "shipped",
@@ -63,36 +64,42 @@ const timelineSteps = [
 ];
 
 function OrderTimeline({ status, createdAt }) {
-  const getCompletedSteps = () => {
-    switch (status?.toLowerCase()) {
-      case "completed":
-      case "delivered":
-        return ["created", "processing", "shipped", "delivered"];
-      case "shipped":
-        return ["created", "processing", "shipped"];
-      case "processing":
-      case "pending":
-        return ["created", "processing"];
-      default:
-        return ["created"];
-    }
-  };
-
-  const completedSteps = getCompletedSteps();
+  const normalizedStatus = status?.toLowerCase();
+  const cancelled = normalizedStatus === "cancelled";
+  const steps = cancelled
+    ? [
+        ...timelineSteps.slice(0, 1),
+        {
+          id: "cancelled",
+          name: "Cancelled",
+          description: "This order was cancelled",
+          icon: RxCross2,
+          iconBackground: "bg-red-500",
+        },
+      ]
+    : timelineSteps;
+  const currentStep = {
+    pending: "created",
+    processing: "processing",
+    shipped: "shipped",
+    delivered: "delivered",
+    completed: "delivered",
+    cancelled: "cancelled",
+  }[normalizedStatus];
+  const currentStepIndex = steps.findIndex((step) => step.id === currentStep);
   const formattedDate = new Date(createdAt).toLocaleString();
 
   return (
     <div className="flow-root">
       <ul className="-mb-8">
-        {timelineSteps.map((step, stepIdx) => {
-          const isCompleted = completedSteps.includes(step.id);
-          const isActive =
-            completedSteps[completedSteps.length - 1] === step.id;
+        {steps.map((step, stepIdx) => {
+          const isCompleted = stepIdx <= currentStepIndex;
+          const isActive = stepIdx === currentStepIndex;
 
           return (
             <li key={step.id}>
               <div className="relative pb-8">
-                {stepIdx !== timelineSteps.length - 1 ? (
+                {stepIdx !== steps.length - 1 ? (
                   <span
                     className={`absolute left-4 top-4 -ml-px h-full w-0.5 ${
                       isCompleted
@@ -227,6 +234,12 @@ export default function OrderDetailPage() {
           </div>
         );
       case "processing":
+        return (
+          <div className={`${base} text-orange-500 dark:text-orange-400`}>
+            <CogIcon size={16} />
+            <span>{status}</span>
+          </div>
+        );
       case "shipped":
         return (
           <div className={`${base} text-yellow-500 dark:text-yellow-400`}>
@@ -263,6 +276,7 @@ export default function OrderDetailPage() {
       case "delivered":
         return "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400";
       case "processing":
+        return "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400";
       case "shipped":
         return "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400";
       case "pending":
@@ -345,8 +359,9 @@ export default function OrderDetailPage() {
             </p>
             <Badge
               variant="outline"
-              className={getOrderStatusColor(order.status)}
+              className={`${getOrderStatusColor(order.status)} inline-flex items-center gap-1`}
             >
+              <OrderStatusIcon status={order.status} />
               {order.status}
             </Badge>
           </div>
@@ -595,8 +610,9 @@ export default function OrderDetailPage() {
                       </p>
                       <Badge
                         variant="outline"
-                        className={getOrderStatusColor(order.status)}
+                        className={`${getOrderStatusColor(order.status)} inline-flex items-center gap-1`}
                       >
+                        <OrderStatusIcon status={order.status} />
                         {order.status}
                       </Badge>
                     </div>

@@ -24,14 +24,21 @@ import {
 import { ScrollArea } from "../ui/scroll-area";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Heart, LucideSunMedium, Menu, Search, X } from "lucide-react";
-import { FaBrush, FaMoon } from "react-icons/fa";
 import {
-  FaGear,
-  FaMoneyCheckDollar,
-  FaUserGear,
-  FaRightFromBracket,
-} from "react-icons/fa6";
+  BadgeDollarSign,
+  Heart,
+  LogOut,
+  LucideSunMedium,
+  Menu,
+  Moon,
+  Paintbrush,
+  Search,
+  Settings,
+  ShoppingCart,
+  Trash2,
+  UserRoundCog,
+  X,
+} from "lucide-react";
 import { useSelector } from "react-redux";
 import useAuth from "@/hooks/useAuth";
 import useCart from "@/hooks/useCart";
@@ -147,7 +154,7 @@ export default function Navbar() {
                       className="text-sm text-gray-500 dark:text-gray-400"
                     >
                       {choice.type}:{" "}
-                      {choice.type.toLowerCase() === "color" ? (
+                      {choice.type?.toLowerCase() === "color" ? (
                         <span className="inline-flex items-center">
                           <span
                             className="inline-block w-3 h-3 mr-1 rounded-full"
@@ -170,7 +177,7 @@ export default function Navbar() {
                     }
                     className="text-red-500 hover:text-red-700 dark:hover:text-red-400"
                   >
-                    <i className="fa-regular fa-trash-can"></i>
+                    <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
               </div>
@@ -222,7 +229,7 @@ export default function Navbar() {
       (selectedTheme === "system" && systemIsDark) ? (
         <LucideSunMedium className="h-4 w-4 text-amber-300" />
       ) : (
-        <FaMoon className="h-4 w-4 text-slate-700 dark:text-slate-400" />
+        <Moon className="h-4 w-4 text-slate-700 dark:text-slate-400" />
       )}
     </Button>
   );
@@ -244,7 +251,7 @@ export default function Navbar() {
               placeholder="Search"
             />
             <button className="h-full bg-slate-100 flex justify-center items-center p-3 rounded-r-md transition-colors hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600/70">
-              <i className="fa-regular fa-magnifying-glass text-slate-400 transition-colors dark:text-slate-300"></i>
+              <Search className="h-4 w-4 text-slate-400 transition-colors dark:text-slate-300" />
             </button>
           </div>
         </div>
@@ -281,7 +288,7 @@ export default function Navbar() {
               <TooltipTrigger asChild>
                 <Link href="/user/wishlist" onClick={handleNavigation}>
                   <Button variant="ghost" size="icon">
-                    <i className="fa-light fa-heart text-xl text-rose-400"></i>
+                    <Heart className="h-5 w-5 text-rose-400" />
                   </Button>
                 </Link>
               </TooltipTrigger>
@@ -295,7 +302,7 @@ export default function Navbar() {
                 <TooltipTrigger asChild>
                   <SheetTrigger asChild>
                     <Button variant="ghost" size="icon" className="relative">
-                      <i className="fa-light fa-cart-shopping text-xl text-amber-400"></i>
+                      <ShoppingCart className="h-5 w-5 text-amber-400" />
                       {cart?.length > 0 && (
                         <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                           {cart.length}
@@ -373,13 +380,13 @@ export default function Navbar() {
                     <DropdownMenuGroup className="text-slate-800 dark:text-slate-300 py-1">
                       <DropdownMenuItem asChild className="py-2">
                         <Link href="/user/profile" onClick={handleNavigation}>
-                          <FaUserGear className="mr-2 text-slate-400 dark:text-slate-500" />
+                          <UserRoundCog className="mr-2 h-4 w-4 text-slate-400 dark:text-slate-500" />
                           Profile
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild className="py-2">
                         <Link href="/user/orders" onClick={handleNavigation}>
-                          <FaMoneyCheckDollar className="mr-2 text-slate-400 dark:text-slate-500" />
+                          <BadgeDollarSign className="mr-2 h-4 w-4 text-slate-400 dark:text-slate-500" />
                           Orders
                         </Link>
                       </DropdownMenuItem>
@@ -387,7 +394,7 @@ export default function Navbar() {
                     <DropdownMenuSeparator />
                     <DropdownMenuSub>
                       <DropdownMenuSubTrigger className="text-slate-800 dark:text-slate-300 py-2">
-                        <FaBrush className="mr-2 text-slate-400 dark:text-slate-500" />
+                        <Paintbrush className="mr-2 h-4 w-4 text-slate-400 dark:text-slate-500" />
                         Theme
                       </DropdownMenuSubTrigger>
                       <DropdownMenuItem
@@ -395,7 +402,7 @@ export default function Navbar() {
                         className="text-slate-800 dark:text-slate-300 py-2"
                       >
                         <Link href="/user/settings" onClick={handleNavigation}>
-                          <FaGear className="mr-2 text-slate-400 dark:text-slate-500" />
+                          <Settings className="mr-2 h-4 w-4 text-slate-400 dark:text-slate-500" />
                           Settings
                         </Link>
                       </DropdownMenuItem>
@@ -409,7 +416,7 @@ export default function Navbar() {
                             } flex justify-between items-center py-2.5`}
                           >
                             <span>Dark</span>
-                            {selectedTheme === "dark" && <FaMoon />}
+                            {selectedTheme === "dark" && <Moon />}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => changeTheme("light")}
@@ -430,7 +437,7 @@ export default function Navbar() {
                           >
                             <span>System</span>
                             {selectedTheme === "system" &&
-                              (systemIsDark ? <FaMoon /> : <LucideSunMedium />)}
+                              (systemIsDark ? <Moon /> : <LucideSunMedium />)}
                           </DropdownMenuItem>
                         </DropdownMenuSubContent>
                       </DropdownMenuPortal>
@@ -440,7 +447,7 @@ export default function Navbar() {
                       onClick={logout}
                       className="text-red-600 dark:text-red-400 py-2"
                     >
-                      <FaRightFromBracket className="mr-2" />
+                      <LogOut className="mr-2 h-4 w-4" />
                       Logout
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -458,19 +465,19 @@ export default function Navbar() {
             aria-label="Search"
             className="text-slate-600 dark:text-slate-300"
           >
-            <i className="fa-light fa-magnifying-glass text-[17px] mt-px"></i>
+            <Search className="mt-px h-[17px] w-[17px]" />
           </Button>
 
           <Link href="/user/wishlist" onClick={handleNavigation}>
             <Button variant="ghost" size="icon">
-              <i className="fa-light fa-heart text-xl text-rose-400"></i>
+              <Heart className="h-5 w-5 text-rose-400" />
             </Button>
           </Link>
 
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="relative">
-                <i className="fa-light fa-cart-shopping text-xl text-amber-400"></i>
+                <ShoppingCart className="h-5 w-5 text-amber-400" />
                 {cart?.length > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                     {cart.length}
@@ -492,9 +499,9 @@ export default function Navbar() {
             className="text-slate-600 dark:text-slate-300"
           >
             {mobileMenuOpen ? (
-              <i className="fa-light fa-xmark text-xl mt-0.5"></i>
+              <X className="mt-0.5 h-5 w-5" />
             ) : (
-              <i className="fa-light fa-bars text-xl mt-0.5"></i>
+              <Menu className="mt-0.5 h-5 w-5" />
             )}
           </Button>
         </div>
@@ -509,7 +516,7 @@ export default function Navbar() {
               placeholder="Search"
             />
             <button className="h-full bg-slate-100 flex justify-center items-center p-3 rounded-r-md transition-colors hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600/70">
-              <i className="fa-regular fa-magnifying-glass text-slate-400 transition-colors dark:text-slate-300"></i>
+              <Search className="h-4 w-4 text-slate-400 transition-colors dark:text-slate-300" />
             </button>
           </div>
         </div>
@@ -563,7 +570,7 @@ export default function Navbar() {
                   onClick={handleNavigation}
                   className="flex items-center px-3 py-2 text-base font-medium rounded-md text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                 >
-                  <FaUserGear className="mr-2 text-slate-400 dark:text-slate-500" />
+                  <UserRoundCog className="mr-2 h-4 w-4 text-slate-400 dark:text-slate-500" />
                   Profile
                 </Link>
                 <Link
@@ -571,7 +578,7 @@ export default function Navbar() {
                   onClick={handleNavigation}
                   className="flex items-center px-3 py-2 text-base font-medium rounded-md text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                 >
-                  <FaMoneyCheckDollar className="mr-2 text-slate-400 dark:text-slate-500" />
+                  <BadgeDollarSign className="mr-2 h-4 w-4 text-slate-400 dark:text-slate-500" />
                   Orders
                 </Link>
                 <Link
@@ -579,7 +586,7 @@ export default function Navbar() {
                   onClick={handleNavigation}
                   className="flex items-center px-3 py-2 text-base font-medium rounded-md text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                 >
-                  <FaGear className="mr-2 text-slate-400 dark:text-slate-500" />
+                  <Settings className="mr-2 h-4 w-4 text-slate-400 dark:text-slate-500" />
                   Settings
                 </Link>
               </div>
@@ -592,7 +599,7 @@ export default function Navbar() {
                   className="flex items-center justify-between px-3 py-2 text-base font-medium rounded-md text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
                 >
                   <div className="flex items-center">
-                    <FaBrush className="mr-2 text-slate-400 dark:text-slate-500" />
+                    <Paintbrush className="mr-2 h-4 w-4 text-slate-400 dark:text-slate-500" />
                     Theme
                   </div>
                   <div className="pointer-events-none">
@@ -609,7 +616,7 @@ export default function Navbar() {
                   }}
                   className="flex items-center w-full px-3 py-2 text-base font-medium rounded-md text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/10"
                 >
-                  <FaRightFromBracket className="mr-2" />
+                  <LogOut className="mr-2 h-4 w-4" />
                   Logout
                 </button>
               </div>

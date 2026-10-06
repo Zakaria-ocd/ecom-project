@@ -11,7 +11,7 @@ import {
   removeFromCart,
   createCheckout,
 } from "@/features/cart/cartSlice";
-import { Loader2 } from "lucide-react";
+import { Heart, Loader2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -220,7 +220,7 @@ export default function CartProducts() {
                             type="button"
                             className="inline-flex items-center text-sm font-medium text-gray-500 transition-colors group hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                           >
-                            <i className="fa-regular fa-heart me-1.5"></i>
+                            <Heart className="me-1.5 h-4 w-4" />
                             <span className="group-hover:underline">
                               Add to Favorites
                             </span>
@@ -231,7 +231,7 @@ export default function CartProducts() {
                             onClick={() => removeFromCart(item.id)}
                             className="inline-flex items-center text-sm font-medium text-red-600 transition-colors group dark:text-red-500"
                           >
-                            <i className="fa-regular fa-xmark me-1.5"></i>
+                            <X className="me-1.5 h-4 w-4" />
                             <span className="group-hover:underline">
                               Remove
                             </span>

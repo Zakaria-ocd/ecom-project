@@ -7,7 +7,7 @@ export default function Logo({ className = "", fullLogo = false }) {
         src={"/assets/logo.png"}
         width={500}
         height={300}
-        alt="logo"
+        alt="3Z Shop logo"
         className={className}
       />
       {fullLogo && (

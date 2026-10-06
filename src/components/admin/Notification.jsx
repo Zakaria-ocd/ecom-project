@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { FaTimesCircle, FaCheckCircle } from "react-icons/fa";
+import { CircleCheck, CircleX } from "lucide-react";
 
 const Notification = ({ message, type, onClose }) => {
   useEffect(() => {
@@ -18,9 +18,9 @@ const Notification = ({ message, type, onClose }) => {
       } text-white flex items-center w-60`}
     >
       {type === "success" ? (
-        <FaCheckCircle className="mr-2" />
+        <CircleCheck className="mr-2 h-4 w-4" />
       ) : (
-        <FaTimesCircle className="mr-2" />
+        <CircleX className="mr-2 h-4 w-4" />
       )}
       <span className="mr-4">{message}</span>
       <button

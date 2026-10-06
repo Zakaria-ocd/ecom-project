@@ -11,10 +11,11 @@ import {
 import ProductChoices from "./ProductChoices";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { FaUpload, FaXmark } from "react-icons/fa6";
+import { Upload, X } from "lucide-react";
 import { IoIosCloudUpload } from "react-icons/io";
 import Image from "next/image";
 import { useSelector } from "react-redux";
+import { getAuthToken } from "@/lib/auth";
 
 export default function CreateProduct() {
   const [productData, setProductData] = useState({
@@ -141,16 +142,21 @@ export default function CreateProduct() {
       const res = await fetch("http://localhost:8000/api/uploadImages", {
         method: "POST",
         body: formData,
-        headers: { Accept: "application/json" },
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
       });
       const data = await res.json();
 
       if (res.ok) {
         return data;
       }
+      throw new Error(data.message || "Image upload failed");
     } catch (error) {
-      console.error(data.message, error, "Image upload failed");
-      toast.error(data.message);
+      console.error("Image upload failed:", error);
+      toast.error(error.message || "Image upload failed");
+      throw error;
     }
   }
 
@@ -164,7 +170,10 @@ export default function CreateProduct() {
       const newProduct = { ...productData, seller_id: user.id };
       const productRes = await fetch("http://localhost:8000/api/products", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
         body: JSON.stringify(newProduct),
       });
       if (!productRes.ok) throw new Error("Failed to create product");
@@ -189,7 +198,10 @@ export default function CreateProduct() {
           `http://localhost:8000/api/products/${productId}/choices`,
           {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${getAuthToken()}`,
+            },
             body: JSON.stringify(choiceData),
           }
         );
@@ -244,7 +256,7 @@ export default function CreateProduct() {
                         onClick={() => removeImage(i)}
                         className="absolute top-1 right-1 bg-rose-600 hover:bg-rose-700 rounded-full size-5 flex items-center justify-center"
                       >
-                        <FaXmark className="text-white" />
+                        <X className="text-white" />
                       </button>
                     </div>
                   ))
@@ -274,7 +286,7 @@ export default function CreateProduct() {
               className="cursor-pointer px-4 py-2 flex items-center gap-2"
             >
               Upload Images ({selectedImages.length}/10, max 5MB each){" "}
-              <FaUpload />
+              <Upload />
             </label>
           </Button>
         </div>

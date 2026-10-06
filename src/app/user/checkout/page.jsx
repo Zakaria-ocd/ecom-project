@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,17 +28,23 @@ export default function CheckoutPage() {
     notes: "",
   });
 
-  if (typeof window !== "undefined" && !loading) {
+  const unauthenticated = !loading && !isAuthenticated();
+  const emptyCart = !loading && cart.length === 0;
+
+  useEffect(() => {
+    if (loading) return;
+
     if (!isAuthenticated()) {
       router.push("/user/login?redirect=checkout");
-      return null;
+      return;
     }
 
     if (cart.length === 0) {
       router.push("/user/cart");
-      return null;
     }
-  }
+  }, [cart.length, loading, router]);
+
+  if (unauthenticated || emptyCart) return null;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -51,31 +57,14 @@ export default function CheckoutPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const requiredFields = ["fullName", "address", "city", "state", "phone"];
-    const emptyFields = requiredFields.filter((field) => !deliveryInfo[field]);
-
-    if (emptyFields.length > 0) {
-      toast.error(
-        `Please fill in all required fields: ${emptyFields.join(", ")}`
-      );
+    const phoneDigits = deliveryInfo.phone.replace(/\D/g, "");
+    if (phoneDigits.length < 7 || phoneDigits.length > 15) {
+      toast.error("Enter a valid phone number with 7 to 15 digits.");
       return;
     }
 
-    const addressParts = [
-      deliveryInfo.address,
-      deliveryInfo.city,
-      deliveryInfo.state,
-    ];
-    if (deliveryInfo.zipCode) {
-      addressParts.push(deliveryInfo.zipCode);
-    }
-    const formattedAddress = addressParts.join(", ");
-
     try {
-      await processCheckout({
-        address: formattedAddress,
-        phone: deliveryInfo.phone,
-      });
+      await processCheckout(deliveryInfo);
     } catch (error) {
       console.error("Checkout error:", error);
     }
@@ -99,6 +88,7 @@ export default function CheckoutPage() {
             <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-3">
               <div className="lg:col-span-2">
                 <form
+                  id="checkout-form"
                   onSubmit={handleSubmit}
                   className="space-y-6 rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-slate-950"
                 >
@@ -120,6 +110,8 @@ export default function CheckoutPage() {
                         name="fullName"
                         value={deliveryInfo.fullName}
                         onChange={handleInputChange}
+                        autoComplete="name"
+                        maxLength={100}
                         className="mt-1 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400"
                         required
                       />
@@ -137,6 +129,10 @@ export default function CheckoutPage() {
                         name="phone"
                         value={deliveryInfo.phone}
                         onChange={handleInputChange}
+                        autoComplete="tel"
+                        inputMode="tel"
+                        maxLength={20}
+                        pattern="(?=(?:\D*\d){7,15}\D*$)\+?[0-9\s().-]+"
                         className="mt-1 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400"
                         required
                       />
@@ -156,6 +152,8 @@ export default function CheckoutPage() {
                       name="email"
                       value={deliveryInfo.email}
                       onChange={handleInputChange}
+                      autoComplete="email"
+                      maxLength={255}
                       className="mt-1 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400"
                       required
                     />
@@ -174,6 +172,8 @@ export default function CheckoutPage() {
                       name="address"
                       value={deliveryInfo.address}
                       onChange={handleInputChange}
+                      autoComplete="street-address"
+                      maxLength={255}
                       className="mt-1 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400"
                       required
                     />
@@ -193,6 +193,8 @@ export default function CheckoutPage() {
                         name="city"
                         value={deliveryInfo.city}
                         onChange={handleInputChange}
+                        autoComplete="address-level2"
+                        maxLength={100}
                         className="mt-1 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400"
                         required
                       />
@@ -210,6 +212,8 @@ export default function CheckoutPage() {
                         name="state"
                         value={deliveryInfo.state}
                         onChange={handleInputChange}
+                        autoComplete="address-level1"
+                        maxLength={100}
                         className="mt-1 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400"
                         required
                       />
@@ -227,6 +231,8 @@ export default function CheckoutPage() {
                         name="zipCode"
                         value={deliveryInfo.zipCode}
                         onChange={handleInputChange}
+                        autoComplete="postal-code"
+                        maxLength={20}
                         className="mt-1 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400"
                         required
                       />
@@ -246,6 +252,7 @@ export default function CheckoutPage() {
                       value={deliveryInfo.notes}
                       onChange={handleInputChange}
                       rows="3"
+                      maxLength={1000}
                       className="mt-1 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:focus:border-blue-400 dark:focus:ring-blue-400"
                     ></textarea>
                   </div>
@@ -312,7 +319,7 @@ export default function CheckoutPage() {
                                     className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
                                   >
                                     {detail.type}: {detail.value}
-                                    {detail.type.toLowerCase() === "color" &&
+                                    {detail.type?.toLowerCase() === "color" &&
                                       detail.colorCode && (
                                         <span
                                           className="ml-1 inline-block w-2 h-2 rounded-full"
@@ -346,22 +353,6 @@ export default function CheckoutPage() {
                         ${totalPrice.toFixed(2)}
                       </p>
                     </div>
-                    <div className="flex justify-between">
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Shipping
-                      </p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        ${totalPrice > 100 ? "10.00" : "30.00"}
-                      </p>
-                    </div>
-                    <div className="flex justify-between">
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Tax
-                      </p>
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">
-                        ${(totalPrice * 0.05).toFixed(2)}
-                      </p>
-                    </div>
                   </div>
 
                   <div className="flex justify-between border-t border-gray-200 pt-4 dark:border-gray-700">
@@ -370,17 +361,13 @@ export default function CheckoutPage() {
                     </p>
                     <p className="text-base font-medium text-gray-900 dark:text-white">
                       $
-                      {(
-                        totalPrice +
-                        (totalPrice > 100 ? 10 : 30) +
-                        totalPrice * 0.05
-                      ).toFixed(2)}
+                      {Number(totalPrice).toFixed(2)}
                     </p>
                   </div>
 
                   <button
-                    type="button"
-                    onClick={handleSubmit}
+                    type="submit"
+                    form="checkout-form"
                     disabled={checkoutLoading}
                     className="mt-6 w-full rounded-md bg-cyan-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-blue-400"
                   >

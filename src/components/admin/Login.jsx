@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { FaEnvelope, FaLock, FaSpinner } from "react-icons/fa";
+import { LoaderCircle, Lock, Mail } from "lucide-react";
 import Notification from "./Notification";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -25,6 +25,7 @@ export default function LoginForm() {
       const response = await fetch("/api/admin/login", {
         method: "POST",
         headers: {
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
@@ -72,7 +73,7 @@ export default function LoginForm() {
               Email
             </label>
             <div className="flex items-center bg-gray-50 p-2 rounded-lg border border-gray-300 focus-within:border-blue-500 transition">
-              <FaEnvelope className="text-gray-500 mr-2" />
+              <Mail className="mr-2 h-4 w-4 text-gray-500" />
               <input
                 className="w-full bg-transparent outline-none text-gray-700"
                 type="email"
@@ -93,7 +94,7 @@ export default function LoginForm() {
               Password
             </label>
             <div className="flex items-center bg-gray-50 p-2 rounded-lg border border-gray-300 focus-within:border-blue-500 transition">
-              <FaLock className="text-gray-500 mr-2" />
+              <Lock className="mr-2 h-4 w-4 text-gray-500" />
               <input
                 className="w-full bg-transparent outline-none text-gray-700"
                 type="password"
@@ -113,7 +114,7 @@ export default function LoginForm() {
           >
             {loading ? (
               <div className="flex items-center justify-center">
-                <FaSpinner className="text-white mr-2 animate-spin" />
+                <LoaderCircle className="mr-2 h-4 w-4 animate-spin text-white" />
                 <span>Logging in...</span>
               </div>
             ) : (
