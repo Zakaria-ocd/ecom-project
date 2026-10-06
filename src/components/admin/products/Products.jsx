@@ -47,6 +47,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getAuthToken } from "@/lib/auth";
 
 export function Products() {
   const [products, setProducts] = useState([]);
@@ -59,14 +60,15 @@ export function Products() {
 
   const handleDeleteProduct = async (productId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/products`, {
+      const response = await fetch(`http://localhost:8000/api/products/${productId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
         },
-        body: JSON.stringify({ id: productId }),
       });
       const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Failed to delete product");
       setProducts((prev) => prev.filter((product) => product.id !== productId));
       toast.success(data.message);
       setDeleteDialogOpen(false);

@@ -33,7 +33,7 @@ export default function DashboardLayout({ children }) {
         const user = data.user;
         setLoading(true);
         dispatch(authUser(user));
-        dispatch(fetchUserImage(user.id));
+        dispatch(fetchUserImage(user));
       } else {
         router.replace("/admin/login");
       }

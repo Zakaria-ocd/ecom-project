@@ -14,7 +14,7 @@ import {
 } from "react-icons/fi";
 import { GoGear } from "react-icons/go";
 import { TbDeviceAnalytics } from "react-icons/tb";
-import { FaListUl, FaPlus } from "react-icons/fa";
+import { Boxes, List, Plus } from "lucide-react";
 import { useSelector } from "react-redux";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -173,7 +173,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
-                  <FaListUl className="h-3 w-3 mr-2" />
+                  <List className="h-3 w-3 mr-2" />
                   <span className="text-nowrap">All Users</span>
                 </Link>
                 <Link
@@ -184,7 +184,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
-                  <FaPlus className="h-3 w-3 mr-2" />
+                  <Plus className="h-3 w-3 mr-2" />
                   <span className="text-nowrap">Add User</span>
                 </Link>
               </motion.div>
@@ -203,7 +203,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
             }`}
           >
             <div className="text-lg pr-3 pl-1">
-              <i className="fa-regular fa-boxes-stacked size-4 text-base"></i>
+              <Boxes className="size-4 text-base" />
             </div>
             {open && (
               <>
@@ -234,7 +234,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
-                  <FaListUl className="h-3 w-3 mr-2" />
+                  <List className="h-3 w-3 mr-2" />
                   <span className="text-nowrap">All Products</span>
                 </Link>
                 <Link
@@ -245,7 +245,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
-                  <FaPlus className="h-3 w-3 mr-2" />
+                  <Plus className="h-3 w-3 mr-2" />
                   <span className="text-nowrap">Add Product</span>
                 </Link>
               </motion.div>
@@ -294,7 +294,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
-                  <FaListUl className="h-3 w-3 mr-2" />
+                  <List className="h-3 w-3 mr-2" />
                   <span className="text-nowrap">All Categories</span>
                 </Link>
                 <Link
@@ -305,7 +305,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
-                  <FaPlus className="h-3 w-3 mr-2" />
+                  <Plus className="h-3 w-3 mr-2" />
                   <span className="text-nowrap">Add Category</span>
                 </Link>
               </motion.div>
@@ -354,7 +354,7 @@ const Sidebar = ({ section = "Dashboard" }) => {
                       : "text-slate-600 hover:bg-slate-100"
                   }`}
                 >
-                  <FaListUl className="h-3 w-3 mr-2" />
+                  <List className="h-3 w-3 mr-2" />
                   <span className="text-nowrap">All Orders</span>
                 </Link>
               </motion.div>
@@ -363,30 +363,8 @@ const Sidebar = ({ section = "Dashboard" }) => {
         </div>
 
         <Option
-          Icon={ClipboardList}
-          title="Seller Requests"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-        />
-        <Option
-          Icon={FiMessageCircle}
-          title="Messages"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-          notifs={3}
-        />
-        <Option
           Icon={TbDeviceAnalytics}
           title="Analytics"
-          selected={selected}
-          setSelected={setSelected}
-          open={open}
-        />
-        <Option
-          Icon={GoGear}
-          title="Settings"
           selected={selected}
           setSelected={setSelected}
           open={open}

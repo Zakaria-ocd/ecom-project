@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Check, ChevronUp } from "lucide-react";
 
 export default function CategoriesSide({
   filters,
@@ -47,11 +48,11 @@ export default function CategoriesSide({
                   }
                 >
                   {filterKey}
-                  <i
-                    className={`fa-regular fa-angle-up transition-transform duration-300 ${
+                  <ChevronUp
+                    className={`h-4 w-4 transition-transform duration-300 ${
                       filtersVisibility[filterKey] ? "rotate-0" : "-rotate-180"
                     }`}
-                  ></i>
+                  />
                 </button>
                 {!filtersVisibility[filterKey] &&
                   selectedFilters[filterKey].length !== 0 && (
@@ -110,13 +111,13 @@ export default function CategoriesSide({
                             {filterKey === "prices"
                               ? "$" + item.name + "+"
                               : item.name}
-                            <i
+                            <Check
                               className={`${
                                 isSelected
                                   ? "text-emerald-500 transition-colors dark:text-emerald-300"
                                   : "text-emerald-400 opacity-0 transition-all group-hover:opacity-100 dark:text-emerald-500"
-                              } fa-solid fa-check`}
-                            ></i>
+                              } h-4 w-4`}
+                            />
                           </button>
                         </li>
                       );

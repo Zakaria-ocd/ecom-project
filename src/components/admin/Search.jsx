@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { Search as SearchIcon } from "lucide-react";
 
 const Search = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +29,7 @@ const Search = () => {
           aria-label="Search"
           className="h-full px-3 bg-slate-200/70 rounded-r-md hover:bg-slate-300/60 transition-colors"
         >
-          <i className="fa-regular fa-search text-slate-400"></i>
+          <SearchIcon className="h-4 w-4 text-slate-400" />
         </button>
       </form>
     </div>

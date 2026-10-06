@@ -9,6 +9,7 @@ import useCart from "../../../hooks/useCart";
 import useCheckout from "../../../hooks/useCheckout";
 import { isAuthenticated } from "../../../lib/auth";
 import QuantityCalculator from "../../../components/QuantityCalculator";
+import { Trash2 } from "lucide-react";
 
 export default function CartPage() {
   const router = useRouter();
@@ -62,7 +63,7 @@ export default function CartPage() {
             >
               <span className="font-medium">{choice.type}:</span>
               <span className="ml-1">{choice.value}</span>
-              {choice.colorCode && (
+              {choice.type?.toLowerCase() === "color" && choice.colorCode && (
                 <span
                   className="ml-2 inline-block h-4 w-4 rounded-full border border-gray-300"
                   style={{ backgroundColor: choice.colorCode }}
@@ -184,7 +185,7 @@ export default function CartPage() {
                                 className="ml-4 text-red-500 hover:text-red-700 dark:hover:text-red-400"
                                 aria-label="Remove from cart"
                               >
-                                <i className="fa-regular fa-trash-can"></i>
+                                <Trash2 className="h-4 w-4" />
                               </button>
                             </div>
 

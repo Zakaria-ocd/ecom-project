@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 
 export default function SortFilter({
   selectedFilter,
@@ -44,7 +45,7 @@ export default function SortFilter({
         <span className="text-slate-600 font-medium capitalize transition-colors group-hover:text-slate-700 dark:text-slate-200 dark:group-hover:text-slate-300">
           {selectedFilter.name}
         </span>
-        <i className="fa-regular fa-angle-down"></i>
+        <ChevronDown className="h-4 w-4" />
       </button>
 
       <AnimatePresence>

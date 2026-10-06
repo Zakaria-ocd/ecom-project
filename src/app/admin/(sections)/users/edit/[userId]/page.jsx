@@ -23,6 +23,7 @@ import {
 import { toast } from "sonner";
 import { ArrowLeft, Camera, Loader2, X } from "lucide-react";
 import Image from "next/image";
+import { getUserImageUrl } from "@/lib/userImage";
 import Link from "next/link";
 
 export default function EditUserPage() {
@@ -152,6 +153,9 @@ export default function EditUserPage() {
           `http://localhost:8000/api/users/image/${userId}`,
           {
             method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           }
         );
 
@@ -191,6 +195,9 @@ export default function EditUserPage() {
           `http://localhost:8000/api/users/image`,
           {
             method: "POST",
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
             body: formDataImage,
           }
         );
@@ -385,7 +392,7 @@ export default function EditUserPage() {
                       />
                     ) : user.image ? (
                       <Image
-                        src={`http://localhost:8000/api/users/imageById/${user.id}`}
+                        src={getUserImageUrl(user)}
                         alt={user.username || `User #${user.id}`}
                         fill
                         className="object-cover"

@@ -33,6 +33,15 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import Link from "next/link";
+import { getUserImageUrl } from "@/lib/userImage";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import OrderStatusIcon from "@/components/orders/OrderStatusIcon";
 
 export default function OrderPage() {
   const { orderId } = useParams();
@@ -42,6 +51,7 @@ export default function OrderPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingUser, setIsLoadingUser] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
   const token = getAuthToken();
 
   useEffect(() => {
@@ -117,6 +127,8 @@ export default function OrderPage() {
     switch (status?.toLowerCase()) {
       case "pending":
         return "bg-blue-100 text-blue-800 border-blue-200";
+      case "processing":
+        return "bg-orange-100 text-orange-800 border-orange-200";
       case "shipped":
         return "bg-amber-100 text-amber-800 border-amber-200";
       case "delivered":
@@ -125,6 +137,41 @@ export default function OrderPage() {
         return "bg-red-100 text-red-800 border-red-200";
       default:
         return "bg-slate-100 text-slate-800 border-slate-200";
+    }
+  };
+
+  const updateOrderStatus = async (status) => {
+    setIsUpdatingStatus(true);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8000/api/orders/${orderId}`,
+        {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ status }),
+        }
+      );
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to update order status");
+      }
+
+      setOrder((currentOrder) => ({
+        ...currentOrder,
+        ...data.order,
+      }));
+      toast.success("Order status updated");
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      toast.error(error.message || "Failed to update order status");
+    } finally {
+      setIsUpdatingStatus(false);
     }
   };
 
@@ -226,8 +273,9 @@ export default function OrderPage() {
             </p>
             <Badge
               variant="outline"
-              className={getOrderStatusColor(order.status)}
+              className={`${getOrderStatusColor(order.status)} inline-flex items-center gap-1`}
             >
+              <OrderStatusIcon status={order.status} />
               {order.status}
             </Badge>
           </div>
@@ -435,10 +483,36 @@ export default function OrderPage() {
                     <p className="text-sm text-slate-500">Status</p>
                     <Badge
                       variant="outline"
-                      className={getOrderStatusColor(order.status)}
+                      className={`${getOrderStatusColor(order.status)} inline-flex items-center gap-1`}
                     >
+                      <OrderStatusIcon status={order.status} />
                       {order.status}
                     </Badge>
+                    <Select
+                      value={order.status}
+                      onValueChange={updateOrderStatus}
+                      disabled={isUpdatingStatus}
+                    >
+                      <SelectTrigger
+                        aria-label={`Update order ${order.id} status`}
+                        className="mt-2"
+                      >
+                        <SelectValue placeholder="Update status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {[
+                          "pending",
+                          "processing",
+                          "shipped",
+                          "delivered",
+                          "cancelled",
+                        ].map((status) => (
+                          <SelectItem key={status} value={status}>
+                            {status}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="col-span-2">
@@ -496,11 +570,7 @@ export default function OrderPage() {
                     <div className="flex items-start gap-4 mb-6">
                       <div className="relative w-24 h-24 overflow-hidden rounded-full border-2 border-slate-200">
                         <ProfileImage
-                          imageUrl={
-                            userData?.image
-                              ? `http://localhost:8000/api/users/imageById/${userData.id}`
-                              : null
-                          }
+                          imageUrl={getUserImageUrl(userData)}
                           previewUrl={null}
                           username={userData?.username}
                           onImageChange={() => {}}

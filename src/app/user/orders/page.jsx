@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { isAuthenticated } from "@/lib/auth";
 import { getUserOrders } from "@/lib/order";
-import { Loader2, ChevronRight, Eye, PackageCheck } from "lucide-react";
+import { Loader2, ChevronRight, Eye, PackageCheck, CogIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MdOutlineLocalShipping, MdPendingActions } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
@@ -73,6 +73,12 @@ export default function OrdersPage() {
           </div>
         );
       case "processing":
+        return (
+          <div className={`${base} text-orange-500 dark:text-orange-400`}>
+            <CogIcon size={16} />
+            <span>{status}</span>
+          </div>
+        );
       case "shipped":
         return (
           <div className={`${base} text-yellow-500 dark:text-yellow-400`}>

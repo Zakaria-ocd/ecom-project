@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { getUserImageUrl } from "@/lib/userImage";
 
 const initialState = {
   id: "",
@@ -32,14 +33,26 @@ const userSlice = createSlice({
   },
 });
 
-export const fetchUserImage = (userId) => async (dispatch) => {
+export const fetchUserImage = (user) => async (dispatch) => {
+  const imageUrl = getUserImageUrl(user);
+  if (!imageUrl) {
+    dispatch(setUserImage(""));
+    return;
+  }
+
   try {
-    const res = await fetch(`http://localhost:8000/api/users/imageById/${userId}`);
+    const res = await fetch(imageUrl);
+    if (!res.ok || !res.headers.get("content-type")?.startsWith("image/")) {
+      dispatch(setUserImage(""));
+      return;
+    }
+
     const blob = await res.blob();
     const objectURL = URL.createObjectURL(blob);
     dispatch(setUserImage(objectURL));
   } catch (error) {
     console.error("Error fetching user image:", error);
+    dispatch(setUserImage(""));
   }
 };
 

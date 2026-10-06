@@ -22,7 +22,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { FaStar } from "react-icons/fa6";
+import { Star } from "lucide-react";
 import Link from "next/link";
 
 export default function ProductCard({ product, handleDeleteProduct }) {
@@ -266,7 +266,7 @@ export default function ProductCard({ product, handleDeleteProduct }) {
           <div className="flex items-center justify-between">
             <div className="font-semibold text-lg">{product.name}</div>
             <div className="flex items-center gap-1 text-sm text-gray-500">
-              <FaStar className="text-amber-500" />
+              <Star className="fill-amber-500 text-amber-500" />
               {Number(product.rating || 0).toFixed(1)}
             </div>
           </div>

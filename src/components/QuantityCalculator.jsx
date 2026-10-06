@@ -1,3 +1,5 @@
+import { Minus, Plus } from "lucide-react";
+
 export default function QuantityCalculator({
   productId,
   choiceValueId,
@@ -26,7 +28,7 @@ export default function QuantityCalculator({
             : "bg-gray-100 transition-colors hover:bg-gray-200"
         } dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600`}
       >
-        <i className="fa-solid fa-minus text-gray-800 text-xs transition-colors dark:text-white"></i>
+        <Minus className="h-3 w-3 text-gray-800 transition-colors dark:text-white" />
       </button>
       <span className="w-10 text-center text-sm font-medium text-gray-900 transition-colors dark:text-white">
         {itemQuantity}
@@ -41,7 +43,7 @@ export default function QuantityCalculator({
             : "bg-gray-100 transition-colors hover:bg-gray-200"
         } dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600`}
       >
-        <i className="fa-solid fa-plus text-gray-800 text-xs transition-colors dark:text-white"></i>
+        <Plus className="h-3 w-3 text-gray-800 transition-colors dark:text-white" />
       </button>
     </div>
   );

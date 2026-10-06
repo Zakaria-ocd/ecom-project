@@ -3,6 +3,7 @@ import ProfileImage from "@/components/user/ProfileImage";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
+import { getAuthToken } from "@/lib/auth";
 
 export default function ShowUsers() {
   const [users, setUsers] = useState([]);
@@ -12,8 +13,11 @@ export default function ShowUsers() {
     async function fetchUsers() {
       setLoading(true);
       try {
-        const data = await fetch("http://localhost:8000/api/users/8/limit");
-        setUsers(await data.json());
+        const response = await fetch("http://localhost:8000/api/users/8/limit", {
+          headers: { Authorization: `Bearer ${getAuthToken()}` },
+        });
+        if (!response.ok) throw new Error("Failed to fetch users");
+        setUsers(await response.json());
       } catch (error) {
         console.log(error);
       } finally {

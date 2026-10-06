@@ -1,3 +1,5 @@
+import { Boxes } from "lucide-react";
+
 export default function TotalProducts({ totalProducts }) {
   return (
     <div className="bg-white p-4 border border-slate-200/40 rounded-lg shadow-md flex items-center justify-between">
@@ -6,7 +8,7 @@ export default function TotalProducts({ totalProducts }) {
         <p className="text-sm text-slate-600">Total Products</p>
       </div>
       <div className="bg-violet-50 p-3 rounded-md">
-        <i className="fa-regular fa-boxes text-violet-600 text-[28px]" />
+        <Boxes className="h-7 w-7 text-violet-600" />
       </div>
     </div>
   );

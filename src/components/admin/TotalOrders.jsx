@@ -1,4 +1,5 @@
 "use client";
+import { ShoppingCart } from "lucide-react";
 
 const TotalOrders = ({ totalOrders }) => {
   return (
@@ -8,7 +9,7 @@ const TotalOrders = ({ totalOrders }) => {
         <p className="text-sm text-gray-600">Total Orders</p>
       </div>
       <div className="bg-sky-50 p-3 rounded-md">
-        <i className="fa-regular fa-shopping-cart text-sky-600 text-[28px]" />
+        <ShoppingCart className="h-7 w-7 text-sky-600" />
       </div>
     </div>
   );

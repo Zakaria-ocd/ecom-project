@@ -26,7 +26,8 @@ export default function OrdersPage() {
 
       try {
         const userResponse = await fetch(
-          `http://localhost:8000/api/users/${userId}`
+          `http://localhost:8000/api/users/${userId}`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         if (!userResponse.ok) throw new Error("Failed to load user data");
 

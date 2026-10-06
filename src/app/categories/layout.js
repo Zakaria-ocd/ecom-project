@@ -1,8 +1,8 @@
 import Navbar from "@/components/user/Navbar";
 
 export const metadata = {
-  title: "Categories | E-commerce",
-  description: "Browse our product categories",
+  title: "Categories",
+  description: "Browse product categories at 3Z Shop.",
 };
 
 export default function CategoriesLayout({ children }) {
